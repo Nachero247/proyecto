@@ -4,6 +4,9 @@
  */
 package proyecto;
 
+import java.awt.Image;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author DAM2Alu9
@@ -17,6 +20,40 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
      */
     public JFrameMenuPrincipal() {
         initComponents();
+        icono1();
+        icono2();
+        icono3();
+        icono4();
+    }
+    
+    
+    
+    public void icono1(){
+         ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/logo_GymManager.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(jLabelTitulo.getWidth(), jLabelTitulo.getHeight(), Image.SCALE_SMOOTH);
+        jLabelTitulo.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
+    public void icono2(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo persona.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+        jButtonSocios.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
+    public void icono3(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo pagos.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(60, 30, Image.SCALE_SMOOTH);
+        jButtonPagos.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
+    public void icono4(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo asistencia.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(50, 30, Image.SCALE_SMOOTH);
+        jButtonAsistencias.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
+    public void icono5(){
+        
     }
 
     /**
@@ -29,6 +66,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jSeparator6 = new javax.swing.JSeparator();
+        jSeparator9 = new javax.swing.JSeparator();
         jPanelLateral = new javax.swing.JPanel();
         jLabelTitulo = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -53,8 +91,13 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jPanelLateral.setPreferredSize(new java.awt.Dimension(220, 415));
         jPanelLateral.setLayout(new javax.swing.BoxLayout(jPanelLateral, javax.swing.BoxLayout.Y_AXIS));
 
-        jLabelTitulo.setText("GYM MANAGER  ");
+        jLabelTitulo.setText("GYM MANAGER");
+        jLabelTitulo.setMaximumSize(new java.awt.Dimension(150, 80));
+        jLabelTitulo.setMinimumSize(new java.awt.Dimension(120, 16));
+        jLabelTitulo.setName(""); // NOI18N
         jPanelLateral.add(jLabelTitulo);
+
+        jSeparator1.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator1);
 
         jButtonSocios.setBackground(new java.awt.Color(153, 153, 153));
@@ -65,42 +108,62 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
             }
         });
         jPanelLateral.add(jButtonSocios);
+
+        jSeparator2.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator2);
 
+        jButtonPagos.setBackground(new java.awt.Color(153, 153, 153));
         jButtonPagos.setText("Pagos");
         jPanelLateral.add(jButtonPagos);
+
+        jSeparator3.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator3);
 
+        jButtonAsistencias.setBackground(new java.awt.Color(153, 153, 153));
         jButtonAsistencias.setText("Asistencias");
         jPanelLateral.add(jButtonAsistencias);
+
+        jSeparator4.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator4);
 
+        jButtonPlanes.setBackground(new java.awt.Color(153, 153, 153));
         jButtonPlanes.setText("Planes de Entrenamiento");
         jPanelLateral.add(jButtonPlanes);
+
+        jSeparator5.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator5);
 
+        jButtonUsuarios.setBackground(new java.awt.Color(153, 153, 153));
         jButtonUsuarios.setText("Usuarios");
         jPanelLateral.add(jButtonUsuarios);
+
+        jSeparator7.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator7);
 
+        jButtonAyuda.setBackground(new java.awt.Color(153, 153, 153));
         jButtonAyuda.setText("Ayuda");
         jPanelLateral.add(jButtonAyuda);
+
+        jSeparator8.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator8);
 
+        jButtonCerrarSesion.setBackground(new java.awt.Color(153, 153, 153));
         jButtonCerrarSesion.setText("Cerrar Sesión");
         jPanelLateral.add(jButtonCerrarSesion);
 
         getContentPane().add(jPanelLateral, java.awt.BorderLayout.WEST);
 
+        jDesktopPane1.setBackground(new java.awt.Color(204, 204, 204));
+
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 215, Short.MAX_VALUE)
+            .addGap(0, 294, Short.MAX_VALUE)
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 363, Short.MAX_VALUE)
+            .addGap(0, 355, Short.MAX_VALUE)
         );
 
         getContentPane().add(jDesktopPane1, java.awt.BorderLayout.CENTER);
@@ -110,6 +173,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonSociosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSociosActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButtonSociosActionPerformed
 
     /**
@@ -156,5 +220,6 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
     // End of variables declaration//GEN-END:variables
 }
