@@ -52,7 +52,7 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="GYM MANAGER"/>
             <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-              <Dimension value="[150, 80]"/>
+              <Dimension value="[220, 80]"/>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
               <Dimension value="[120, 16]"/>
@@ -73,6 +73,11 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Socios"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="horizontalTextPosition" type="int" value="4"/>
+            <Property name="iconTextGap" type="int" value="10"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonSociosActionPerformed"/>
@@ -91,6 +96,11 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pagos"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
+            <Property name="horizontalAlignment" type="int" value="2"/>
+            <Property name="horizontalTextPosition" type="int" value="4"/>
+            <Property name="iconTextGap" type="int" value="10"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator3">
@@ -106,6 +116,8 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Asistencias"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator4">
@@ -121,6 +133,8 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Planes de Entrenamiento"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator5">
@@ -136,6 +150,8 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Usuarios"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator7">
@@ -151,6 +167,8 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Ayuda"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSeparator" name="jSeparator8">
@@ -166,6 +184,8 @@
               <Color blue="99" green="99" red="99" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cerrar Sesi&#xf3;n"/>
+            <Property name="actionCommand" type="java.lang.String" value=""/>
+            <Property name="alignmentY" type="float" value="0.0"/>
           </Properties>
         </Component>
       </SubComponents>

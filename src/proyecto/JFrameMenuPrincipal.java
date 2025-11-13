@@ -4,8 +4,11 @@
  */
 package proyecto;
 
+import java.sql.Connection;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
 
 /**
  *
@@ -14,6 +17,9 @@ import javax.swing.ImageIcon;
 public class JFrameMenuPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameMenuPrincipal.class.getName());
+    
+    
+    
 
     /**
      * Creates new form JFrameMenuPrincipal
@@ -24,6 +30,19 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         icono2();
         icono3();
         icono4();
+        icono5();
+        icono6();
+        icono7();
+        icono8();
+        
+        configurarBotones(jButtonAsistencias);
+        configurarBotones(jButtonAyuda);
+        configurarBotones(jButtonCerrarSesion);
+        configurarBotones(jButtonPagos);
+        configurarBotones(jButtonPlanes);
+        configurarBotones(jButtonSocios);
+        configurarBotones(jButtonUsuarios);
+        
     }
     
     
@@ -35,25 +54,53 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
     }
     
     public void icono2(){
-        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo persona.png"));
-        Image imagenEscalada = original.getImage().getScaledInstance(35, 35, Image.SCALE_SMOOTH);
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/avatar.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         jButtonSocios.setIcon(new ImageIcon(imagenEscalada));
     }
     
     public void icono3(){
-        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo pagos.png"));
-        Image imagenEscalada = original.getImage().getScaledInstance(60, 30, Image.SCALE_SMOOTH);
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/credit-cards-payment.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         jButtonPagos.setIcon(new ImageIcon(imagenEscalada));
     }
     
     public void icono4(){
-        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo asistencia.png"));
-        Image imagenEscalada = original.getImage().getScaledInstance(50, 30, Image.SCALE_SMOOTH);
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/available.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         jButtonAsistencias.setIcon(new ImageIcon(imagenEscalada));
     }
     
     public void icono5(){
-        
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/weight.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        jButtonPlanes.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
+    public void icono6(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/avatar.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        jButtonUsuarios.setIcon(new ImageIcon(imagenEscalada));
+    }
+    public void icono7(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/simbolo ayuda.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        jButtonAyuda.setIcon(new ImageIcon(imagenEscalada));
+    }
+    public void icono8(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/logout.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        jButtonCerrarSesion.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
+    private void configurarBotones(JButton b){
+        b.setHorizontalAlignment(SwingConstants.LEFT);
+        b.setHorizontalTextPosition(SwingConstants.RIGHT);
+        b.setIconTextGap(10);
+        b.setFocusPainted(false);
+        b.setBorderPainted(false);
+        b.setContentAreaFilled(false);
+        b.setOpaque(true);
     }
 
     /**
@@ -92,7 +139,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jPanelLateral.setLayout(new javax.swing.BoxLayout(jPanelLateral, javax.swing.BoxLayout.Y_AXIS));
 
         jLabelTitulo.setText("GYM MANAGER");
-        jLabelTitulo.setMaximumSize(new java.awt.Dimension(150, 80));
+        jLabelTitulo.setMaximumSize(new java.awt.Dimension(220, 80));
         jLabelTitulo.setMinimumSize(new java.awt.Dimension(120, 16));
         jLabelTitulo.setName(""); // NOI18N
         jPanelLateral.add(jLabelTitulo);
@@ -102,6 +149,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonSocios.setBackground(new java.awt.Color(153, 153, 153));
         jButtonSocios.setText("Socios");
+        jButtonSocios.setActionCommand("");
+        jButtonSocios.setAlignmentY(0.0F);
+        jButtonSocios.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonSocios.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButtonSocios.setIconTextGap(10);
         jButtonSocios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSociosActionPerformed(evt);
@@ -114,6 +166,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonPagos.setBackground(new java.awt.Color(153, 153, 153));
         jButtonPagos.setText("Pagos");
+        jButtonPagos.setActionCommand("");
+        jButtonPagos.setAlignmentY(0.0F);
+        jButtonPagos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jButtonPagos.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        jButtonPagos.setIconTextGap(10);
         jPanelLateral.add(jButtonPagos);
 
         jSeparator3.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -121,6 +178,8 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonAsistencias.setBackground(new java.awt.Color(153, 153, 153));
         jButtonAsistencias.setText("Asistencias");
+        jButtonAsistencias.setActionCommand("");
+        jButtonAsistencias.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonAsistencias);
 
         jSeparator4.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -128,6 +187,8 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonPlanes.setBackground(new java.awt.Color(153, 153, 153));
         jButtonPlanes.setText("Planes de Entrenamiento");
+        jButtonPlanes.setActionCommand("");
+        jButtonPlanes.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonPlanes);
 
         jSeparator5.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -135,6 +196,8 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonUsuarios.setBackground(new java.awt.Color(153, 153, 153));
         jButtonUsuarios.setText("Usuarios");
+        jButtonUsuarios.setActionCommand("");
+        jButtonUsuarios.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonUsuarios);
 
         jSeparator7.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -142,6 +205,8 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonAyuda.setBackground(new java.awt.Color(153, 153, 153));
         jButtonAyuda.setText("Ayuda");
+        jButtonAyuda.setActionCommand("");
+        jButtonAyuda.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonAyuda);
 
         jSeparator8.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -149,6 +214,8 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jButtonCerrarSesion.setBackground(new java.awt.Color(153, 153, 153));
         jButtonCerrarSesion.setText("Cerrar Sesión");
+        jButtonCerrarSesion.setActionCommand("");
+        jButtonCerrarSesion.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonCerrarSesion);
 
         getContentPane().add(jPanelLateral, java.awt.BorderLayout.WEST);
@@ -173,6 +240,10 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonSociosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSociosActionPerformed
         // TODO add your handling code here:
+        JFrameGestionSocios ventanaSocios = new JFrameGestionSocios();
+        ventanaSocios.setVisible(true);
+        ventanaSocios.setLocationRelativeTo(null);
+        this.dispose();
         
     }//GEN-LAST:event_jButtonSociosActionPerformed
 
