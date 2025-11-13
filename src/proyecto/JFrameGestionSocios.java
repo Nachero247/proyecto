@@ -4,6 +4,10 @@
  */
 package proyecto;
 
+import ConexionBBDD.ConexionBBDD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -18,6 +22,25 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
      * Creates new form JFrameGestionSocios
      */
     DefaultTableModel dtm;
+    ConexionBBDD nueva;
+    Connection conexion;
+    
+    // --------------------------------------------------------------------------------------------------------------------------------
+    
+    // Carga en la tabla los datos de la BBDD
+    public void cargaReal() {
+        try {
+            PreparedStatement ps = conexion.prepareStatement("SELECT Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado FROM socio;");
+            nueva.selectSQL(ps, dtm);
+        } catch (SQLException ex) {
+            System.getLogger(JFrameGestionSocios.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+    }
+    
+    
+    // --------------------------------------------------------------------------------------------------------------------------------
+    
+    // Carga los datos de prueba en la tabla
     public void cargaInicial() {
         dtm.setRowCount(0);
         for (Socio socio: LogicaNegocio.getSocios()) {
@@ -25,13 +48,17 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         }
     }
     
+    // CONSTRUCTOR
     public JFrameGestionSocios() {
         initComponents();
+        nueva = new ConexionBBDD();
+        conexion = nueva.getConnection();
         dtm = new DefaultTableModel();
         jTableSocios.setModel(dtm);
-        dtm.setColumnIdentifiers(Socio.getColumnas());
-        LogicaNegocio.cargaPrueba();
-        cargaInicial();
+        cargaReal();
+        //dtm.setColumnIdentifiers(Socio.getColumnas());
+        // LogicaNegocio.cargaPrueba();
+        //cargaInicial();
     }
 
     /**
@@ -133,6 +160,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // METODOS
     private void jButtonCargaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaClientesActionPerformed
         // TODO add your handling code here:
         
@@ -162,15 +190,16 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
         // TODO add your handling code here:
-        JDialogAltaCliente jdac = new JDialogAltaCliente(this, true);
+        JDialogAltaSocio jdac = new JDialogAltaSocio(this, true);
         jdac.setVisible(true);
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
-        // FALTA TERMINAR
-        JDialogEditarCliente jdec = new JDialogEditarCliente(this, true);
+        JDialogEditarSocio jdec = new JDialogEditarSocio(this, true);
         jdec.setVisible(true);
+
+        // FALTA Recojer los datos de la filaSeleccionada al JDialog
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     public void addSocio(Socio nuevo) {

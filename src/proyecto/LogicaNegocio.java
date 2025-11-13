@@ -4,6 +4,10 @@
  */
 package proyecto;
 
+import ConexionBBDD.ConexionBBDD;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,8 +17,8 @@ import java.util.List;
  * @author DAM2Alu14
  */
 public class LogicaNegocio {
-    static List<Socio> listaSocios = new ArrayList();   
-    
+    static List<Socio> listaSocios = new ArrayList(); 
+  
     public static void cargaPrueba() {
         //String[] columnas ={"Nombre", "Apellido", "Provincia", "Edad", "Correo", "Alta"};
         // String nombre, String apellido1, String apellido2, String dni, String telefono, String correo, Date fecha_alta, String estado) {
@@ -24,6 +28,7 @@ public class LogicaNegocio {
         }
         
     }
+    
     
     public static void addSocio (Socio socio) {
         listaSocios.add(socio);
