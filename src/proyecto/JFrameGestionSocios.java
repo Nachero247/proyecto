@@ -5,9 +5,12 @@
 package proyecto;
 
 import ConexionBBDD.ConexionBBDD;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -182,16 +185,57 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCargaClientesActionPerformed
 
     private void jButtonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBajaActionPerformed
-        // TODO add your handling code here:
-        if(jTableSocios.getSelectedRowCount()>0){
+        // FALTA ACTUALIZAR VISUALMENTE                       
+        if (jTableSocios.getSelectedRowCount() > 0) {
             int[] seleccionados = jTableSocios.getSelectedRows();
-            for (int i = jTableSocios.getSelectedRowCount()-1; i >= 0; i--) {
-                dtm.removeRow(seleccionados[i]);
+
+            try {
+                // Sentencia para actualizar estado
+                PreparedStatement ps = conexion.prepareStatement(
+                    "UPDATE socio SET estado = ? WHERE DNI = ?"
+                );
+
+                // Recorremos de atrás hacia adelante
+                for (int i = seleccionados.length - 1; i >= 0; i--) {
+
+                    // Obtener el ID del socio (asumo columna 0)
+                    String dni = (
+                        jTableSocios.getValueAt(seleccionados[i], 3).toString()
+                    );
+
+                    // Establecemos ESTADO = "Baja" (o el valor que uses)
+                    ps.setString(1, "Baja");
+                    ps.setString(2, dni);
+
+                    // Ejecutar actualización
+                    ps.executeUpdate();
+
+                }
+
+                ps.close();
+                JOptionPane.showMessageDialog(this, 
+                    "Socio/s dado/s de baja correctamente.");
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(
+                this,
+                "Error al dar de baja socio.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
             }
+
+        } else {
+            JOptionPane.showMessageDialog(
+                this,
+                "Seleccione al menos un socio para dar de baja.",
+                "Aviso",
+                JOptionPane.WARNING_MESSAGE
+            );
         }
-        
+      
+       
         /*
-        TERMINAR, PROBLEMA AL BORRAR SOCIO POR LA FK, ADEMAS INTERESA DAR DE BAJA NO BORRAR
+        BORRAR SOCIO, TERMINAR, PROBLEMA AL BORRAR SOCIO POR LA FK
             if (jTableSocios.getSelectedRowCount() > 0) {
          int[] seleccionados = jTableSocios.getSelectedRows();
 

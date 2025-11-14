@@ -23,6 +23,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
     Connection conexion;
     JFrameGestionSocios jframepadre;
     
+    // TERMINAR NO FUNCIONA GETSOCIOS()
     public void cargaID(){
         jComboBoxId.removeAllItems();
         for (Socio socio : LogicaNegocio.getSocios()) {
@@ -173,8 +174,9 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // TODO add your handling code here:
-        int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+    int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+
+        // Actualizar el objeto socio en memoria
         Socio socio = LogicaNegocio.getSocio(id);
         socio.setNombre(jTextFieldNombre.getText());
         socio.setApellido1(jTextFieldApellido1.getText());
@@ -182,16 +184,21 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         socio.setDni(jTextFieldDni.getText());
         socio.setTelefono(jTextFieldTelefono.getText());
         socio.setCorreo(jTextFieldEmail.getText());
-        socio.setFecha_alta((Date)jSpinnerFechaAlta.getValue());
+        socio.setFecha_alta((Date) jSpinnerFechaAlta.getValue());
         socio.setEstado(jComboBoxEstado.getSelectedItem().toString());
+
+        // Actualizar en lógica de negocio
         LogicaNegocio.editSocio(socio);
+
+        // Recargar tabla en ventana padre
         jframepadre.cargaReal();
-        
-        // TERMINAR 
-        /*
+
+        // ACTUALIZAR EN LA BD
         try {
+
             PreparedStatement ps = conexion.prepareStatement(
-                "UPDATE socio SET (Nombre = ?, Apellido1 = ? , Apellido2 = ? , DNI = ? , Telefono = ? , Correo = ? , Fecha_Alta = ?, Estado = ?) WHERE id_socio = ? "
+                "UPDATE socio SET Nombre = ?, Apellido1 = ?, Apellido2 = ?, DNI = ?, " +
+                "Telefono = ?, Correo = ?, Fecha_Alta = ?, Estado = ? WHERE id_socio = ?"
             );
 
             ps.setString(1, socio.getNombre());
@@ -202,65 +209,18 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
             ps.setString(6, socio.getCorreo());
             ps.setDate(7, new java.sql.Date(socio.getFecha_alta().getTime()));
             ps.setString(8, socio.getEstado());
-            ps.setInteger(9, jComboBoxId.getSelectedItem());
+            ps.setInt(9, id); // ID del socio
 
             ps.executeUpdate();
             ps.close();
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
-                .log(java.util.logging.Level.SEVERE, "Error al insertar socio en la BD", ex);
+
         }
-        
-        ///////
-                try {
-            int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
-            Socio socio = LogicaNegocio.getSocio(id);
 
-            // Actualizamos el objeto Socio
-            socio.setNombre(jTextFieldNombre.getText());
-            socio.setApellido1(jTextFieldApellido1.getText());
-            socio.setApellido2(jTextFieldApellido2.getText());
-            socio.setDni(jTextFieldDni.getText());
-            socio.setTelefono(jTextFieldTelefono.getText());
-            socio.setCorreo(jTextFieldEmail.getText());
-            socio.setFecha_alta((Date) jSpinnerFechaAlta.getValue());
-            socio.setEstado(jComboBoxEstado.getSelectedItem().toString());
-
-            // Actualizamos en la lógica de negocio
-            LogicaNegocio.editSocio(socio);
-
-            // Actualizamos la base de datos
-            PreparedStatement ps = conexion.prepareStatement(
-                "UPDATE socio SET Nombre = ?, Apellido1 = ?, Apellido2 = ?, DNI = ?, Telefono = ?, Correo = ?, Fecha_Alta = ?, Estado = ? WHERE id_socio = ?"
-            );
-
-            ps.setString(1, socio.getNombre());
-            ps.setString(2, socio.getApellido1());
-            ps.setString(3, socio.getApellido2());
-            ps.setString(4, socio.getDni());
-            ps.setString(5, socio.getTelefono());
-            ps.setString(6, socio.getCorreo());
-            ps.setDate(7, new java.sql.Date(socio.getFecha_alta().getTime()));
-            ps.setString(8, socio.getEstado());
-            ps.setInt(9, id);  // Convertimos a int
-
-            ps.executeUpdate();
-            ps.close();
-
-            // Actualizamos la tabla en el JFrame padre
-            jframepadre.cargaReal();
-
-            // Cerramos el diálogo
-            dispose();
-
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
-                .log(java.util.logging.Level.SEVERE, "Error al actualizar socio en la BD", ex);
-        }
-        */
-        
+        // Cerrar la ventana
         dispose();
+
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -272,15 +232,16 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(jComboBoxId.getSelectedItem() != null) {
             int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
-            Socio socio = LogicaNegocio.getSocio(id);
-            jTextFieldNombre.setText(socio.getNombre());
-            jTextFieldApellido1.setText(socio.getApellido1());
-            jTextFieldApellido2.setText(socio.getApellido2());
-            jTextFieldDni.setText(socio.getDni());
-            jTextFieldEmail.setText(socio.getCorreo());
-            jTextFieldTelefono.setText(socio.getTelefono());
-            jSpinnerFechaAlta.setValue(socio.getFecha_alta());
-            jComboBoxEstado.setSelectedItem(socio.getEstado());
+            Socio s = LogicaNegocio.getSocio(id);
+            jTextFieldNombre.setText(s.getNombre());
+            jTextFieldApellido1.setText(s.getApellido1());
+            jTextFieldApellido2.setText(s.getApellido2());
+            jTextFieldDni.setText(s.getDni());
+            jTextFieldTelefono.setText(s.getTelefono());
+            jTextFieldEmail.setText(s.getCorreo());
+            jSpinnerFechaAlta.setValue(s.getFecha_alta());          
+            jComboBoxEstado.setSelectedItem(s.getEstado());
+            
         }
     }//GEN-LAST:event_jComboBoxIdItemStateChanged
 

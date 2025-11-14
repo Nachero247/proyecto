@@ -7,7 +7,7 @@ package proyecto;
 import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,13 +20,38 @@ public class LogicaNegocio {
     static List<Socio> listaSocios = new ArrayList(); 
   
     public static void cargaPrueba() {
-        //String[] columnas ={"Nombre", "Apellido", "Provincia", "Edad", "Correo", "Alta"};
-        // String nombre, String apellido1, String apellido2, String dni, String telefono, String correo, Date fecha_alta, String estado) {
-        for (int i = 0; i < 30; i++) {
-            Socio socio = new Socio("Nombre"+i, "Apellido"+i, "Apellido"+i  ,"18059864P" ,"677889966" , "mail"+i, new Date() , "Alta");
-            listaSocios.add(socio);
+        /*
+        listaSocios.clear();  // Limpiamos lista antes de cargar
+
+        String sql = "SELECT id_socio, nombre, apellido1, apellido2, dni, telefono, correo, fecha_alta, estado "
+                   + "FROM socios";
+
+        try (Connection con = ConexionBBDD.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+
+                Socio socio = new Socio(
+                        rs.getInt("id_socio"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido1"),
+                        rs.getString("apellido2"),
+                        rs.getString("dni"),
+                        rs.getString("telefono"),
+                        rs.getString("correo"),
+                        rs.getDate("fecha_alta"),
+                        rs.getString("estado")
+                );
+
+                listaSocios.add(socio);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("❌ Error cargando socios desde la BBDD");
         }
-        
+        */
     }
     
     
