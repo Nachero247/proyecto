@@ -7,7 +7,7 @@ package proyecto;
 import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,36 +29,52 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
     
     // Carga en la tabla los datos de la BBDD
     public void cargaReal() {
-        try {
-            PreparedStatement ps = conexion.prepareStatement("SELECT Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado FROM socio;");
-            nueva.selectSQL(ps, dtm);
+        String sql = "SELECT Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado FROM socio";
+
+        try (PreparedStatement ps = conexion.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+
+            dtm.setRowCount(0); // Borra filas existentes
+
+            while (rs.next()) {
+                Object[] fila = new Object[8];
+                fila[0] = rs.getString("Nombre");
+                fila[1] = rs.getString("Apellido1");
+                fila[2] = rs.getString("Apellido2");
+                fila[3] = rs.getString("DNI");
+                fila[4] = rs.getString("Telefono");
+                fila[5] = rs.getString("Correo");
+                fila[6] = rs.getDate("Fecha_Alta");
+                fila[7] = rs.getString("Estado");
+
+                dtm.addRow(fila);
+            }
+
         } catch (SQLException ex) {
-            System.getLogger(JFrameGestionSocios.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            ex.printStackTrace();
         }
     }
     
+    public void cargaInicial() { dtm.setRowCount(0); for (Socio socio: LogicaNegocio.getSocios()) { dtm.addRow(socio.devuelveFila()); } }
     
     // --------------------------------------------------------------------------------------------------------------------------------
-    
-    // Carga los datos de prueba en la tabla
-    public void cargaInicial() {
-        dtm.setRowCount(0);
-        for (Socio socio: LogicaNegocio.getSocios()) {
-            dtm.addRow(socio.devuelveFila());
-        }
-    }
-    
+        
     // CONSTRUCTOR
     public JFrameGestionSocios() {
         initComponents();
+
+        // Inicializar conexión y modelo
         nueva = new ConexionBBDD();
         conexion = nueva.getConnection();
         dtm = new DefaultTableModel();
         jTableSocios.setModel(dtm);
+
+        // Definir columnas
+        String[] columnas = {"Nombre", "Apellido1", "Apellido2", "DNI", "Telefono", "Correo", "Fecha_Alta", "Estado"};
+        dtm.setColumnIdentifiers(columnas);
+
+        // Cargar datos desde la BBDD
         cargaReal();
-        //dtm.setColumnIdentifiers(Socio.getColumnas());
-        // LogicaNegocio.cargaPrueba();
-        //cargaInicial();
     }
 
     /**
@@ -162,19 +178,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
 
     // METODOS
     private void jButtonCargaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaClientesActionPerformed
-        // TODO add your handling code here:
-        
-        // Borra la tabla
-        for (int i = jTableSocios.getRowCount()-1; i >= 0; i--) {
-            dtm.removeRow(i);     
-        }
-        // dtm.setRowCount(0);
-        
-        // Añado los clientes del array a la tabla
-        for (Socio socio : LogicaNegocio.getSocios()) {
-            dtm.addRow(socio.devuelveFila());
-        }
-
+        cargaReal();  // Solo recarga los datos de la BBDD
     }//GEN-LAST:event_jButtonCargaClientesActionPerformed
 
     private void jButtonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBajaActionPerformed
@@ -183,28 +187,79 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
             int[] seleccionados = jTableSocios.getSelectedRows();
             for (int i = jTableSocios.getSelectedRowCount()-1; i >= 0; i--) {
                 dtm.removeRow(seleccionados[i]);
-                
             }
         }
+        
+        /*
+        TERMINAR, PROBLEMA AL BORRAR SOCIO POR LA FK, ADEMAS INTERESA DAR DE BAJA NO BORRAR
+            if (jTableSocios.getSelectedRowCount() > 0) {
+         int[] seleccionados = jTableSocios.getSelectedRows();
+
+         try {
+             // Preparar sentencia SQL
+             PreparedStatement ps = conexion.prepareStatement(
+                 "DELETE FROM socio WHERE DNI = ?"
+             );
+
+             // Recorrer las filas seleccionadas (de atrás hacia adelante para no alterar índices)
+             for (int i = seleccionados.length - 1; i >= 0; i--) {
+                 // Obtener el ID_SOCIO desde la tabla (suponiendo que está en la columna 0)
+                 String dni = jTableSocios.getValueAt(seleccionados[i], 3).toString();
+
+                 // Asignar el parámetro en la consulta
+                 ps.setString(1, dni);
+
+                 // Ejecutar eliminación en BD
+                 ps.executeUpdate();
+
+                 // Eliminar también la fila del modelo
+                 dtm.removeRow(seleccionados[i]);
+             }
+
+             ps.close();
+             JOptionPane.showMessageDialog(this, "Socio/s eliminado/s correctamente.");
+
+         } catch (SQLException ex) {
+             java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
+                 .log(java.util.logging.Level.SEVERE, "Error al eliminar socio de la BD", ex);
+             JOptionPane.showMessageDialog(this, "Error al eliminar socio: " + ex.getMessage(), 
+                                           "Error", JOptionPane.ERROR_MESSAGE);
+         }
+
+     } else {
+         JOptionPane.showMessageDialog(this, "Seleccione al menos un socio para eliminar.", 
+                                       "Aviso", JOptionPane.WARNING_MESSAGE);
+     }
+        */
+        
     }//GEN-LAST:event_jButtonBajaActionPerformed
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
         // TODO add your handling code here:
-        JDialogAltaSocio jdac = new JDialogAltaSocio(this, true);
+        JDialogAltaSocio jdac = new JDialogAltaSocio(this, true, this.conexion);
         jdac.setVisible(true);
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
-        JDialogEditarSocio jdec = new JDialogEditarSocio(this, true);
+        JDialogEditarSocio jdec = new JDialogEditarSocio(this, true, this.conexion);
         jdec.setVisible(true);
 
-        // FALTA Recojer los datos de la filaSeleccionada al JDialog
+        // FALTA Recojer los datos de la filaSeleccionada y pasarlo al JDialog
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
-    public void addSocio(Socio nuevo) {
-        LogicaNegocio.addSocio(nuevo);
-        dtm.addRow(nuevo.devuelveFila());
+    public void addSocio(Socio s) {
+        // Solo añade la fila visible (sin id_socio)
+        dtm.addRow(new Object[]{
+            s.getNombre(),
+            s.getApellido1(),
+            s.getApellido2(),
+            s.getDni(),
+            s.getTelefono(),
+            s.getCorreo(),
+            s.getFecha_alta(),
+            s.getEstado()
+        });
     }
     /**
      * @param args the command line arguments

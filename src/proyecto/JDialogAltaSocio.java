@@ -7,6 +7,8 @@ package proyecto;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
+import ConexionBBDD.ConexionBBDD;
+import java.sql.Connection;
 
 /**
  *
@@ -19,11 +21,14 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
     /**
      * Creates new form JDialogAltaCliente
      */
+    Connection conexion;
     JFrameGestionSocios jframepadre;
-    public JDialogAltaSocio(java.awt.Frame parent, boolean modal) {
-        //super(parent, modal);
+    
+    public JDialogAltaSocio(java.awt.Frame parent, boolean modal, Connection conexionPadre) {
         jframepadre =(JFrameGestionSocios)parent;
         initComponents();
+
+        this.conexion = conexionPadre; // Usamos la misma conexión que el padre
     }
 
     /**
@@ -162,7 +167,7 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
         jframepadre.addSocio(nuevo);
         
         // TERMINAR
-        /*
+        
         try {
             PreparedStatement ps = conexion.prepareStatement(
                 "INSERT INTO socio (Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado) " +
@@ -185,7 +190,7 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
                 .log(java.util.logging.Level.SEVERE, "Error al insertar socio en la BD", ex);
         }
-        */
+        
         dispose();
     }//GEN-LAST:event_jButtonAltaActionPerformed
     
