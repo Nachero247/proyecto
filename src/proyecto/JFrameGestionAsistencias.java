@@ -4,6 +4,11 @@
  */
 package proyecto;
 
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author DAM2Alu9
@@ -12,11 +17,13 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGestionAsistencias.class.getName());
 
+    AsistenciaDAO dao = new AsistenciaDAO();
     /**
      * Creates new form JFrameGestionAsistencias
      */
     public JFrameGestionAsistencias() {
         initComponents();
+        cargaTabla();
     }
 
     /**
@@ -30,7 +37,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableAsistencia = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jButtonRegistrarAsistencia = new javax.swing.JButton();
         jButtonBuscar = new javax.swing.JButton();
@@ -40,7 +47,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableAsistencia.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -51,7 +58,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
                 "ID_Asistencia", "Socio_ID", "Fecha_Asistencia", "Hora_Entrada"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableAsistencia);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -71,12 +78,27 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
         jButtonRegistrarAsistencia.setText("Registrar Asistencias");
+        jButtonRegistrarAsistencia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegistrarAsistenciaActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonRegistrarAsistencia);
 
         jButtonBuscar.setText("Buscar");
+        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonBuscar);
 
         jButtonEliminar.setText("Eliminar");
+        jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEliminarActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonEliminar);
 
         jButtonActualizar.setText("Actualizar");
@@ -108,11 +130,83 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonRegistrarAsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarAsistenciaActionPerformed
+        // TODO add your handling code here:
+        String input = JOptionPane.showInputDialog("Introduce el ID del socio");
+        
+        if(input != null){
+            try{
+                int idSocio = Integer.parseInt(input);
+                if(dao.registrarAsistencias(idSocio)){
+                    JOptionPane.showMessageDialog(null, "Asistencia registrada con exito");
+                    cargaTabla();
+                    
+                }else{
+                    JOptionPane.showMessageDialog(null, "Error al registrar la asistencia");
+                }
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Id no válido");
+            }
+        }
+    }//GEN-LAST:event_jButtonRegistrarAsistenciaActionPerformed
+
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
+        // TODO add your handling code here:
+        String input = JOptionPane.showInputDialog("Introduce el Id del socio que quieres buscar");
+        
+        if(input != null){
+            try{
+            
+                int idSocio = Integer.parseInt(input);
+                
+                DefaultTableModel model = (DefaultTableModel) jTableAsistencia.getModel();
+                model.setRowCount(0);
+                
+                List <Asistencia> lista = dao.ListarAsistencia();
+                boolean encontrado = false;
+                
+                for(Asistencia a : lista){
+                    if(a.getId_socio() == idSocio){
+                        model.addRow(new Object[]{
+                        a.getId(),
+                        a.getId_socio(),
+                        a.getFecha(),
+                        a.getHora()
+                        });
+                    encontrado = true;
+                    }
+                }
+                
+                if(!encontrado){
+                    JOptionPane.showMessageDialog(null, "No hay asistencias para ese Id de Socio");
+                }
+                
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Introduce un Id de socio válido");
+        }
+        }
+        
+        
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
+        // TODO add your handling code here:
+        
+        int fila = jTableAsistencia.getSelectedRow();
+        
+        if(fila>= 0){
+            int id = (int) jTableAsistencia.getValueAt(fila, 0);
+            
+            
+        }
+    }//GEN-LAST:event_jButtonEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
+        
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -132,6 +226,25 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new JFrameGestionAsistencias().setVisible(true));
     }
+    
+    
+    private void cargaTabla(){
+        DefaultTableModel model = (DefaultTableModel) jTableAsistencia.getModel();
+        model.setRowCount(0);
+        
+        List<Asistencia> lista = dao.ListarAsistencia();
+        for(Asistencia a: lista){
+            model.addRow(new Object[]{
+            a.getId(),
+            a.getId_socio(),
+            a.getFecha(),
+            a.getHora()
+        })  ;
+        }
+}
+    
+    
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
@@ -142,6 +255,9 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableAsistencia;
     // End of variables declaration//GEN-END:variables
 }
+
+
+

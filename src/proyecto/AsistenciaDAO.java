@@ -21,13 +21,12 @@ public class AsistenciaDAO {
         con = nueva.getConnection();
     }
     
-    public boolean registrarAsistencias(int idAsistencia,int idSocio){
-        String sql = "INSERT INTO asistencia(idAsistencia, idSocio, Fecha_Asistencia, Hora_Entrada) VALUES (?,?,CURDATE(), CURTIME())";
+    public boolean registrarAsistencias(int idSocio){
+        String sql = "INSERT INTO asistencia(socio_id, Fecha_Asistencia, Hora_Entrada) VALUES (?,CURDATE(), NOW())";
         
         try{
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setInt(1, idAsistencia);
-            ps.setInt(2, idSocio);
+            ps.setInt(1, idSocio);
             ps.executeUpdate();
             return true;
             
@@ -45,13 +44,13 @@ public class AsistenciaDAO {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                Asistencia = new Asistencia(
-                rs.getInt("Id"),
-                rs.getInt("id_socio"),
+                Asistencia a = new Asistencia(
+                rs.getInt("id_asistencia"),
+                rs.getInt("socio_id"),
                 rs.getDate("fecha_asistencia"),
-                rs.getTime(sql)
+                rs.getDate("hora_entrada")
                 );
-                Lista.add(rs);
+                Lista.add(a);
             }
         }catch(SQLException e){
             e.printStackTrace();

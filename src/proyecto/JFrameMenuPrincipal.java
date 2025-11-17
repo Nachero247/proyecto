@@ -180,6 +180,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonAsistencias.setText("Asistencias");
         jButtonAsistencias.setActionCommand("");
         jButtonAsistencias.setAlignmentY(0.0F);
+        jButtonAsistencias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAsistenciasActionPerformed(evt);
+            }
+        });
         jPanelLateral.add(jButtonAsistencias);
 
         jSeparator4.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -246,6 +251,14 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         this.dispose();
         
     }//GEN-LAST:event_jButtonSociosActionPerformed
+
+    private void jButtonAsistenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAsistenciasActionPerformed
+        // TODO add your handling code here:
+        JFrameGestionAsistencias asistencias = new JFrameGestionAsistencias();
+        asistencias.setVisible(true);
+        asistencias.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonAsistenciasActionPerformed
 
     /**
      * @param args the command line arguments
