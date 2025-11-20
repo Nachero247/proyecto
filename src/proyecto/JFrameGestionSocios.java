@@ -97,6 +97,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jButtonBaja = new javax.swing.JButton();
         jButtonAlta = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
+        jButtonVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -159,6 +160,14 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jButtonEditar);
+
+        jButtonVolver.setText("Volver");
+        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVolverActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButtonVolver);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -284,6 +293,8 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jdac.setVisible(true);
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
+     
+    
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
         // TODO add your handling code here:
         JDialogEditarSocio jdec = new JDialogEditarSocio(this, true, this.conexion);
@@ -291,6 +302,13 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
 
         // FALTA Recojer los datos de la filaSeleccionada y pasarlo al JDialog
     }//GEN-LAST:event_jButtonEditarActionPerformed
+
+    private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
+        // TODO add your handling code here:
+        JFrameMenuPrincipal menu = new JFrameMenuPrincipal();
+        menu.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_jButtonVolverActionPerformed
 
     public void addSocio(Socio s) {
         // Solo añade la fila visible (sin id_socio)
@@ -335,6 +353,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
     private javax.swing.JButton jButtonBaja;
     private javax.swing.JButton jButtonCargaClientes;
     private javax.swing.JButton jButtonEditar;
+    private javax.swing.JButton jButtonVolver;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

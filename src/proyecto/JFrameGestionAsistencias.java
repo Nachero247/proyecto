@@ -102,9 +102,19 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         jPanel1.add(jButtonEliminar);
 
         jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonActualizarActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonActualizar);
 
         jButtonVolver.setText("Volver");
+        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVolverActionPerformed(evt);
+            }
+        });
         jPanel1.add(jButtonVolver);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -197,9 +207,33 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         if(fila>= 0){
             int id = (int) jTableAsistencia.getValueAt(fila, 0);
             
+            if(dao.eliminar(id)){
+                JOptionPane.showMessageDialog(null, "Asistencia eliminada");
+                cargaTabla();
+            }else{
+                JOptionPane.showMessageDialog(null, "No se pudo eliminar la asistencia");
+            }
+            
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecciona una fila");
             
         }
     }//GEN-LAST:event_jButtonEliminarActionPerformed
+
+    private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
+        // TODO add your handling code here:
+        cargaTabla();
+        JOptionPane.showMessageDialog(null, "Tabla actualizada!!");
+    }//GEN-LAST:event_jButtonActualizarActionPerformed
+
+    private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
+        // TODO add your handling code here:
+        JFrameMenuPrincipal menu = new JFrameMenuPrincipal();
+        menu.setVisible(true);
+        this.dispose();
+        
+    }//GEN-LAST:event_jButtonVolverActionPerformed
 
     /**
      * @param args the command line arguments

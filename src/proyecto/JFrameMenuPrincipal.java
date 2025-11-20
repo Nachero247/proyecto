@@ -26,6 +26,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
      */
     public JFrameMenuPrincipal() {
         initComponents();
+        setLocationRelativeTo(null);
         icono1();
         icono2();
         icono3();
