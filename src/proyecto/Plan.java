@@ -10,17 +10,27 @@ import java.util.Date;
  *
  * @author DAM2Alu9
  */
-public class PlanEntrenamiento {
+public class Plan {
+    private int IdPlan;
     private int socioId;
     private String descripcion;
     private Date fechaInicio;
     private Date fechaFin;
 
-    public PlanEntrenamiento(int socioId, String descripcion, Date fechaInicio, Date fechaFin) {
+    public Plan(int IdPlan, int socioId, String descripcion, Date fechaInicio, Date fechaFin) {
+        this.IdPlan = IdPlan;
         this.socioId = socioId;
         this.descripcion = descripcion;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+    }
+    
+    public int getIdPlan(){
+        return IdPlan;
+    }
+    
+    public void setIdPlan(int IdPlan){
+        this.IdPlan = IdPlan;
     }
 
     public int getSocioId() {

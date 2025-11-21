@@ -192,7 +192,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jPanelLateral.add(jSeparator4);
 
         jButtonPlanes.setBackground(new java.awt.Color(153, 153, 153));
-        jButtonPlanes.setText("Planes de Entrenamiento");
+        jButtonPlanes.setText("Planes");
         jButtonPlanes.setActionCommand("");
         jButtonPlanes.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonPlanes);
