@@ -86,4 +86,41 @@ public class PlanDAO {
         }
     }
     
+    public boolean eliminar(int idPlan){
+        String sql = "DELETE FROM plan WHERE id_Plan = ?";
+        
+        try(PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1, idPlan);
+            return ps.executeUpdate() > 0;
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public Plan buscar(int idPlan){
+        String sql = "SELECT * FROM plan WHERE id_Plan = ?";
+        
+        try(PreparedStatement ps = con.prepareStatement(sql)){
+            ps.setInt(1, idPlan);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                return new Plan(
+                rs.getInt("id_Plan"),
+                rs.getInt("Socio_ID"),
+                rs.getString("Descripcion"),
+                rs.getDate("Fecha_Inicio"),
+                rs.getDate("Fecha_Fin")
+                );
+            }
+            
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
 }
