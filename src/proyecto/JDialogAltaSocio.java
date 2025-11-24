@@ -49,7 +49,7 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jTextFieldApellido2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextFieldApellidoDNI = new javax.swing.JTextField();
+        jTextFieldDNI = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldTelefono = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -83,7 +83,7 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
 
         jLabel4.setText("DNI");
         jPanel1.add(jLabel4);
-        jPanel1.add(jTextFieldApellidoDNI);
+        jPanel1.add(jTextFieldDNI);
 
         jLabel6.setText("Telefono");
         jPanel1.add(jLabel6);
@@ -153,25 +153,71 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
-        // TODO add your handling code here:
-        Socio nuevo = new Socio(
-            jTextFieldNombre.getText(),
-            jTextFieldApellido1.getText(),
-            jTextFieldApellido2.getText(),
-            jTextFieldApellidoDNI.getText(),
-            jTextFieldTelefono.getText(),
-            jTextFieldEmail.getText(),
-            (Date)jSpinnerFechaAlta.getValue(),
-            jComboBoxEstado.getSelectedItem().toString()
-        );
-        jframepadre.addSocio(nuevo);
-        
-        // TERMINAR
-        
+        // Compruebo que el dni introducido no esta en la bbdd
+        String dniIntroducido = jTextFieldDNI.getText().trim();
+        // Obtener estado seleccionado
+        String estado = jComboBoxEstado.getSelectedItem().toString().trim();
+
+        if (jTextFieldNombre.getText().trim().isEmpty() ||
+            jTextFieldApellido1.getText().trim().isEmpty() ||
+            jTextFieldDNI.getText().trim().isEmpty() ||
+            jTextFieldTelefono.getText().trim().isEmpty() ||
+            jTextFieldEmail.getText().trim().isEmpty() ||
+            jSpinnerFechaAlta.getValue() == null ||
+            estado.isEmpty()) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Todos los campos obligatorios deben estar llenos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return; // No continuar si falta algún dato
+        }
+
+
+
         try {
+            // 1. Comprobar si el DNI ya existe
+            PreparedStatement psCheck = conexion.prepareStatement(
+                "SELECT COUNT(*) FROM socio WHERE DNI = ?"
+            );
+            psCheck.setString(1, dniIntroducido);
+
+            java.sql.ResultSet rs = psCheck.executeQuery();
+            rs.next();
+            int existe = rs.getInt(1);
+
+            rs.close();
+            psCheck.close();
+
+            if (existe > 0) {
+                // DNI duplicado → no insertar
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "El DNI " + dniIntroducido + " ya está registrado.",
+                    "DNI duplicado",
+                    javax.swing.JOptionPane.WARNING_MESSAGE
+                );
+                return; // 👉 salir del método
+            }
+
+            // 2. Si no existe, ahora sí creamos el socio
+            Socio nuevo = new Socio(
+                jTextFieldNombre.getText(),
+                jTextFieldApellido1.getText(),
+                jTextFieldApellido2.getText(),
+                dniIntroducido,
+                jTextFieldTelefono.getText(),
+                jTextFieldEmail.getText(),
+                (Date)jSpinnerFechaAlta.getValue(),
+                estado
+            );
+
+            // Inserto el nuevo socio con los datos
             PreparedStatement ps = conexion.prepareStatement(
-                "INSERT INTO socio (Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+                "INSERT INTO socio (Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
             );
 
             ps.setString(1, nuevo.getNombre());
@@ -183,16 +229,28 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
             ps.setDate(7, new java.sql.Date(nuevo.getFecha_alta().getTime()));
             ps.setString(8, nuevo.getEstado());
 
-            ps.executeUpdate(); // Ejecuta el INSERT
+            ps.executeUpdate();
             ps.close();
 
+            // Actualizar tabla del padre
+            jframepadre.addSocio(nuevo);
+            jframepadre.cargaReal();
+
+            dispose();
+
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
-                .log(java.util.logging.Level.SEVERE, "Error al insertar socio en la BD", ex);
+            java.util.logging.Logger.getLogger(JDialogAltaSocio.class.getName())
+                .log(java.util.logging.Level.SEVERE, "Error al verificar o insertar socio", ex);
+
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Error en la base de datos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
         }
-        
-        dispose();
     }//GEN-LAST:event_jButtonAltaActionPerformed
+    
     
     private void jButtonCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarActionPerformed
         // TODO add your handling code here:
@@ -241,7 +299,7 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinnerFechaAlta;
     private javax.swing.JTextField jTextFieldApellido1;
     private javax.swing.JTextField jTextFieldApellido2;
-    private javax.swing.JTextField jTextFieldApellidoDNI;
+    private javax.swing.JTextField jTextFieldDNI;
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldNombre;
     private javax.swing.JTextField jTextFieldTelefono;

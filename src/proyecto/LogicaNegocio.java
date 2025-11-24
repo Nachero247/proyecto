@@ -20,42 +20,47 @@ public class LogicaNegocio {
     static List<Socio> listaSocios = new ArrayList(); 
   
     public static void cargaPrueba() {
-        /*
+        
         listaSocios.clear();  // Limpiamos lista antes de cargar
-
+        
         String sql = "SELECT id_socio, nombre, apellido1, apellido2, dni, telefono, correo, fecha_alta, estado "
-                   + "FROM socios";
+                   + "FROM socio";
 
-        try (Connection con = ConexionBBDD.getConnection();
-             PreparedStatement ps = con.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+        try {
+        ConexionBBDD nueva = new ConexionBBDD();
+        Connection conexion = nueva.getConnection();
+        
+             PreparedStatement ps = conexion.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
 
                 Socio socio = new Socio(
-                        rs.getInt("id_socio"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido1"),
-                        rs.getString("apellido2"),
-                        rs.getString("dni"),
-                        rs.getString("telefono"),
-                        rs.getString("correo"),
-                        rs.getDate("fecha_alta"),
-                        rs.getString("estado")
+                    rs.getString("nombre"),
+                    rs.getString("apellido1"),
+                    rs.getString("apellido2"),
+                    rs.getString("dni"),
+                    rs.getString("telefono"),
+                    rs.getString("correo"),
+                    rs.getDate("fecha_alta"),
+                    rs.getString("estado")
                 );
+
+                socio.setId_socio(rs.getInt("id_socio"));
 
                 listaSocios.add(socio);
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("❌ Error cargando socios desde la BBDD");
+            System.out.println("Error cargando socios desde la BBDD");
         }
-        */
+        
     }
     
     
     public static void addSocio (Socio socio) {
+        System.out.println(socio.getId_socio());
         listaSocios.add(socio);
     }
     
@@ -80,14 +85,14 @@ public class LogicaNegocio {
         return null;
     }
     
-    public static void editSocio(Socio editar){
-        for (int i = 0; i< listaSocios.size(); i++) {
-            if (listaSocios.get(i).getId_socio() == editar.getId_socio())
-                   listaSocios.set(i, editar);
-    
+    public static void editSocio(Socio editar) {
+        for (int i = 0; i < listaSocios.size(); i++) {
+            if (listaSocios.get(i).getId_socio() == editar.getId_socio()) {
+                listaSocios.set(i, editar);  // Se reemplaza el socio en la lista.
+            }
         }
-        
     }
+
     
     public static List<Socio> getSocios() {
         return listaSocios;

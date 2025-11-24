@@ -26,7 +26,9 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     /**
      * Creates new form JFrameGestionPagos
      */
-    public JFrameGestionPlanes() {
+    private String rol;
+    public JFrameGestionPlanes(String rol) {
+        this.rol = rol;
         initComponents();
         cargarTabla();
     }
@@ -290,7 +292,7 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JFrameGestionPlanes().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionPlanes().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
