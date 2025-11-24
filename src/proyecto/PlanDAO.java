@@ -69,7 +69,7 @@ public class PlanDAO {
     }
     
     public boolean actualizar(Plan p){
-        String sql = "UPDATE pla SET Socio_ID = ?, Descripcion = ?, Fecha_Inicio = ?, Fecha_Fin = ? WHERE id_Plan = ?";
+        String sql = "UPDATE plan SET Socio_ID = ?, Descripcion = ?, Fecha_Inicio = ?, Fecha_Fin = ? WHERE ID_Plan = ?";
         
         try(PreparedStatement ps = con.prepareStatement(sql)){
             ps.setInt(1, p.getSocioId());
@@ -87,7 +87,7 @@ public class PlanDAO {
     }
     
     public boolean eliminar(int idPlan){
-        String sql = "DELETE FROM plan WHERE id_Plan = ?";
+        String sql = "DELETE FROM plan WHERE ID_Plan = ?";
         
         try(PreparedStatement ps = con.prepareStatement(sql)){
             ps.setInt(1, idPlan);
@@ -100,7 +100,7 @@ public class PlanDAO {
     }
     
     public Plan buscar(int idPlan){
-        String sql = "SELECT * FROM plan WHERE id_Plan = ?";
+        String sql = "SELECT * FROM plan WHERE ID_Plan = ?";
         
         try(PreparedStatement ps = con.prepareStatement(sql)){
             ps.setInt(1, idPlan);
@@ -108,7 +108,7 @@ public class PlanDAO {
             
             if(rs.next()){
                 return new Plan(
-                rs.getInt("id_Plan"),
+                rs.getInt("ID_Plan"),
                 rs.getInt("Socio_ID"),
                 rs.getString("Descripcion"),
                 rs.getDate("Fecha_Inicio"),

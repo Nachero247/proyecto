@@ -79,13 +79,24 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
 
         jLabel1.setText("ID Plan");
 
+        jTextFieldPlan.setMinimumSize(new java.awt.Dimension(90, 40));
+        jTextFieldPlan.setName(""); // NOI18N
+
         jLabel2.setText("Descripcion");
+
+        jTextFieldDescripcion.setMinimumSize(new java.awt.Dimension(90, 40));
 
         jLabel3.setText("Socio ID");
 
+        jTextFieldSocio.setMinimumSize(new java.awt.Dimension(90, 40));
+
         jLabel4.setText("Fecha Inicio");
 
+        jTextFieldFecha_Inicio.setMinimumSize(new java.awt.Dimension(90, 40));
+
         jLabel5.setText("Fecha Fin");
+
+        jTextFieldFecha_Fin.setMinimumSize(new java.awt.Dimension(90, 40));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -101,23 +112,23 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
                         .addGap(46, 46, 46)
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+                    .addComponent(jTextFieldPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(70, 70, 70)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(128, 128, 128)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(47, 47, 47)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextFieldFecha_Inicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextFieldSocio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(98, 98, 98)
+                        .addComponent(jTextFieldSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100)
                         .addComponent(jLabel5)
-                        .addGap(39, 39, 39)
-                        .addComponent(jTextFieldFecha_Fin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(71, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldFecha_Fin, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldFecha_Inicio, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(96, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,8 +139,8 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
                     .addComponent(jTextFieldPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(jTextFieldSocio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextFieldFecha_Fin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldFecha_Fin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -153,6 +164,11 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         jPanel2.add(jButtonAgregar);
 
         jButtonBuscar.setText("Buscar");
+        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBuscarActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButtonBuscar);
 
         jButtonEliminar.setText("Eliminar");
@@ -172,6 +188,11 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         jPanel2.add(jButtonActualizar);
 
         jButtonVolver.setText("Volver");
+        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVolverActionPerformed(evt);
+            }
+        });
         jPanel2.add(jButtonVolver);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -239,10 +260,49 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
         // TODO add your handling code here:
-            
-            
+           int idPlan = Integer.parseInt(jTextFieldPlan.getText());
+           
+           if(dao.eliminar(idPlan)){
+               JOptionPane.showMessageDialog(null, "Plan eliminado");
+               cargarTabla();
+           }else{
+               JOptionPane.showMessageDialog(null, "No se ha podido eliminar el plan");
+           }
             
     }//GEN-LAST:event_jButtonEliminarActionPerformed
+
+    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
+        // TODO add your handling code here:
+        String input = JOptionPane.showInputDialog("Introduce el Id del plan: ");
+        
+        if(input != null) try{
+            int idPlan = Integer.parseInt(input);
+            
+            Plan p = dao.buscar(idPlan);
+            
+            if(p != null){
+                jTextFieldPlan.setText(String.valueOf(p.getIdPlan()));
+                jTextFieldSocio.setText(String.valueOf(p.getSocioId()));
+                jTextFieldDescripcion.setText(p.getDescripcion());
+                jTextFieldFecha_Inicio.setText(p.getFechaInicio().toString());
+                jTextFieldFecha_Fin.setText(p.getFechaFin().toString());
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "No existe un plan con ese ID");
+            }
+            
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null, "ID inválido");
+            
+        }
+    }//GEN-LAST:event_jButtonBuscarActionPerformed
+
+    private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
+        // TODO add your handling code here:
+       JFrameMenuPrincipal menu = new JFrameMenuPrincipal(rol);
+       menu.setVisible(true);
+       this.dispose();
+    }//GEN-LAST:event_jButtonVolverActionPerformed
 
     
     private void cargarTabla(){
