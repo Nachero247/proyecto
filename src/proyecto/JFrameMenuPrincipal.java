@@ -18,13 +18,14 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameMenuPrincipal.class.getName());
     
-    
+    private String rol;
     
 
     /**
      * Creates new form JFrameMenuPrincipal
      */
-    public JFrameMenuPrincipal() {
+    public JFrameMenuPrincipal(String rol) {
+        this.rol = rol;
         initComponents();
         setLocationRelativeTo(null);
         icono1();
@@ -43,12 +44,13 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         configurarBotones(jButtonPlanes);
         configurarBotones(jButtonSocios);
         configurarBotones(jButtonUsuarios);
-        
+        configurarMenu();
     }
     
     
     
     public void icono1(){
+        //PROBLEMA LAS IMAGENES SE UBICAN EN BUILD/CLASSES/IMAGENES, NO ESTA EN GITHUB
          ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/logo_GymManager.png"));
         Image imagenEscalada = original.getImage().getScaledInstance(jLabelTitulo.getWidth(), jLabelTitulo.getHeight(), Image.SCALE_SMOOTH);
         jLabelTitulo.setIcon(new ImageIcon(imagenEscalada));
@@ -172,6 +174,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonPagos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jButtonPagos.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         jButtonPagos.setIconTextGap(10);
+        jButtonPagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPagosActionPerformed(evt);
+            }
+        });
         jPanelLateral.add(jButtonPagos);
 
         jSeparator3.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -192,7 +199,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jPanelLateral.add(jSeparator4);
 
         jButtonPlanes.setBackground(new java.awt.Color(153, 153, 153));
-        jButtonPlanes.setText("Planes");
+        jButtonPlanes.setText("Planes de Entrenamiento");
         jButtonPlanes.setActionCommand("");
         jButtonPlanes.setAlignmentY(0.0F);
         jPanelLateral.add(jButtonPlanes);
@@ -246,7 +253,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonSociosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSociosActionPerformed
         // TODO add your handling code here:
-        JFrameGestionSocios ventanaSocios = new JFrameGestionSocios();
+        JFrameGestionSocios ventanaSocios = new JFrameGestionSocios(rol);
         ventanaSocios.setVisible(true);
         ventanaSocios.setLocationRelativeTo(null);
         this.dispose();
@@ -255,12 +262,60 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonAsistenciasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAsistenciasActionPerformed
         // TODO add your handling code here:
-        JFrameGestionAsistencias asistencias = new JFrameGestionAsistencias();
+        
+        JFrameGestionAsistencias asistencias = new JFrameGestionAsistencias(rol);
         asistencias.setVisible(true);
         asistencias.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonAsistenciasActionPerformed
 
+    private void jButtonPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagosActionPerformed
+        // TODO add your handling code here:
+        JFramePagos pagos = new JFramePagos(rol);
+        pagos.setVisible(true);
+        pagos.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonPagosActionPerformed
+
+    
+    public void configurarMenu() {
+        // TERMINAR Profesor
+        //if (rolUsuario == "Entrenador") {
+        if (rol.equals("Entrenador")) {
+            // Desactivar botones que NO deben usarse
+            jButtonSocios.setEnabled(false);
+            jButtonPagos.setEnabled(false);
+            jButtonUsuarios.setEnabled(false);
+
+            // Mantener activados los permitidos
+            jButtonAsistencias.setEnabled(true);
+            jButtonAyuda.setEnabled(true);
+            jButtonCerrarSesion.setEnabled(true);
+            jButtonPlanes.setEnabled(true);
+        } else if(rol.equals("Administrador")){ // Es un admin
+            // Mantener activados los permitidos
+            jButtonSocios.setEnabled(true);
+            jButtonPagos.setEnabled(true);
+            jButtonUsuarios.setEnabled(true);
+            jButtonAsistencias.setEnabled(true);
+            jButtonAyuda.setEnabled(true);
+            jButtonCerrarSesion.setEnabled(true);
+            jButtonPlanes.setEnabled(true);
+        } else { // Es un profesor
+            // Desactivar botones que NO deben usarse
+            jButtonSocios.setEnabled(false);
+            jButtonPagos.setEnabled(false);
+            jButtonUsuarios.setEnabled(false);
+            jButtonPlanes.setEnabled(false);
+            
+            // Mantener activados los permitidos
+            jButtonAsistencias.setEnabled(true);
+            jButtonAyuda.setEnabled(true);
+            jButtonCerrarSesion.setEnabled(true);
+            
+        }
+    }
+        
     /**
      * @param args the command line arguments
      */
@@ -283,7 +338,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JFrameMenuPrincipal().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameMenuPrincipal().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

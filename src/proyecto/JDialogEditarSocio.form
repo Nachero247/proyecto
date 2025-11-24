@@ -122,7 +122,7 @@
             <Property name="text" type="java.lang.String" value="DNI"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldDni">
+        <Component class="javax.swing.JTextField" name="jTextFieldDNI">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>

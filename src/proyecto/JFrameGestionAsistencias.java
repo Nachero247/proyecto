@@ -21,7 +21,10 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     /**
      * Creates new form JFrameGestionAsistencias
      */
-    public JFrameGestionAsistencias() {
+    
+    private String rol;
+    public JFrameGestionAsistencias(String rol) {
+        this.rol = rol;
         initComponents();
         cargaTabla();
     }
@@ -229,7 +232,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
         // TODO add your handling code here:
-        JFrameMenuPrincipal menu = new JFrameMenuPrincipal();
+        JFrameMenuPrincipal menu = new JFrameMenuPrincipal(rol);
         menu.setVisible(true);
         this.dispose();
         
@@ -258,7 +261,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JFrameGestionAsistencias().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionAsistencias().setVisible(true));
     }
     
     

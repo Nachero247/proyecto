@@ -23,20 +23,37 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
     Connection conexion;
     JFrameGestionSocios jframepadre;
     
-    // TERMINAR NO FUNCIONA GETSOCIOS()
+    // Carga los ids disponibles en el jComboBoxId
     public void cargaID(){
         jComboBoxId.removeAllItems();
         for (Socio socio : LogicaNegocio.getSocios()) {
             jComboBoxId.addItem(String.valueOf(socio.getId_socio()));
         }
     }
-        
-    public JDialogEditarSocio(java.awt.Frame parent, boolean modal, Connection conexion) {
-        //super(parent, modal);
+    
+    public void cargarCampos(Socio socio) {
+        jComboBoxId.setSelectedItem(String.valueOf(socio.getId_socio()));
+        jTextFieldNombre.setText(socio.getNombre());
+        jTextFieldApellido1.setText(socio.getApellido1());
+        jTextFieldApellido2.setText(socio.getApellido2());
+        jTextFieldDNI.setText(socio.getDni());
+        jTextFieldTelefono.setText(socio.getTelefono());
+        jTextFieldEmail.setText(socio.getCorreo());
+        jSpinnerFechaAlta.setValue(socio.getFecha_alta());
+        jComboBoxEstado.setSelectedItem(socio.getEstado());
+    }
+    
+    private Socio socio; // Recoje los datos del socio seleccionado en la tabla
+    
+    public JDialogEditarSocio(java.awt.Frame parent, boolean modal, Connection conexion, Socio socio) {
         jframepadre =(JFrameGestionSocios)parent;
         initComponents();
         this.conexion = conexion;
+        this.socio = socio;
         cargaID();
+        
+        // Cargar los datos del socio seleccionado
+        cargarCampos(socio);
     }
 
     /**
@@ -59,7 +76,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jTextFieldApellido2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextFieldDni = new javax.swing.JTextField();
+        jTextFieldDNI = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldTelefono = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -104,7 +121,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
 
         jLabel4.setText("DNI");
         jPanel1.add(jLabel4);
-        jPanel1.add(jTextFieldDni);
+        jPanel1.add(jTextFieldDNI);
 
         jLabel6.setText("Telefono");
         jPanel1.add(jLabel6);
@@ -174,28 +191,78 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-    int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+        int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+        String estado = (jComboBoxEstado.getSelectedItem().toString());
 
-        // Actualizar el objeto socio en memoria
+        // Comprobar que los campos obligatorios no estén vacíos
+        if (jTextFieldNombre.getText().trim().isEmpty() ||
+            jTextFieldApellido1.getText().trim().isEmpty() ||
+            jTextFieldDNI.getText().trim().isEmpty() ||
+            jTextFieldTelefono.getText().trim().isEmpty() ||
+            jTextFieldEmail.getText().trim().isEmpty() ||
+            jSpinnerFechaAlta.getValue() == null) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Todos los campos obligatorios deben estar llenos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return; // No continuar si falta algún dato
+        }
+
+        // Comprobar si el DNI ya está registrado en otro socio
+        String nuevoDNI = jTextFieldDNI.getText().trim();
+        try {
+                    
+            PreparedStatement psCheck = conexion.prepareStatement(
+                "SELECT COUNT(*) FROM socio WHERE DNI = ? AND id_socio <> ?"
+            );
+            psCheck.setString(1, nuevoDNI);
+            psCheck.setInt(2, id);
+
+            java.sql.ResultSet rs = psCheck.executeQuery();
+            rs.next();
+            int existe = rs.getInt(1);
+
+            rs.close();
+            psCheck.close();
+
+            if (existe > 0) {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "El DNI " + nuevoDNI + " ya está registrado en otro socio.",
+                    "DNI duplicado",
+                    javax.swing.JOptionPane.WARNING_MESSAGE
+                );
+                return; // No continúa
+            }
+
+        } catch (SQLException ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al comprobar DNI", ex);
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Error al verificar DNI en la base de datos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+        
+        // Editar el socio con los datos ingresados
         Socio socio = LogicaNegocio.getSocio(id);
-        socio.setNombre(jTextFieldNombre.getText());
-        socio.setApellido1(jTextFieldApellido1.getText());
-        socio.setApellido2(jTextFieldApellido2.getText());
-        socio.setDni(jTextFieldDni.getText());
-        socio.setTelefono(jTextFieldTelefono.getText());
-        socio.setCorreo(jTextFieldEmail.getText());
+        socio.setNombre(jTextFieldNombre.getText().trim());
+        socio.setApellido1(jTextFieldApellido1.getText().trim());
+        socio.setApellido2(jTextFieldApellido2.getText().trim());
+        socio.setDni(nuevoDNI);
+        socio.setTelefono(jTextFieldTelefono.getText().trim());
+        socio.setCorreo(jTextFieldEmail.getText().trim());
         socio.setFecha_alta((Date) jSpinnerFechaAlta.getValue());
-        socio.setEstado(jComboBoxEstado.getSelectedItem().toString());
+        socio.setEstado(estado);
 
-        // Actualizar en lógica de negocio
         LogicaNegocio.editSocio(socio);
 
-        // Recargar tabla en ventana padre
-        jframepadre.cargaReal();
-
-        // ACTUALIZAR EN LA BD
         try {
-
             PreparedStatement ps = conexion.prepareStatement(
                 "UPDATE socio SET Nombre = ?, Apellido1 = ?, Apellido2 = ?, DNI = ?, " +
                 "Telefono = ?, Correo = ?, Fecha_Alta = ?, Estado = ? WHERE id_socio = ?"
@@ -209,18 +276,25 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
             ps.setString(6, socio.getCorreo());
             ps.setDate(7, new java.sql.Date(socio.getFecha_alta().getTime()));
             ps.setString(8, socio.getEstado());
-            ps.setInt(9, id); // ID del socio
+            ps.setInt(9, id);
 
             ps.executeUpdate();
             ps.close();
 
         } catch (SQLException ex) {
-
+            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar socio", ex);
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Error al actualizar el socio en la base de datos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
         }
 
-        // Cerrar la ventana
+        // Refrescar tabla y cerrar ventana
+        jframepadre.cargaReal();
         dispose();
-
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
@@ -236,12 +310,11 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
             jTextFieldNombre.setText(s.getNombre());
             jTextFieldApellido1.setText(s.getApellido1());
             jTextFieldApellido2.setText(s.getApellido2());
-            jTextFieldDni.setText(s.getDni());
+            jTextFieldDNI.setText(s.getDni());
             jTextFieldTelefono.setText(s.getTelefono());
             jTextFieldEmail.setText(s.getCorreo());
             jSpinnerFechaAlta.setValue(s.getFecha_alta());          
             jComboBoxEstado.setSelectedItem(s.getEstado());
-            
         }
     }//GEN-LAST:event_jComboBoxIdItemStateChanged
 
@@ -289,7 +362,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
     private javax.swing.JSpinner jSpinnerFechaAlta;
     private javax.swing.JTextField jTextFieldApellido1;
     private javax.swing.JTextField jTextFieldApellido2;
-    private javax.swing.JTextField jTextFieldDni;
+    private javax.swing.JTextField jTextFieldDNI;
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldNombre;
     private javax.swing.JTextField jTextFieldTelefono;

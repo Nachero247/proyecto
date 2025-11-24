@@ -10,8 +10,12 @@ import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -27,7 +31,9 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
     DefaultTableModel dtm;
     ConexionBBDD nueva;
     Connection conexion;
+    TableRowSorter<TableModel> order;
     
+    private String rol;
     // --------------------------------------------------------------------------------------------------------------------------------
     
     // Carga en la tabla los datos de la BBDD
@@ -58,12 +64,14 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         }
     }
     
+    // Carga en la tabla visualmente los socios guardados en el array
     public void cargaInicial() { dtm.setRowCount(0); for (Socio socio: LogicaNegocio.getSocios()) { dtm.addRow(socio.devuelveFila()); } }
     
     // --------------------------------------------------------------------------------------------------------------------------------
         
     // CONSTRUCTOR
-    public JFrameGestionSocios() {
+    public JFrameGestionSocios(String rol) {
+        this.rol = rol;
         initComponents();
 
         // Inicializar conexión y modelo
@@ -77,7 +85,10 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         dtm.setColumnIdentifiers(columnas);
 
         // Cargar datos desde la BBDD
-        cargaReal();
+        LogicaNegocio.cargaPrueba(); // Carga los datos de la bbdd en un array
+        cargaReal(); // Carga los datos de la bbdd en la tabla
+        order = new TableRowSorter<>(dtm);
+        jTableSocios.setRowSorter(order);
     }
 
     /**
@@ -94,9 +105,11 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jTableSocios = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
         jButtonCargaClientes = new javax.swing.JButton();
-        jButtonBaja = new javax.swing.JButton();
         jButtonAlta = new javax.swing.JButton();
+        jButtonBaja = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jTextFieldBuscar = new javax.swing.JTextField();
         jButtonVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -137,14 +150,6 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         });
         jPanel3.add(jButtonCargaClientes);
 
-        jButtonBaja.setText("Baja");
-        jButtonBaja.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBajaActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButtonBaja);
-
         jButtonAlta.setText("Alta");
         jButtonAlta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,6 +158,14 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         });
         jPanel3.add(jButtonAlta);
 
+        jButtonBaja.setText("Baja");
+        jButtonBaja.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonBajaActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButtonBaja);
+
         jButtonEditar.setText("Editar");
         jButtonEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -160,6 +173,17 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jButtonEditar);
+
+        jLabel1.setText("Buscar");
+        jPanel3.add(jLabel1);
+
+        jTextFieldBuscar.setPreferredSize(new java.awt.Dimension(80, 22));
+        jTextFieldBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscarKeyReleased(evt);
+            }
+        });
+        jPanel3.add(jTextFieldBuscar);
 
         jButtonVolver.setText("Volver");
         jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
@@ -180,21 +204,33 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    // METODOS
-    private void jButtonCargaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaClientesActionPerformed
-        cargaReal();  // Solo recarga los datos de la BBDD
-    }//GEN-LAST:event_jButtonCargaClientesActionPerformed
+    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
+        int fila = jTableSocios.getSelectedRow();
+
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un socio de la tabla");
+            return;
+        }
+        LogicaNegocio.cargaPrueba();
+        // Obtener el ID desde LogicaNegocio (misma posición)
+        Socio socioSeleccionado = LogicaNegocio.getSocios().get(fila);
+
+        // Pasar el socio al JDialog
+        JDialogEditarSocio jdec = new JDialogEditarSocio(this, true, conexion, socioSeleccionado);
+
+        jdec.setVisible(true);
+    }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBajaActionPerformed
-        // FALTA ACTUALIZAR VISUALMENTE                       
+        // FALTA ACTUALIZAR VISUALMENTE
         if (jTableSocios.getSelectedRowCount() > 0) {
             int[] seleccionados = jTableSocios.getSelectedRows();
 
@@ -222,15 +258,17 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
                 }
 
                 ps.close();
-                JOptionPane.showMessageDialog(this, 
+                JOptionPane.showMessageDialog(this,
                     "Socio/s dado/s de baja correctamente.");
+                
+                cargaReal(); // Recargo los datos
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(
-                this,
-                "Error al dar de baja socio.",
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+                    this,
+                    "Error al dar de baja socio.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
             }
 
         } else {
@@ -241,72 +279,77 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
                 JOptionPane.WARNING_MESSAGE
             );
         }
-      
-       
+
         /*
         BORRAR SOCIO, TERMINAR, PROBLEMA AL BORRAR SOCIO POR LA FK
-            if (jTableSocios.getSelectedRowCount() > 0) {
-         int[] seleccionados = jTableSocios.getSelectedRows();
+        if (jTableSocios.getSelectedRowCount() > 0) {
+            int[] seleccionados = jTableSocios.getSelectedRows();
 
-         try {
-             // Preparar sentencia SQL
-             PreparedStatement ps = conexion.prepareStatement(
-                 "DELETE FROM socio WHERE DNI = ?"
-             );
+            try {
+                // Preparar sentencia SQL
+                PreparedStatement ps = conexion.prepareStatement(
+                    "DELETE FROM socio WHERE DNI = ?"
+                );
 
-             // Recorrer las filas seleccionadas (de atrás hacia adelante para no alterar índices)
-             for (int i = seleccionados.length - 1; i >= 0; i--) {
-                 // Obtener el ID_SOCIO desde la tabla (suponiendo que está en la columna 0)
-                 String dni = jTableSocios.getValueAt(seleccionados[i], 3).toString();
+                // Recorrer las filas seleccionadas (de atrás hacia adelante para no alterar índices)
+                for (int i = seleccionados.length - 1; i >= 0; i--) {
+                    // Obtener el ID_SOCIO desde la tabla (suponiendo que está en la columna 0)
+                    String dni = jTableSocios.getValueAt(seleccionados[i], 3).toString();
 
-                 // Asignar el parámetro en la consulta
-                 ps.setString(1, dni);
+                    // Asignar el parámetro en la consulta
+                    ps.setString(1, dni);
 
-                 // Ejecutar eliminación en BD
-                 ps.executeUpdate();
+                    // Ejecutar eliminación en BD
+                    ps.executeUpdate();
 
-                 // Eliminar también la fila del modelo
-                 dtm.removeRow(seleccionados[i]);
-             }
+                    // Eliminar también la fila del modelo
+                    dtm.removeRow(seleccionados[i]);
+                }
 
-             ps.close();
-             JOptionPane.showMessageDialog(this, "Socio/s eliminado/s correctamente.");
+                ps.close();
+                JOptionPane.showMessageDialog(this, "Socio/s eliminado/s correctamente.");
 
-         } catch (SQLException ex) {
-             java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
-                 .log(java.util.logging.Level.SEVERE, "Error al eliminar socio de la BD", ex);
-             JOptionPane.showMessageDialog(this, "Error al eliminar socio: " + ex.getMessage(), 
-                                           "Error", JOptionPane.ERROR_MESSAGE);
-         }
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
+                .log(java.util.logging.Level.SEVERE, "Error al eliminar socio de la BD", ex);
+                JOptionPane.showMessageDialog(this, "Error al eliminar socio: " + ex.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
 
-     } else {
-         JOptionPane.showMessageDialog(this, "Seleccione al menos un socio para eliminar.", 
-                                       "Aviso", JOptionPane.WARNING_MESSAGE);
-     }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione al menos un socio para eliminar.",
+                "Aviso", JOptionPane.WARNING_MESSAGE);
+        }
         */
-        
+
     }//GEN-LAST:event_jButtonBajaActionPerformed
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
         // TODO add your handling code here:
         JDialogAltaSocio jdac = new JDialogAltaSocio(this, true, this.conexion);
         jdac.setVisible(true);
+        //jd.setUusrio("");
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
-     
-    
-    private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        // TODO add your handling code here:
-        JDialogEditarSocio jdec = new JDialogEditarSocio(this, true, this.conexion);
-        jdec.setVisible(true);
+    // METODOS
+    private void jButtonCargaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaClientesActionPerformed
+        cargaReal();  // Solo recarga los datos de la BBDD
+    }//GEN-LAST:event_jButtonCargaClientesActionPerformed
 
-        // FALTA Recojer los datos de la filaSeleccionada y pasarlo al JDialog
-    }//GEN-LAST:event_jButtonEditarActionPerformed
+    private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
+        // TODO add your handling code here:
+        try {
+            RowFilter<Object, Object> rf = RowFilter.regexFilter(jTextFieldBuscar.getText());
+            order.setRowFilter(rf);
+        } catch (PatternSyntaxException pse) {
+            System.out.println("Bad regex pattern");
+        }
+    }//GEN-LAST:event_jTextFieldBuscarKeyReleased
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
         // TODO add your handling code here:
-        JFrameMenuPrincipal menu = new JFrameMenuPrincipal();
-        menu.setVisible(true);
+        JFrameMenuPrincipal jfap = new JFrameMenuPrincipal(rol);
+        jfap.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
@@ -323,6 +366,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
             s.getEstado()
         });
     }
+    
     /**
      * @param args the command line arguments
      */
@@ -345,7 +389,8 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JFrameGestionSocios().setVisible(true));
+        // TERMINAR
+        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionSocios().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -354,9 +399,11 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
     private javax.swing.JButton jButtonCargaClientes;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonVolver;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableSocios;
+    private javax.swing.JTextField jTextFieldBuscar;
     // End of variables declaration//GEN-END:variables
 }
