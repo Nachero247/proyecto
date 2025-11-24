@@ -202,6 +202,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonPlanes.setText("Planes de Entrenamiento");
         jButtonPlanes.setActionCommand("");
         jButtonPlanes.setAlignmentY(0.0F);
+        jButtonPlanes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPlanesActionPerformed(evt);
+            }
+        });
         jPanelLateral.add(jButtonPlanes);
 
         jSeparator5.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -276,6 +281,14 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         pagos.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonPagosActionPerformed
+
+    private void jButtonPlanesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPlanesActionPerformed
+        // TODO add your handling code here:
+        JFrameGestionPlanes planes = new JFrameGestionPlanes(rol);
+        planes.setVisible(true);
+        planes.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonPlanesActionPerformed
 
     
     public void configurarMenu() {
