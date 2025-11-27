@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 /**
@@ -225,6 +226,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonAyuda.setText("Ayuda");
         jButtonAyuda.setActionCommand("");
         jButtonAyuda.setAlignmentY(0.0F);
+        jButtonAyuda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAyudaActionPerformed(evt);
+            }
+        });
         jPanelLateral.add(jButtonAyuda);
 
         jSeparator8.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -234,6 +240,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonCerrarSesion.setText("Cerrar Sesión");
         jButtonCerrarSesion.setActionCommand("");
         jButtonCerrarSesion.setAlignmentY(0.0F);
+        jButtonCerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCerrarSesionActionPerformed(evt);
+            }
+        });
         jPanelLateral.add(jButtonCerrarSesion);
 
         getContentPane().add(jPanelLateral, java.awt.BorderLayout.WEST);
@@ -289,6 +300,43 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         planes.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonPlanesActionPerformed
+
+    private void jButtonCerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarSesionActionPerformed
+        // TODO add your handling code here:
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Seguro que quieres cerrar sesión?",
+                "Cerrar sesión",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        
+        if(opcion == JOptionPane.YES_OPTION){
+            JFrameLogin login = new JFrameLogin();
+            login.setVisible(true);
+            this.dispose();
+        }
+        
+    }//GEN-LAST:event_jButtonCerrarSesionActionPerformed
+
+    private void jButtonAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAyudaActionPerformed
+        // TODO add your handling code here:
+        String mensaje = 
+                "AYUDA DEL SISTEMA DE GESTIÓN DEL GIMNASIO:\n" + 
+                "Menú socios: Permite agregar, buscar, actualizar y eliminar socios.\n" + 
+                "Gestión de asistencias: Registra y administra la entrada diaria de los socios.\n" +
+                "Planes de pago: Puedes crear, modificar y eliminar planes de pago.\n" + 
+                "Cerrar sesión: Vuelve inmediatamente a la pantalla del Login.\n" +
+                "CONSEJOS:\n" +
+                "Asegúrate de rellenar todos los campos obligatorios antes de guardar.\n" +
+                "Si un registro no se puede eliminar, puede tener datos vinculados.\n" +
+                "Usa el botón Buscar para localizar un registro por ID rápidamente.\n" +
+                "INFORMACIÓN DEL SISTEMA:\n" +
+                "Versión 1.0\n" +
+                "Año: 2025\n" +
+                "Para más información, contacta con el administrador del sistema.";
+        
+        JOptionPane.showMessageDialog(this, mensaje, "Ayuda", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jButtonAyudaActionPerformed
 
     
     public void configurarMenu() {
