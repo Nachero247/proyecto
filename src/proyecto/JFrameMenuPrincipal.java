@@ -51,7 +51,6 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
     
     
     public void icono1(){
-        //PROBLEMA LAS IMAGENES SE UBICAN EN BUILD/CLASSES/IMAGENES, NO ESTA EN GITHUB
          ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/logo_GymManager.png"));
         Image imagenEscalada = original.getImage().getScaledInstance(jLabelTitulo.getWidth(), jLabelTitulo.getHeight(), Image.SCALE_SMOOTH);
         jLabelTitulo.setIcon(new ImageIcon(imagenEscalada));
