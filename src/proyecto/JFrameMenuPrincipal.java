@@ -216,6 +216,11 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonUsuarios.setText("Usuarios");
         jButtonUsuarios.setActionCommand("");
         jButtonUsuarios.setAlignmentY(0.0F);
+        jButtonUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUsuariosActionPerformed(evt);
+            }
+        });
         jPanelLateral.add(jButtonUsuarios);
 
         jSeparator7.setMaximumSize(new java.awt.Dimension(32767, 20));
@@ -336,6 +341,14 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         
         JOptionPane.showMessageDialog(this, mensaje, "Ayuda", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jButtonAyudaActionPerformed
+
+    private void jButtonUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuariosActionPerformed
+        // TODO add your handling code here:
+        JFrameUsuarios usuario = new JFrameUsuarios(rol);
+        usuario.setVisible(true);
+        usuario.setLocationRelativeTo(null);
+        this.dispose();
+    }//GEN-LAST:event_jButtonUsuariosActionPerformed
 
     
     public void configurarMenu() {
