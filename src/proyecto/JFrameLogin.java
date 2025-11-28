@@ -105,25 +105,24 @@ public class JFrameLogin extends javax.swing.JFrame {
         String password = new String(jPasswordField.getPassword());
         
         try {
-        PreparedStatement ps = conexion.prepareStatement(
-            "SELECT Usuario, Rol FROM usuario WHERE Usuario = ? AND Contrasena = ?"
-        );
-        ps.setString(1, user);
-        ps.setString(2, password);
-        ResultSet rs = ps.executeQuery();
-        
-        if (rs.next()) {
-            String u = rs.getString("Usuario");
-            String rol = rs.getString("Rol");
+            PreparedStatement ps = conexion.prepareStatement(
+                "SELECT Usuario, Rol FROM usuario WHERE Usuario = ? AND Contrasena = ?"
+            );
+            ps.setString(1, user);
+            ps.setString(2, password);
+            ResultSet rs = ps.executeQuery();
 
-            
-            // TERMINAR ACCEDER A MenuPrincipal segun el rol del usuario pudiendo acceder a ciertas partes
-            JFrameMenuPrincipal menu = new JFrameMenuPrincipal(rol);
-            menu.setVisible(true);
-            this.dispose(); // Cierro login
-        } else {
-            JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
-        }
+            if (rs.next()) {
+                String u = rs.getString("Usuario");
+                String rol = rs.getString("Rol");
+
+                // Se accede al menu principal con unas opciones u otras según el rol del usuario
+                JFrameMenuPrincipal menu = new JFrameMenuPrincipal(rol);
+                menu.setVisible(true);
+                this.dispose(); // Cierro login
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            }
         } catch (SQLException e){
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }

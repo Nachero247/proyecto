@@ -175,10 +175,8 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
             return; // No continuar si falta algún dato
         }
 
-
-
         try {
-            // 1. Comprobar si el DNI ya existe
+            // Comprobar si el DNI ya existe
             PreparedStatement psCheck = conexion.prepareStatement(
                 "SELECT COUNT(*) FROM socio WHERE DNI = ?"
             );
@@ -202,7 +200,7 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
                 return; // 👉 salir del método
             }
 
-            // 2. Si no existe, ahora sí creamos el socio
+            // Si no existe, ahora sí creamos el socio
             Socio nuevo = new Socio(
                 jTextFieldNombre.getText(),
                 jTextFieldApellido1.getText(),

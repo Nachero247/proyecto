@@ -115,7 +115,6 @@ public class Socio {
     }
     
     // OTROS METODOS
-    //public Socio(String nombre, String apellido1, String apellido2, String dni, String telefono, String correo, Date fecha_alta, String estado) {
     public static String[] getColumnas() {
         String[] columnas ={"ID", "Nombre", "Apellido1", "Apellido2",  "DNI", "Telefono" , "Correo", "Fecha de Alta", "Estado"};
         return columnas;

@@ -64,9 +64,6 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         }
     }
     
-    // Carga en la tabla visualmente los socios guardados en el array
-    public void cargaInicial() { dtm.setRowCount(0); for (Socio socio: LogicaNegocio.getSocios()) { dtm.addRow(socio.devuelveFila()); } }
-    
     // --------------------------------------------------------------------------------------------------------------------------------
         
     // CONSTRUCTOR
@@ -220,17 +217,15 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
             return;
         }
         LogicaNegocio.cargaPrueba();
-        // Obtener el ID desde LogicaNegocio (misma posición)
+        // Obtener el ID desde LogicaNegocio
         Socio socioSeleccionado = LogicaNegocio.getSocios().get(fila);
 
         // Pasar el socio al JDialog
         JDialogEditarSocio jdec = new JDialogEditarSocio(this, true, conexion, socioSeleccionado);
-
         jdec.setVisible(true);
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBajaActionPerformed
-        // FALTA ACTUALIZAR VISUALMENTE
         if (jTableSocios.getSelectedRowCount() > 0) {
             int[] seleccionados = jTableSocios.getSelectedRows();
 
@@ -248,7 +243,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
                         jTableSocios.getValueAt(seleccionados[i], 3).toString()
                     );
 
-                    // Establecemos ESTADO = "Baja" (o el valor que uses)
+                    // Establecemos ESTADO = "Baja"
                     ps.setString(1, "Baja");
                     ps.setString(2, dni);
 
@@ -279,56 +274,12 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
                 JOptionPane.WARNING_MESSAGE
             );
         }
-
-        /*
-        BORRAR SOCIO, TERMINAR, PROBLEMA AL BORRAR SOCIO POR LA FK
-        if (jTableSocios.getSelectedRowCount() > 0) {
-            int[] seleccionados = jTableSocios.getSelectedRows();
-
-            try {
-                // Preparar sentencia SQL
-                PreparedStatement ps = conexion.prepareStatement(
-                    "DELETE FROM socio WHERE DNI = ?"
-                );
-
-                // Recorrer las filas seleccionadas (de atrás hacia adelante para no alterar índices)
-                for (int i = seleccionados.length - 1; i >= 0; i--) {
-                    // Obtener el ID_SOCIO desde la tabla (suponiendo que está en la columna 0)
-                    String dni = jTableSocios.getValueAt(seleccionados[i], 3).toString();
-
-                    // Asignar el parámetro en la consulta
-                    ps.setString(1, dni);
-
-                    // Ejecutar eliminación en BD
-                    ps.executeUpdate();
-
-                    // Eliminar también la fila del modelo
-                    dtm.removeRow(seleccionados[i]);
-                }
-
-                ps.close();
-                JOptionPane.showMessageDialog(this, "Socio/s eliminado/s correctamente.");
-
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName())
-                .log(java.util.logging.Level.SEVERE, "Error al eliminar socio de la BD", ex);
-                JOptionPane.showMessageDialog(this, "Error al eliminar socio: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-        } else {
-            JOptionPane.showMessageDialog(this, "Seleccione al menos un socio para eliminar.",
-                "Aviso", JOptionPane.WARNING_MESSAGE);
-        }
-        */
-
     }//GEN-LAST:event_jButtonBajaActionPerformed
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
         // TODO add your handling code here:
         JDialogAltaSocio jdac = new JDialogAltaSocio(this, true, this.conexion);
         jdac.setVisible(true);
-        //jd.setUusrio("");
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
     // METODOS
@@ -389,8 +340,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        // TERMINAR
-        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionSocios().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionSocios("Administrador").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

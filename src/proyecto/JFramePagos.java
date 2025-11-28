@@ -10,7 +10,11 @@ import java.sql.PreparedStatement;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 import ConexionBBDD.ConexionBBDD;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 /**
  *
  * @author DAM2Alu14
@@ -19,11 +23,15 @@ public class JFramePagos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFramePagos.class.getName());
 
+    // Variables
     DefaultTableModel dtm;
+    DefaultTableModel modelo;
     ConexionBBDD nueva;
     Connection conexion;
+    TableRowSorter<TableModel> orderPagos;
+    TableRowSorter<TableModel> orderPendientes;
+
     private String rol;
-    
     /**
      * Creates new form JFramePagos
      */
@@ -34,9 +42,21 @@ public class JFramePagos extends javax.swing.JFrame {
         nueva = new ConexionBBDD();
         conexion = nueva.getConnection();
         dtm = new DefaultTableModel();
+        modelo = new DefaultTableModel();
+        
+        LogicaNegocio.cargaPrueba(); // Carga los socios a una lista
+        cargaID();
+        
         
         listarPagos();
+        // Ordeno los JTable segun Buscar
+        orderPagos = new TableRowSorter<>(jTablePagos.getModel());
+        jTablePagos.setRowSorter(orderPagos);
+
         cargarPagosPendientes();
+        // Ordeno los JTable segun Buscar
+        orderPendientes = new TableRowSorter<>(jTablePagosPendientes.getModel());
+        jTablePagosPendientes.setRowSorter(orderPendientes);        
     }
 
     /**
@@ -51,21 +71,35 @@ public class JFramePagos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTabbedPanelAplicacion = new javax.swing.JTabbedPane();
         jPanel4 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        jComboBoxId = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        jTextFieldNombre = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        jTextFieldApellido1 = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jTextFieldApellido2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        jSpinnerFechaPago = new javax.swing.JSpinner();
         jLabel5 = new javax.swing.JLabel();
+        jTextFieldImporte = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBoxEstado = new javax.swing.JComboBox<>();
+        jLabel9 = new javax.swing.JLabel();
         jButtonRegistrarPago = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTablePagos = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
-        jTextField5 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePagosPendientes = new javax.swing.JTable();
+        jLabel13 = new javax.swing.JLabel();
+        jTextFieldBuscar1 = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTablePagos = new javax.swing.JTable();
+        jLabel6 = new javax.swing.JLabel();
+        jTextFieldBuscar = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jButtonTabPrev = new javax.swing.JButton();
         jButtonTabNext = new javax.swing.JButton();
@@ -78,104 +112,78 @@ public class JFramePagos extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("APLICACION INTEGRAL PARA LA GESTION DE PAGOS");
 
+        jPanel1.setLayout(new java.awt.GridLayout(9, 2, 10, 10));
+
         jLabel1.setText("REGISTRAR PAGO");
+        jPanel1.add(jLabel1);
+        jPanel1.add(jLabel8);
 
         jLabel3.setText("Socio_ID");
+        jPanel1.add(jLabel3);
+
+        jComboBoxId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxId.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxIdItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(jComboBoxId);
+
+        jLabel10.setText("Nombre Socio");
+        jPanel1.add(jLabel10);
+        jPanel1.add(jTextFieldNombre);
+
+        jLabel11.setText("1º Apellido Socio");
+        jPanel1.add(jLabel11);
+        jPanel1.add(jTextFieldApellido1);
+
+        jLabel12.setText("2º Apellido Socio");
+        jPanel1.add(jLabel12);
+        jPanel1.add(jTextFieldApellido2);
 
         jLabel4.setText("Fecha Pago");
+        jPanel1.add(jLabel4);
+
+        jSpinnerFechaPago.setModel(new javax.swing.SpinnerDateModel());
+        jSpinnerFechaPago.setEditor(new javax.swing.JSpinner.DateEditor(jSpinnerFechaPago, "dd/MM/yy hh:mm"));
+        jPanel1.add(jSpinnerFechaPago);
 
         jLabel5.setText("Importe");
+        jPanel1.add(jLabel5);
+        jPanel1.add(jTextFieldImporte);
+
+        jLabel7.setText("Estado");
+        jPanel1.add(jLabel7);
+
+        jComboBoxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendiente", "Pagado", "Vencido" }));
+        jPanel1.add(jComboBoxEstado);
+        jPanel1.add(jLabel9);
 
         jButtonRegistrarPago.setText("Registrar Pago");
+        jButtonRegistrarPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegistrarPagoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonRegistrarPago);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4))
-                        .addGap(62, 62, 62)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jLabel5))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(338, Short.MAX_VALUE)
-                .addComponent(jButtonRegistrarPago)
-                .addGap(271, 271, 271))
+                .addGap(102, 102, 102)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(235, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jLabel1)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonRegistrarPago)
-                .addContainerGap(98, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE))
         );
 
         jTabbedPanelAplicacion.addTab("Registrar Pago", jPanel4);
-
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField2.setForeground(new java.awt.Color(51, 153, 255));
-        jTextField2.setText("PAGOS");
-
-        jTablePagos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTablePagos);
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(71, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPanelAplicacion.addTab("Listar Pago", jPanel3);
-
-        jTextField5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTextField5.setForeground(new java.awt.Color(51, 153, 255));
-        jTextField5.setText("EMPLEADOS");
 
         jTablePagosPendientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -190,28 +198,94 @@ public class JFramePagos extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTablePagosPendientes);
 
+        jLabel13.setText("Buscar");
+
+        jTextFieldBuscar1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscar1KeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 496, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(50, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(23, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
+                        .addComponent(jLabel13)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         jTabbedPanelAplicacion.addTab("Ver Pagos Pendientes", jPanel5);
+
+        jTablePagos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(jTablePagos);
+
+        jLabel6.setText("Buscar");
+
+        jTextFieldBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscarKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6)
+                    .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel6)
+                        .addGap(31, 31, 31)
+                        .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+
+        jTabbedPanelAplicacion.addTab("Listar Pago", jPanel3);
 
         jPanel2.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT));
 
@@ -246,11 +320,14 @@ public class JFramePagos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jTabbedPanelAplicacion)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTabbedPanelAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE)
+                .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -258,7 +335,7 @@ public class JFramePagos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPanelAplicacion)
+                .addComponent(jTabbedPanelAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -283,77 +360,169 @@ public class JFramePagos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonTabNextActionPerformed
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
-        // TODO add your handling code here:
+        // Cierra la ventana actual y abre el menu principal
         JFrameMenuPrincipal jfap = new JFrameMenuPrincipal(rol);
         jfap.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
-    // METODOS
-    private void registrarPago() {
-        
-        
-        
+    private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
+        // Ordena la tabla segun lo escrito en el FieldBuscar
+        try {
+            RowFilter<Object, Object> rf = RowFilter.regexFilter(jTextFieldBuscar.getText());
+            orderPagos.setRowFilter(rf);
+        } catch (PatternSyntaxException pse) {
+            System.out.println("Patrón inválido");
+        }
+    }//GEN-LAST:event_jTextFieldBuscarKeyReleased
+
+    // Carga los id disponibles al jComboBoxId
+    public void cargaID(){
+        jComboBoxId.removeAllItems();
+        for (Socio socio : LogicaNegocio.getSocios()) {
+            jComboBoxId.addItem(String.valueOf(socio.getId_socio()));
+        }
     }
     
-    
-    private void listarPagos() {    
-        DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Socio");
-        modelo.addColumn("Fecha Pago");
-        modelo.addColumn("Importe");
-        modelo.addColumn("Estado");
-        
-        // FALTA PODER BUSCAR POR NOMBRE DNI...
-        // selecionnar tmb el nombre dni...
-        // SELECT p.id_pago, p.socio_id, s.nombre , s.apellido1, s.dni, p.fecha_pago, p.importe, p.estado FROM pago p INNER JOIN socio s ON p.socio_id = s.id_socio HAVING estado = (SELECT estado FROM pago WHERE estado = 'Pendiente');
-        try (
-            PreparedStatement ps = conexion.prepareStatement(
-                "SELECT id_pago, socio_id, fecha_pago, importe, estado FROM pago"
-            );
-            ResultSet rs = ps.executeQuery()) {
+    // Acutalizo los campos nombre y apellidos segun el id seleccionado
+    private void jComboBoxIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxIdItemStateChanged
+        // TODO add your handling code here:
+        if(jComboBoxId.getSelectedItem() != null) {
+            int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+            Socio s = LogicaNegocio.getSocio(id);
+            jTextFieldNombre.setText(s.getNombre());
+            jTextFieldApellido1.setText(s.getApellido1());
+            jTextFieldApellido2.setText(s.getApellido2());
+        }
+    }//GEN-LAST:event_jComboBoxIdItemStateChanged
 
+    private void jTextFieldBuscar1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscar1KeyReleased
+        try {
+            RowFilter<Object, Object> rf = RowFilter.regexFilter(jTextFieldBuscar1.getText());
+            orderPendientes.setRowFilter(rf);
+        } catch (PatternSyntaxException pse) {
+            System.out.println("Patrón inválido");
+        }
+    }//GEN-LAST:event_jTextFieldBuscar1KeyReleased
+
+    private void jButtonRegistrarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarPagoActionPerformed
+        // 1. Validar campos obligatorios
+        if (jComboBoxId.getSelectedItem() == null || 
+            jTextFieldImporte.getText().isEmpty()) {
+
+            JOptionPane.showMessageDialog(this, 
+                    "Debe seleccionar un socio y poner un importe.", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            // Recojo los datos de la ventana
+            int socioId = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+            java.util.Date fechaUtil = (java.util.Date) jSpinnerFechaPago.getValue();
+            java.sql.Timestamp fechaPago = new java.sql.Timestamp(fechaUtil.getTime());
+            double importe = Double.parseDouble(jTextFieldImporte.getText());
+            String estado = jComboBoxEstado.getSelectedItem().toString();
+
+            // CONSULTA SQL
+            String sql = "INSERT INTO pago (socio_id, fecha_pago, importe, estado) "
+                       + "VALUES (?, ?, ?, ?)";
+
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setInt(1, socioId);
+            ps.setTimestamp(2, fechaPago);
+            ps.setDouble(3, importe);
+            ps.setString(4, estado);
+
+            int filas = ps.executeUpdate();
+
+            if (filas > 0) {
+                JOptionPane.showMessageDialog(this, 
+                        "Pago registrado correctamente", 
+                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+                // Refrescar tablas
+                listarPagos();
+                cargarPagosPendientes();
+            }
+
+        } catch (NumberFormatException nf) {
+            JOptionPane.showMessageDialog(this, 
+                    "El importe debe ser un número válido.", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, 
+                    "Error al registrar el pago: " + ex.getMessage(), 
+                    "Error SQL", JOptionPane.ERROR_MESSAGE);
+        }    
+    }//GEN-LAST:event_jButtonRegistrarPagoActionPerformed
+
+    // METODOS
+      
+    private void listarPagos() {
+        dtm = new DefaultTableModel();
+        dtm.addColumn("ID");
+        dtm.addColumn("Socio");
+        dtm.addColumn("DNI");
+        dtm.addColumn("Fecha Pago");
+        dtm.addColumn("Importe");
+        dtm.addColumn("Estado");
+
+        // Muestra los datos id socio dni importe junto al nombre y apellidos del socio
+        String sql = "SELECT p.id_pago, CONCAT(s.nombre, ' ', s.apellido1, ' ', IFNULL(s.apellido2,'')) AS socio, " +
+                     "s.dni, p.fecha_pago, p.importe, p.estado FROM pago p " +
+                     "INNER JOIN socio s ON p.socio_id = s.id_socio";
+
+        // Consulta
+        try (
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
             while (rs.next()) {
-                modelo.addRow(new Object[]{
+                dtm.addRow(new Object[]{
                     rs.getInt("id_pago"),
-                    rs.getInt("socio_id"),
+                    rs.getString("socio"),
+                    rs.getString("dni"),
                     rs.getDate("fecha_pago"),
                     rs.getDouble("importe"),
                     rs.getString("estado")
                 });
             }
 
-            jTablePagos.setModel(modelo);
+            jTablePagos.setModel(dtm); // Pongo los datos en la tabla
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al cargar lista de  pagos: " + e.getMessage());
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar lista de pagos: " + e.getMessage());
         }
     }
     
+    
     private void cargarPagosPendientes() {
-
-        DefaultTableModel modelo = new DefaultTableModel();
+        modelo = new DefaultTableModel();
         modelo.addColumn("ID");
         modelo.addColumn("Socio");
+        modelo.addColumn("DNI");
         modelo.addColumn("Fecha Pago");
         modelo.addColumn("Importe");
         modelo.addColumn("Estado");
-        
-        // FALTA PODER BUSCAR POR NOMBRE DNI...
-        // selecionnar tmb el nombre dni...
-        // SELECT p.id_pago, p.socio_id, s.nombre , s.apellido1, s.dni, p.fecha_pago, p.importe, p.estado FROM pago p INNER JOIN socio s ON p.socio_id = s.id_socio HAVING estado = (SELECT estado FROM pago WHERE estado = 'Pendiente');
-        try (
-            PreparedStatement ps = conexion.prepareStatement(
-                "SELECT id_pago, socio_id, fecha_pago, importe, estado FROM pago WHERE estado = 'Pendiente'"
-            );
-            ResultSet rs = ps.executeQuery()) {
 
+        String sql = "SELECT p.id_pago, " +
+                     "CONCAT(s.nombre, ' ', s.apellido1, ' ', IFNULL(s.apellido2,'')) AS socio, " +
+                     "s.dni, p.fecha_pago, p.importe, p.estado " +
+                     "FROM pago p " +
+                     "INNER JOIN socio s ON p.socio_id = s.id_socio " +
+                     "WHERE p.estado = 'Pendiente'";
+
+        try (
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()
+        ) {
             while (rs.next()) {
                 modelo.addRow(new Object[]{
                     rs.getInt("id_pago"),
-                    rs.getInt("socio_id"),
+                    rs.getString("socio"),
+                    rs.getString("dni"),
                     rs.getDate("fecha_pago"),
                     rs.getDouble("importe"),
                     rs.getString("estado")
@@ -362,11 +531,17 @@ public class JFramePagos extends javax.swing.JFrame {
 
             jTablePagosPendientes.setModel(modelo);
 
+            // SOLUCIÓN: ACTUALIZAR EL SORTER
+            if (orderPendientes != null) {
+                orderPendientes.setModel(modelo);
+            }
+
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                 "Error al cargar pagos pendientes: " + e.getMessage());
         }
     }
+    
     /**
      * @param args the command line arguments
      */
@@ -389,7 +564,7 @@ public class JFramePagos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(() -> new JFramePagos().setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFramePagos("Administrador").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -397,23 +572,37 @@ public class JFramePagos extends javax.swing.JFrame {
     private javax.swing.JButton jButtonTabNext;
     private javax.swing.JButton jButtonTabPrev;
     private javax.swing.JButton jButtonVolver;
+    private javax.swing.JComboBox<String> jComboBoxEstado;
+    private javax.swing.JComboBox<String> jComboBoxId;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JSpinner jSpinnerFechaPago;
     private javax.swing.JTabbedPane jTabbedPanelAplicacion;
     private javax.swing.JTable jTablePagos;
     private javax.swing.JTable jTablePagosPendientes;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextFieldApellido1;
+    private javax.swing.JTextField jTextFieldApellido2;
+    private javax.swing.JTextField jTextFieldBuscar;
+    private javax.swing.JTextField jTextFieldBuscar1;
+    private javax.swing.JTextField jTextFieldImporte;
+    private javax.swing.JTextField jTextFieldNombre;
     // End of variables declaration//GEN-END:variables
 }
