@@ -5,16 +5,17 @@
 package proyecto;
 
 
+import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
-import javax.swing.table.DefaultTableModel;
-import ConexionBBDD.ConexionBBDD;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
 /**
  *
  * @author DAM2Alu14
@@ -32,6 +33,7 @@ public class JFramePagos extends javax.swing.JFrame {
     TableRowSorter<TableModel> orderPendientes;
 
     private String rol;
+    
     /**
      * Creates new form JFramePagos
      */
@@ -44,7 +46,8 @@ public class JFramePagos extends javax.swing.JFrame {
         dtm = new DefaultTableModel();
         modelo = new DefaultTableModel();
         
-        LogicaNegocio.cargaPrueba(); // Carga los socios a una lista
+        LogicaSocios.cargaPrueba(); // Carga los socios a una lista
+        LogicaPagos.cargaPrueba(); // Carga los pagos a una lista
         cargaID();
         
         
@@ -56,7 +59,7 @@ public class JFramePagos extends javax.swing.JFrame {
         cargarPagosPendientes();
         // Ordeno los JTable segun Buscar
         orderPendientes = new TableRowSorter<>(jTablePagosPendientes.getModel());
-        jTablePagosPendientes.setRowSorter(orderPendientes);        
+        jTablePagosPendientes.setRowSorter(orderPendientes);           
     }
 
     /**
@@ -114,6 +117,7 @@ public class JFramePagos extends javax.swing.JFrame {
 
         jPanel1.setLayout(new java.awt.GridLayout(9, 2, 10, 10));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("REGISTRAR PAGO");
         jPanel1.add(jLabel1);
         jPanel1.add(jLabel8);
@@ -326,7 +330,7 @@ public class JFramePagos extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPanelAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 825, Short.MAX_VALUE)
+                .addComponent(jTabbedPanelAplicacion)
                 .addGap(14, 14, 14))
         );
         layout.setVerticalGroup(
@@ -335,7 +339,7 @@ public class JFramePagos extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPanelAplicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .addComponent(jTabbedPanelAplicacion)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -343,6 +347,14 @@ public class JFramePagos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    // Carga los id disponibles al jComboBoxId
+    public void cargaID(){
+        jComboBoxId.removeAllItems();
+        for (Socio socio : LogicaSocios.getSocios()) {
+            jComboBoxId.addItem(String.valueOf(socio.getId_socio()));
+        }
+    }
+    
     private void jButtonTabPrevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTabPrevActionPerformed
         // TODO add your handling code here:
         if (jTabbedPanelAplicacion.getSelectedIndex() == 0) {
@@ -361,8 +373,8 @@ public class JFramePagos extends javax.swing.JFrame {
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
         // Cierra la ventana actual y abre el menu principal
-        JFrameMenuPrincipal jfap = new JFrameMenuPrincipal(rol);
-        jfap.setVisible(true);
+        JFrameMenuPrincipal jfmp = new JFrameMenuPrincipal(rol);
+        jfmp.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
@@ -376,20 +388,12 @@ public class JFramePagos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextFieldBuscarKeyReleased
 
-    // Carga los id disponibles al jComboBoxId
-    public void cargaID(){
-        jComboBoxId.removeAllItems();
-        for (Socio socio : LogicaNegocio.getSocios()) {
-            jComboBoxId.addItem(String.valueOf(socio.getId_socio()));
-        }
-    }
-    
     // Acutalizo los campos nombre y apellidos segun el id seleccionado
     private void jComboBoxIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxIdItemStateChanged
         // TODO add your handling code here:
         if(jComboBoxId.getSelectedItem() != null) {
             int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
-            Socio s = LogicaNegocio.getSocio(id);
+            Socio s = LogicaSocios.getSocio(id);
             jTextFieldNombre.setText(s.getNombre());
             jTextFieldApellido1.setText(s.getApellido1());
             jTextFieldApellido2.setText(s.getApellido2());
@@ -406,7 +410,7 @@ public class JFramePagos extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldBuscar1KeyReleased
 
     private void jButtonRegistrarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarPagoActionPerformed
-        // 1. Validar campos obligatorios
+        // Validar campos obligatorios
         if (jComboBoxId.getSelectedItem() == null || 
             jTextFieldImporte.getText().isEmpty()) {
 
@@ -420,45 +424,78 @@ public class JFramePagos extends javax.swing.JFrame {
             // Recojo los datos de la ventana
             int socioId = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
             java.util.Date fechaUtil = (java.util.Date) jSpinnerFechaPago.getValue();
-            java.sql.Timestamp fechaPago = new java.sql.Timestamp(fechaUtil.getTime());
             double importe = Double.parseDouble(jTextFieldImporte.getText());
             String estado = jComboBoxEstado.getSelectedItem().toString();
 
-            // CONSULTA SQL
-            String sql = "INSERT INTO pago (socio_id, fecha_pago, importe, estado) "
-                       + "VALUES (?, ?, ?, ?)";
+            // Consulta SQL para insertar
+            String sqlInsert = "INSERT INTO pago (socio_id, fecha_pago, importe, estado) "
+                             + "VALUES (?, ?, ?, ?)";
 
-            PreparedStatement ps = conexion.prepareStatement(sql);
+            PreparedStatement ps = conexion.prepareStatement(sqlInsert);
             ps.setInt(1, socioId);
-            ps.setTimestamp(2, fechaPago);
+            ps.setDate(2, new java.sql.Date(fechaUtil.getTime()));
             ps.setDouble(3, importe);
             ps.setString(4, estado);
 
             int filas = ps.executeUpdate();
+            ps.close();
 
             if (filas > 0) {
+
+                // Obtener el último ID insertado
+                int ultimoId = -1;
+                String sqlID = "SELECT MAX(id_pago) FROM pago";
+                Statement st = conexion.createStatement();
+                ResultSet rs = st.executeQuery(sqlID);
+
+                if (rs.next()) {
+                    ultimoId = rs.getInt(1);
+                }
+
+                rs.close();
+                st.close();
+
+                // Crear el pago con el ID obtenido
+                Pago nuevoPago = new Pago(
+                    socioId,
+                    fechaUtil,
+                    importe,
+                    estado
+                );
+                nuevoPago.setId_pago(ultimoId); // Asignar ID
+
+                // Guardar en la lógica de negocio
+                LogicaPagos.addPago(nuevoPago);
+
                 JOptionPane.showMessageDialog(this, 
                         "Pago registrado correctamente", 
                         "Éxito", JOptionPane.INFORMATION_MESSAGE);
 
-                // Refrescar tablas
-                listarPagos();
-                cargarPagosPendientes();
+                // Limpiar campos
+                jTextFieldImporte.setText("");
+                jSpinnerFechaPago.setValue(new java.util.Date());
+                jComboBoxEstado.setSelectedIndex(0);
+
+                actualizarTablas();
             }
 
         } catch (NumberFormatException nf) {
             JOptionPane.showMessageDialog(this, 
                     "El importe debe ser un número válido.", 
                     "Error", JOptionPane.ERROR_MESSAGE);
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, 
                     "Error al registrar el pago: " + ex.getMessage(), 
                     "Error SQL", JOptionPane.ERROR_MESSAGE);
-        }    
+        }
     }//GEN-LAST:event_jButtonRegistrarPagoActionPerformed
 
-    // METODOS
-      
+    public void actualizarTablas() {
+        listarPagos();
+        cargarPagosPendientes();
+    }
+          
     private void listarPagos() {
         dtm = new DefaultTableModel();
         dtm.addColumn("ID");
@@ -468,33 +505,30 @@ public class JFramePagos extends javax.swing.JFrame {
         dtm.addColumn("Importe");
         dtm.addColumn("Estado");
 
-        // Muestra los datos id socio dni importe junto al nombre y apellidos del socio
-        String sql = "SELECT p.id_pago, CONCAT(s.nombre, ' ', s.apellido1, ' ', IFNULL(s.apellido2,'')) AS socio, " +
-                     "s.dni, p.fecha_pago, p.importe, p.estado FROM pago p " +
-                     "INNER JOIN socio s ON p.socio_id = s.id_socio";
-
-        // Consulta
-        try (
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery()
-        ) {
-            while (rs.next()) {
+        // Muestra los datos desde LogicaPagos
+        for (Pago pago : LogicaPagos.getPagos()) {
+            Socio socio = LogicaSocios.getSocio(pago.getSocio_id());
+            if (socio != null) {
+                String nombreCompleto = socio.getNombre() + " " + socio.getApellido1() + 
+                    (socio.getApellido2() != null && !socio.getApellido2().isEmpty() ? " " + socio.getApellido2() : "");
+                
+                // Formatear fecha como java.sql.Date
+                java.sql.Date fechaSQL = new java.sql.Date(pago.getFecha_pago().getTime());
+                
                 dtm.addRow(new Object[]{
-                    rs.getInt("id_pago"),
-                    rs.getString("socio"),
-                    rs.getString("dni"),
-                    rs.getDate("fecha_pago"),
-                    rs.getDouble("importe"),
-                    rs.getString("estado")
+                    pago.getId_pago(),
+                    nombreCompleto,
+                    socio.getDni(),
+                    fechaSQL,
+                    pago.getImporte(),
+                    pago.getEstado()
                 });
             }
-
-            jTablePagos.setModel(dtm); // Pongo los datos en la tabla
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error al cargar lista de pagos: " + e.getMessage());
         }
+
+        jTablePagos.setModel(dtm);
+        orderPagos = new TableRowSorter<>(jTablePagos.getModel());
+        jTablePagos.setRowSorter(orderPagos);
     }
     
     
@@ -507,39 +541,30 @@ public class JFramePagos extends javax.swing.JFrame {
         modelo.addColumn("Importe");
         modelo.addColumn("Estado");
 
-        String sql = "SELECT p.id_pago, " +
-                     "CONCAT(s.nombre, ' ', s.apellido1, ' ', IFNULL(s.apellido2,'')) AS socio, " +
-                     "s.dni, p.fecha_pago, p.importe, p.estado " +
-                     "FROM pago p " +
-                     "INNER JOIN socio s ON p.socio_id = s.id_socio " +
-                     "WHERE p.estado = 'Pendiente'";
-
-        try (
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery()
-        ) {
-            while (rs.next()) {
+        // Muestra solo los pagos pendientes desde LogicaPagos
+        for (Pago pago : LogicaPagos.getPagosPendientes()) {
+            Socio socio = LogicaSocios.getSocio(pago.getSocio_id());
+            if (socio != null) {
+                String nombreCompleto = socio.getNombre() + " " + socio.getApellido1() + 
+                    (socio.getApellido2() != null && !socio.getApellido2().isEmpty() ? " " + socio.getApellido2() : "");
+                
+                // Formatear fecha como java.sql.Date
+                java.sql.Date fechaSQL = new java.sql.Date(pago.getFecha_pago().getTime());
+                
                 modelo.addRow(new Object[]{
-                    rs.getInt("id_pago"),
-                    rs.getString("socio"),
-                    rs.getString("dni"),
-                    rs.getDate("fecha_pago"),
-                    rs.getDouble("importe"),
-                    rs.getString("estado")
+                    pago.getId_pago(),
+                    nombreCompleto,
+                    socio.getDni(),
+                    fechaSQL,
+                    pago.getImporte(),
+                    pago.getEstado()
                 });
             }
-
-            jTablePagosPendientes.setModel(modelo);
-
-            // SOLUCIÓN: ACTUALIZAR EL SORTER
-            if (orderPendientes != null) {
-                orderPendientes.setModel(modelo);
-            }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                "Error al cargar pagos pendientes: " + e.getMessage());
         }
+
+        jTablePagosPendientes.setModel(modelo);
+        orderPendientes = new TableRowSorter<>(jTablePagosPendientes.getModel());
+        jTablePagosPendientes.setRowSorter(orderPendientes);
     }
     
     /**

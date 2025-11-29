@@ -23,7 +23,6 @@ public class JFrameLogin extends javax.swing.JFrame {
     ConexionBBDD nueva;
     Connection conexion;
     
-    
     /**
      * Creates new form JFrameLogin
      */
@@ -100,7 +99,6 @@ public class JFrameLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonIniciarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarSesionActionPerformed
-        // TODO add your handling code here:
         String user = jTextFieldUser.getText();
         String password = new String(jPasswordField.getPassword());
         

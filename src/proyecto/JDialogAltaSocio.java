@@ -7,8 +7,10 @@ package proyecto;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
-import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
+import java.sql.*;
 
 /**
  *
@@ -25,10 +27,9 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
     JFrameGestionSocios jframepadre;
     
     public JDialogAltaSocio(java.awt.Frame parent, boolean modal, Connection conexionPadre) {
-        jframepadre =(JFrameGestionSocios)parent;
+        jframepadre = (JFrameGestionSocios)parent;
         initComponents();
-
-        this.conexion = conexionPadre; // Usamos la misma conexión que el padre
+        this.conexion = conexionPadre;
     }
 
     /**
@@ -153,11 +154,11 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
-        // Compruebo que el dni introducido no esta en la bbdd
+        // Obtener valores del formulario
         String dniIntroducido = jTextFieldDNI.getText().trim();
-        // Obtener estado seleccionado
         String estado = jComboBoxEstado.getSelectedItem().toString().trim();
 
+        // Comprobar campos obligatorios
         if (jTextFieldNombre.getText().trim().isEmpty() ||
             jTextFieldApellido1.getText().trim().isEmpty() ||
             jTextFieldDNI.getText().trim().isEmpty() ||
@@ -166,53 +167,53 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
             jSpinnerFechaAlta.getValue() == null ||
             estado.isEmpty()) {
 
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
                 "Todos los campos obligatorios deben estar llenos.",
                 "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                JOptionPane.ERROR_MESSAGE
             );
-            return; // No continuar si falta algún dato
+            return;
         }
 
         try {
-            // Comprobar si el DNI ya existe
+            // Comprobar si el DNI ya existe en la base de datos
             PreparedStatement psCheck = conexion.prepareStatement(
                 "SELECT COUNT(*) FROM socio WHERE DNI = ?"
             );
             psCheck.setString(1, dniIntroducido);
 
-            java.sql.ResultSet rs = psCheck.executeQuery();
+            ResultSet rs = psCheck.executeQuery();
             rs.next();
             int existe = rs.getInt(1);
 
             rs.close();
             psCheck.close();
 
+            // Avisar si el DNI está repetido
             if (existe > 0) {
-                // DNI duplicado → no insertar
-                javax.swing.JOptionPane.showMessageDialog(
+                JOptionPane.showMessageDialog(
                     this,
                     "El DNI " + dniIntroducido + " ya está registrado.",
                     "DNI duplicado",
-                    javax.swing.JOptionPane.WARNING_MESSAGE
+                    JOptionPane.WARNING_MESSAGE
                 );
-                return; // 👉 salir del método
+                return;
             }
 
-            // Si no existe, ahora sí creamos el socio
+            // Crear objeto socio con los datos del formulario
             Socio nuevo = new Socio(
-                jTextFieldNombre.getText(),
-                jTextFieldApellido1.getText(),
-                jTextFieldApellido2.getText(),
+                jTextFieldNombre.getText().trim(),
+                jTextFieldApellido1.getText().trim(),
+                jTextFieldApellido2.getText().trim(),
                 dniIntroducido,
-                jTextFieldTelefono.getText(),
-                jTextFieldEmail.getText(),
-                (Date)jSpinnerFechaAlta.getValue(),
+                jTextFieldTelefono.getText().trim(),
+                jTextFieldEmail.getText().trim(),
+                (Date) jSpinnerFechaAlta.getValue(),
                 estado
             );
 
-            // Inserto el nuevo socio con los datos
+            // Insertar el socio en la base de datos
             PreparedStatement ps = conexion.prepareStatement(
                 "INSERT INTO socio (Nombre, Apellido1, Apellido2, DNI, Telefono, Correo, Fecha_Alta, Estado) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
@@ -230,21 +231,38 @@ public class JDialogAltaSocio extends javax.swing.JFrame {
             ps.executeUpdate();
             ps.close();
 
-            // Actualizar tabla del padre
-            jframepadre.addSocio(nuevo);
-            jframepadre.cargaReal();
+            // Obtener el último ID insertado
+            int nuevoId = -1;
+            Statement st = conexion.createStatement();
+            ResultSet rsId = st.executeQuery("SELECT MAX(id_socio) FROM socio");
 
+            if (rsId.next()) {
+                nuevoId = rsId.getInt(1);
+            }
+
+            rsId.close();
+            st.close();
+
+            // Guardar el ID en el objeto
+            nuevo.setId_socio(nuevoId);
+
+            // Añadir el socio a la lista en lógica de negocio
+            LogicaSocios.addSocio(nuevo);
+
+            // Actualizar tabla del JFrame padre
+            jframepadre.actualizarTabla();
+
+            // Cerrar ventana
             dispose();
 
         } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(JDialogAltaSocio.class.getName())
-                .log(java.util.logging.Level.SEVERE, "Error al verificar o insertar socio", ex);
+            logger.log(java.util.logging.Level.SEVERE, "Error al verificar o insertar socio", ex);
 
-            javax.swing.JOptionPane.showMessageDialog(
+            JOptionPane.showMessageDialog(
                 this,
                 "Error en la base de datos.",
                 "Error",
-                javax.swing.JOptionPane.ERROR_MESSAGE
+                JOptionPane.ERROR_MESSAGE
             );
         }
     }//GEN-LAST:event_jButtonAltaActionPerformed

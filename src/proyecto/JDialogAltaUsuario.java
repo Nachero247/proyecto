@@ -6,9 +6,10 @@ package proyecto;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Date;
 import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,18 +19,16 @@ public class JDialogAltaUsuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JDialogAltaUsuario.class.getName());
 
-    // TERMINAR AL INSERTAR USUARIO  ES OBLIGATTORIO EL ID_PLAN
     
     /**
      * Creates new form JDialogAltaCliente
      */
     Connection conexion;
-    JFrameUsuarios padre;
+    JFrameUsuarios jframepadre;
     
     public JDialogAltaUsuario(java.awt.Frame parent, boolean modal, Connection conexionPadre) {
-        padre = (JFrameUsuarios) parent;
+        jframepadre = (JFrameUsuarios)parent;
         initComponents();
-
         this.conexion = conexionPadre;
     }
 
@@ -45,15 +44,13 @@ public class JDialogAltaUsuario extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldPlanId = new javax.swing.JTextField();
+        jSpinnerPlanId = new javax.swing.JSpinner();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldUsuario = new javax.swing.JTextField();
+        jTextFieldNombreUsuario = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jPasswordNueva = new javax.swing.JPasswordField();
-        jLabel4 = new javax.swing.JLabel();
-        jPasswordConfirmar = new javax.swing.JPasswordField();
+        jPasswordFieldContrasena = new javax.swing.JPasswordField();
         jLabel6 = new javax.swing.JLabel();
-        jComboRol = new javax.swing.JComboBox<>();
+        jComboBoxRol = new javax.swing.JComboBox<>();
         jButtonAlta = new javax.swing.JButton();
         jButtonCerrar = new javax.swing.JButton();
 
@@ -63,29 +60,25 @@ public class JDialogAltaUsuario extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("ALTA USUARIOS");
 
-        jPanel1.setLayout(new java.awt.GridLayout(5, 2, 10, 10));
+        jPanel1.setLayout(new java.awt.GridLayout(4, 2, 10, 10));
 
         jLabel2.setText("Plan_ID");
         jPanel1.add(jLabel2);
-        jPanel1.add(jTextFieldPlanId);
+        jPanel1.add(jSpinnerPlanId);
 
         jLabel3.setText("Usuario");
         jPanel1.add(jLabel3);
-        jPanel1.add(jTextFieldUsuario);
+        jPanel1.add(jTextFieldNombreUsuario);
 
         jLabel8.setText("Nueva Contraseña");
         jPanel1.add(jLabel8);
-        jPanel1.add(jPasswordNueva);
-
-        jLabel4.setText("Confirmar Contraseña");
-        jPanel1.add(jLabel4);
-        jPanel1.add(jPasswordConfirmar);
+        jPanel1.add(jPasswordFieldContrasena);
 
         jLabel6.setText("Rol");
         jPanel1.add(jLabel6);
 
-        jComboRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenador", "Administrador", "Profesor" }));
-        jPanel1.add(jComboRol);
+        jComboBoxRol.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Entrenador", "Administrador", "Profesor" }));
+        jPanel1.add(jComboBoxRol);
 
         jButtonAlta.setText("Alta");
         jButtonAlta.addActionListener(new java.awt.event.ActionListener() {
@@ -134,98 +127,102 @@ public class JDialogAltaUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
-        // Obtener los datos de los campos
-        String planIdStr = jTextFieldPlanId.getText().trim();
-        String usuario = jTextFieldUsuario.getText().trim();
-        String pass1 = new String(jPasswordNueva.getPassword());
-        String pass2 = new String(jPasswordConfirmar.getPassword());
-        String rol = jComboRol.getSelectedItem().toString();
+      // Obtener datos del formulario
+      String nombreUsuario = jTextFieldNombreUsuario.getText().trim();
+      String contrasena = new String(jPasswordFieldContrasena.getPassword()).trim();
+      String rol = jComboBoxRol.getSelectedItem().toString().trim();
+      int planId = (Integer) jSpinnerPlanId.getValue();
 
-        // Validar solo los campos obligatorios
-        if (usuario.isEmpty() || pass1.isEmpty() || pass2.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Usuario y contraseña son obligatorios.", "Error",
-                    javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+      // Comprobar campos obligatorios
+      if (nombreUsuario.isEmpty() ||
+          contrasena.isEmpty() ||
+          rol.isEmpty()) {
 
-        // Verificar que las contraseñas coincidan
-        if (!pass1.equals(pass2)) {
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Las contraseñas no coinciden.", "Error",
-                    javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+          JOptionPane.showMessageDialog(
+              this,
+              "Todos los campos obligatorios deben estar llenos.",
+              "Error",
+              JOptionPane.ERROR_MESSAGE
+          );
+          return;
+      }
 
-        try {
-            // Verificar que el nombre de usuario no exista ya
-            PreparedStatement psCheck = conexion.prepareStatement(
-                "SELECT COUNT(*) FROM usuario WHERE Usuario = ?"
-            );
-            psCheck.setString(1, usuario);
-            java.sql.ResultSet rs = psCheck.executeQuery();
-            
-            if (rs.next() && rs.getInt(1) > 0) {
-                // El usuario ya existe
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        "El nombre de usuario ya existe. Por favor, elija otro.", "Error",
-                        javax.swing.JOptionPane.WARNING_MESSAGE);
-                rs.close();
-                psCheck.close();
-                return;
-            }
-            rs.close();
-            psCheck.close();
+      try {
+          // Comprobar si el nombre de usuario ya existe
+          PreparedStatement psCheck = conexion.prepareStatement(
+              "SELECT COUNT(*) FROM usuario WHERE Usuario = ?"
+          );
+          psCheck.setString(1, nombreUsuario);
 
-            // Preparar la consulta INSERT
-            PreparedStatement ps = conexion.prepareStatement(
-                "INSERT INTO usuario (Plan_ID, Usuario, Contrasena, Rol) VALUES (?, ?, ?, ?)"
-            );
+          ResultSet rs = psCheck.executeQuery();
+          rs.next();
+          int existe = rs.getInt(1);
 
-            // Manejar Plan_ID como opcional
-            if (!planIdStr.isEmpty()) {
-                try {
-                    // Si hay valor, convertir a entero
-                    ps.setInt(1, Integer.parseInt(planIdStr));
-                } catch (NumberFormatException ex) {
-                    // Si no es un número válido, mostrar error
-                    javax.swing.JOptionPane.showMessageDialog(this,
-                            "Plan_ID debe ser un número válido.", "Error",
-                            javax.swing.JOptionPane.ERROR_MESSAGE);
-                    ps.close();
-                    return;
-                }
-            } else {
-                // Si está vacío, insertar NULL
-                ps.setNull(1, java.sql.Types.INTEGER);
-            }
+          rs.close();
+          psCheck.close();
 
-            // Establecer los demás parámetros
-            ps.setString(2, usuario);
-            ps.setString(3, pass1);
-            ps.setString(4, rol);
+          // Avisar si el usuario ya está registrado
+          if (existe > 0) {
+              JOptionPane.showMessageDialog(
+                  this,
+                  "El usuario " + nombreUsuario + " ya está registrado.",
+                  "Usuario duplicado",
+                  JOptionPane.WARNING_MESSAGE
+              );
+              return;
+          }
 
-            // Ejecutar la inserción
-            ps.executeUpdate();
-            ps.close();
+          // Crear usuario
+          Usuario nuevoUsuario = new Usuario(
+              planId,
+              nombreUsuario,
+              contrasena,
+              rol
+          );
 
-            // Mostrar mensaje de éxito
-            javax.swing.JOptionPane.showMessageDialog(this, "Usuario creado correctamente.");
 
-            // Actualizar la tabla del padre
-            padre.cargarUsuarios();
+          // Insertar el usuario en la base de datos
+          PreparedStatement ps = conexion.prepareStatement(
+              "INSERT INTO usuario (Plan_ID, Usuario, Contrasena, Rol) VALUES (?, ?, ?, ?)"
+          );
+          
+          ps.setInt(1, planId);
+          ps.setString(2, nuevoUsuario.getNombre_usuario());
+          ps.setString(3, nuevoUsuario.getContrasena());
+          ps.setString(4, nuevoUsuario.getRol());
 
-            // Cerrar el diálogo
-            dispose();
+          ps.executeUpdate();
+          ps.close();
 
-        } catch (SQLException ex) {
-            logger.log(java.util.logging.Level.SEVERE, "Error al insertar usuario", ex);
+          // Obtener el último ID insertado
+          int nuevoId = -1;
+          PreparedStatement psId = conexion.prepareStatement(
+              "SELECT MAX(id_usuario) FROM usuario"
+          );
+          ResultSet rsId = psId.executeQuery();
 
-            javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error al insertar en la base de datos: " + ex.getMessage(),
-                    "Error",
-                    javax.swing.JOptionPane.ERROR_MESSAGE);
-        }
+          if (rsId.next()) {
+              nuevoId = rsId.getInt(1);
+          }
+
+          rsId.close();
+          psId.close();
+
+          nuevoUsuario.setId_usuario(nuevoId);
+          LogicaUsuarios.addUsuario(nuevoUsuario);
+          jframepadre.actualizarTabla();
+          dispose();
+
+      } catch (SQLException ex) {
+          logger.log(java.util.logging.Level.SEVERE, "Error al verificar o insertar usuario", ex);
+
+          JOptionPane.showMessageDialog(
+              this,
+              "Error en la base de datos.",
+              "Error",
+              JOptionPane.ERROR_MESSAGE
+          );
+      }
     }//GEN-LAST:event_jButtonAltaActionPerformed
     
     
@@ -261,17 +258,15 @@ public class JDialogAltaUsuario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAlta;
     private javax.swing.JButton jButtonCerrar;
-    private javax.swing.JComboBox<String> jComboRol;
+    private javax.swing.JComboBox<String> jComboBoxRol;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordConfirmar;
-    private javax.swing.JPasswordField jPasswordNueva;
-    private javax.swing.JTextField jTextFieldPlanId;
-    private javax.swing.JTextField jTextFieldUsuario;
+    private javax.swing.JPasswordField jPasswordFieldContrasena;
+    private javax.swing.JSpinner jSpinnerPlanId;
+    private javax.swing.JTextField jTextFieldNombreUsuario;
     // End of variables declaration//GEN-END:variables
 }

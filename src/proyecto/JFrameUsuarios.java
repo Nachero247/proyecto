@@ -5,8 +5,6 @@
 package proyecto;
 
 import ConexionBBDD.ConexionBBDD;
-import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
@@ -25,10 +23,8 @@ public class JFrameUsuarios extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameUsuarios.class.getName());
 
-    
-    
     /**
-     * Creates new form JFrameGestionSocios
+     * Creates new form JFrameGestionUsuarios
      */
     DefaultTableModel dtm;
     ConexionBBDD nueva;
@@ -36,13 +32,25 @@ public class JFrameUsuarios extends javax.swing.JFrame {
     TableRowSorter<TableModel> order;
     
     private String rol;
-    
-    // --------------------------------------------------------------------------------------------------------------------------------
-    // Carga usuario desde la base de datos
-    // --------------------------------------------------------------------------------------------------------------------------------
-    // Carga en la tabla los datos de la BBDD
-    public void cargaUsuariosBD() {
 
+    // Actualiza la tabla desde LogicaUsuarios
+    public void actualizarTabla() {
+        dtm.setRowCount(0); // limpiar tabla
+
+        for (Usuario usuario : LogicaUsuarios.getUsuarios()) {
+            Object[] fila = new Object[5];
+            fila[0] = usuario.getId_usuario();
+            fila[1] = usuario.getPlan_id();
+            fila[2] = usuario.getNombre_usuario();
+            fila[3] = usuario.getContrasena();
+            fila[4] = usuario.getRol();
+
+            dtm.addRow(fila);
+        }
+    }
+    
+    // Carga usuario desde la base de datos
+    public void cargaUsuariosBD() {
         String sql = "SELECT ID_Usuario, Plan_ID, Usuario, Contrasena, Rol FROM usuario";
 
         try (PreparedStatement ps = conexion.prepareStatement(sql);
@@ -67,8 +75,10 @@ public class JFrameUsuarios extends javax.swing.JFrame {
                 "Error BD", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    // --------------------------------------------------------------------------------------------------------------------------------
+    /**
+     *
+     * @author DAM2Alu14
+     */
         
     // CONSTRUCTOR
     public JFrameUsuarios(String rol) {
@@ -84,7 +94,9 @@ public class JFrameUsuarios extends javax.swing.JFrame {
         String[] columnas = {"ID_Usuario", "Plan_ID", "Usuario", "Contraseña", "Rol"};
         dtm.setColumnIdentifiers(columnas);
 
-        cargaUsuariosBD();
+        // Cargar usuarios desde LogicaUsuarios
+        LogicaUsuarios.cargaPrueba();
+        actualizarTabla();
 
         order = new TableRowSorter<>(dtm);
         jTableUsuarios.setRowSorter(order);
@@ -220,49 +232,66 @@ public class JFrameUsuarios extends javax.swing.JFrame {
         }
 
         int idUsuario = Integer.parseInt(jTableUsuarios.getValueAt(fila, 0).toString());
+        Usuario usuario = LogicaUsuarios.getUsuario(idUsuario);
 
-        // CREAR EDITAR USUARIO
-        JDialogEditarUsuario dialog = new JDialogEditarUsuario(this, conexion, idUsuario);
+        if (usuario == null) {
+            JOptionPane.showMessageDialog(this, "No se encontró el usuario");
+            return;
+        }
+
+        // Crear diálogo de editar usuario
+        JDialogEditarUsuario dialog = new JDialogEditarUsuario(this, true, conexion, usuario);
         dialog.setVisible(true);
-
-        cargaUsuariosBD(); // refrescar
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBajaActionPerformed
         if (jTableUsuarios.getSelectedRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione un usuario.");
+            JOptionPane.showMessageDialog(this, "Seleccione al menos un usuario.");
             return;
         }
 
-        int fila = jTableUsuarios.getSelectedRow();
-        int idUsuario = Integer.parseInt(jTableUsuarios.getValueAt(fila, 0).toString());
+        int[] filasSeleccionadas = jTableUsuarios.getSelectedRows();
+        int confirmacion = JOptionPane.showConfirmDialog(
+            this, 
+            "¿Está seguro de que desea eliminar " + filasSeleccionadas.length + " usuario(s)?", 
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION
+        );
 
-        try {
-            PreparedStatement ps = conexion.prepareStatement("DELETE FROM usuario WHERE ID_Usuario = ?");
-            ps.setInt(1, idUsuario);
-            ps.executeUpdate();
+        if (confirmacion == JOptionPane.YES_OPTION) {
+            try {
+                // Eliminar de mayor a menor índice para evitar problemas con los índices
+                for (int i = filasSeleccionadas.length - 1; i >= 0; i--) {
+                    int fila = filasSeleccionadas[i];
+                    int idUsuario = Integer.parseInt(jTableUsuarios.getValueAt(fila, 0).toString());
 
-            JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente");
+                    PreparedStatement ps = conexion.prepareStatement("DELETE FROM usuario WHERE ID_Usuario = ?");
+                    ps.setInt(1, idUsuario);
+                    ps.executeUpdate();
+                    ps.close();
 
-            cargaUsuariosBD();
+                    // Eliminar de LogicaUsuarios
+                    LogicaUsuarios.removeUsuario(idUsuario);
+                }
+                
+                JOptionPane.showMessageDialog(this, "Usuario(s) eliminado(s) correctamente");
 
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al eliminar usuario: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                actualizarTabla();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al eliminar usuario: " + ex.getMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_jButtonBajaActionPerformed
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
-        // Crear altausuario
         JDialogAltaUsuario dialog = new JDialogAltaUsuario(this, true, conexion);
         dialog.setVisible(true);
-
-        cargaUsuariosBD();
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
-    // METODOS
     private void jButtonCargaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaUsuariosActionPerformed
-        cargaUsuariosBD();
+       actualizarTabla();
     }//GEN-LAST:event_jButtonCargaUsuariosActionPerformed
 
     private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
@@ -275,13 +304,11 @@ public class JFrameUsuarios extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldBuscarKeyReleased
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
-        // Cierra la ventana actual y abre el MenuPrincipal
         JFrameMenuPrincipal jfmp = new JFrameMenuPrincipal(rol);
         jfmp.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
-    // METODOS
     public void cargarUsuarios() {
         String sql = "SELECT ID_Usuario, Plan_ID, Usuario, Contrasena, Rol FROM usuario";
 
@@ -334,7 +361,7 @@ public class JFrameUsuarios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new JFrameUsuarios("Administrador").setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameUsuarios("Administrador").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

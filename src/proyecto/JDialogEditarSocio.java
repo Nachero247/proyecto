@@ -22,12 +22,13 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
      */
     Connection conexion;
     JFrameGestionSocios jframepadre;
+    private Socio socio;
     
     // Carga los ids disponibles en el jComboBoxId
     public void cargaID(){
         jComboBoxId.removeAllItems();
-        for (Socio socio : LogicaNegocio.getSocios()) {
-            jComboBoxId.addItem(String.valueOf(socio.getId_socio()));
+        for (Socio s : LogicaSocios.getSocios()) {
+            jComboBoxId.addItem(String.valueOf(s.getId_socio()));
         }
     }
     
@@ -42,11 +43,9 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         jSpinnerFechaAlta.setValue(socio.getFecha_alta());
         jComboBoxEstado.setSelectedItem(socio.getEstado());
     }
-    
-    private Socio socio; // Recoje los datos del socio seleccionado en la tabla
-    
+
     public JDialogEditarSocio(java.awt.Frame parent, boolean modal, Connection conexion, Socio socio) {
-        jframepadre =(JFrameGestionSocios)parent;
+        jframepadre = (JFrameGestionSocios)parent;
         initComponents();
         this.conexion = conexion;
         this.socio = socio;
@@ -208,13 +207,13 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
                 "Error",
                 javax.swing.JOptionPane.ERROR_MESSAGE
             );
-            return; // No continuar si falta algún dato
+            return;
         }
 
         // Comprobar si el DNI ya está registrado en otro socio
         String nuevoDNI = jTextFieldDNI.getText().trim();
         try {
-                    
+
             PreparedStatement psCheck = conexion.prepareStatement(
                 "SELECT COUNT(*) FROM socio WHERE DNI = ? AND id_socio <> ?"
             );
@@ -235,7 +234,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
                     "DNI duplicado",
                     javax.swing.JOptionPane.WARNING_MESSAGE
                 );
-                return; // No continúa
+                return;
             }
 
         } catch (SQLException ex) {
@@ -248,21 +247,23 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
             );
             return;
         }
-        
+
         // Editar el socio con los datos ingresados
-        Socio socio = LogicaNegocio.getSocio(id);
+        Socio socio = LogicaSocios.getSocio(id);
         socio.setNombre(jTextFieldNombre.getText().trim());
         socio.setApellido1(jTextFieldApellido1.getText().trim());
         socio.setApellido2(jTextFieldApellido2.getText().trim());
         socio.setDni(nuevoDNI);
         socio.setTelefono(jTextFieldTelefono.getText().trim());
         socio.setCorreo(jTextFieldEmail.getText().trim());
-        socio.setFecha_alta((Date) jSpinnerFechaAlta.getValue());
+        socio.setFecha_alta((Date)jSpinnerFechaAlta.getValue());
         socio.setEstado(estado);
 
-        LogicaNegocio.editSocio(socio);
+        // Actualizar en LogicaSocios
+        LogicaSocios.editSocio(socio);
 
         try {
+            // Actualizar en BBDD
             PreparedStatement ps = conexion.prepareStatement(
                 "UPDATE socio SET Nombre = ?, Apellido1 = ?, Apellido2 = ?, DNI = ?, " +
                 "Telefono = ?, Correo = ?, Fecha_Alta = ?, Estado = ? WHERE id_socio = ?"
@@ -292,8 +293,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
             return;
         }
 
-        // Refrescar tabla y cerrar ventana
-        jframepadre.cargaReal();
+        jframepadre.actualizarTabla();
         dispose();
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
@@ -306,7 +306,7 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(jComboBoxId.getSelectedItem() != null) {
             int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
-            Socio s = LogicaNegocio.getSocio(id);
+            Socio s = LogicaSocios.getSocio(id);
             jTextFieldNombre.setText(s.getNombre());
             jTextFieldApellido1.setText(s.getApellido1());
             jTextFieldApellido2.setText(s.getApellido2());

@@ -69,7 +69,7 @@
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
         <Property name="columns" type="int" value="2"/>
         <Property name="horizontalGap" type="int" value="10"/>
-        <Property name="rows" type="int" value="5"/>
+        <Property name="rows" type="int" value="4"/>
         <Property name="verticalGap" type="int" value="10"/>
       </Layout>
       <SubComponents>
@@ -78,35 +78,28 @@
             <Property name="text" type="java.lang.String" value="Plan_ID"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldPlanId">
+        <Component class="javax.swing.JSpinner" name="jSpinnerPlanId">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="text" type="java.lang.String" value="Usuario"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextFieldUsuario">
+        <Component class="javax.swing.JTextField" name="jTextFieldNombreUsuario">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel8">
           <Properties>
             <Property name="text" type="java.lang.String" value="Nueva Contrase&#xf1;a"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="jPasswordNueva">
-        </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Confirmar Contrase&#xf1;a"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JPasswordField" name="jPasswordConfirmar">
+        <Component class="javax.swing.JPasswordField" name="jPasswordFieldContrasena">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
             <Property name="text" type="java.lang.String" value="Rol"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JComboBox" name="jComboRol">
+        <Component class="javax.swing.JComboBox" name="jComboBoxRol">
           <Properties>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="3">

@@ -10,13 +10,14 @@ import java.sql.PreparedStatement;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  *
  * @author DAM2Alu14
  */
-public class LogicaNegocio {
+public class LogicaSocios {
     static List<Socio> listaSocios = new ArrayList(); 
   
     public static void cargaPrueba() {
@@ -27,8 +28,8 @@ public class LogicaNegocio {
                    + "FROM socio";
 
         try {
-        ConexionBBDD nueva = new ConexionBBDD();
-        Connection conexion = nueva.getConnection();
+            ConexionBBDD nueva = new ConexionBBDD();
+            Connection conexion = nueva.getConnection();
         
              PreparedStatement ps = conexion.prepareStatement(sql);
              ResultSet rs = ps.executeQuery();
@@ -68,13 +69,16 @@ public class LogicaNegocio {
         listaSocios.remove(socio);
     }
     
-    public static void removeSocio(int id){
-        for (Socio socio : listaSocios) {
-            if(socio.getId_socio()==id) {
-                listaSocios.remove(socio);
-            }
+public static void removeSocio(int id){
+    Iterator<Socio> iterator = listaSocios.iterator();
+    while (iterator.hasNext()) {
+        Socio socio = iterator.next();
+        if(socio.getId_socio() == id) {
+            iterator.remove();
+            break; // Salir después de encontrar el socio
         }
     }
+}
     
     public static Socio getSocio(int id) {
         for (Socio socio : listaSocios) {

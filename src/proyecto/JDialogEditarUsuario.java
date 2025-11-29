@@ -17,49 +17,42 @@ import java.sql.ResultSet;
 public class JDialogEditarUsuario extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JDialogEditarUsuario.class.getName());
-
-
-    // TERMINAR NO HACE FALTA INTRODUCIR LA CONTRASEPÑA ACTUAL
     
     /**
      * Creates new form JDialogAltaCliente
      */
-    Connection conexion; // conexión pública
-    private int idUsuario;
-    JFrameUsuarios jframepadre; // referencia al JFrameUsuarios padre
-
+    Connection conexion;
+    JFrameUsuarios jframepadre;
+    private Usuario usuario;
     
-    public JDialogEditarUsuario(JFrameUsuarios padre, Connection conexion, int idUsuario) {
-        this.jframepadre = padre;
-        this.conexion = conexion;
-        this.idUsuario = idUsuario;
-        initComponents();
-        cargarUsuario(); // carga los datos actuales
-    }
-
-    // METODO
-    public void cargarUsuario() {
-       try {
-            String sql = "SELECT Plan_ID, Usuario, Contrasena, Rol FROM usuario WHERE ID_Usuario=?";
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            ps.setInt(1, idUsuario);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                jTextFieldPlanID.setText(String.valueOf(rs.getInt("Plan_ID")));
-                jTextFieldUsuario.setText(rs.getString("Usuario"));
-                jPasswordNueva.setText("");
-                jPasswordConfirmar.setText("");
-                jComboBoxRol.setSelectedItem(rs.getString("Rol"));
-            }
-
-            rs.close();
-            ps.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error cargando usuario: " + ex.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
+    // Carga los ids disponibles en el jComboBoxId
+    public void cargaID() {
+        jComboBoxId.removeAllItems();
+        for (Usuario u : LogicaUsuarios.getUsuarios()) {
+            jComboBoxId.addItem(String.valueOf(u.getId_usuario()));
         }
     }
+    
+    public void cargarCampos(Usuario usuario) {
+        jComboBoxId.setSelectedItem(String.valueOf(usuario.getId_usuario()));
+        jSpinnerPlanId.setValue(usuario.getPlan_id());
+        jTextFieldNombreUsuario.setText(usuario.getNombre_usuario());
+        jPasswordFieldContrasena.setText(usuario.getContrasena());
+        jComboBoxRol.setSelectedItem(usuario.getRol());
+    }
+    
+    public JDialogEditarUsuario(java.awt.Frame parent, boolean modal, Connection conexion, Usuario usuario) {
+        jframepadre = (JFrameUsuarios)parent;
+        initComponents();
+        this.conexion = conexion;
+        this.usuario = usuario;
+        cargaID();
+        
+        // Cargar los datos del usuario seleccionado
+        cargarCampos(usuario);
+    }
+
+    // METODOS
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,14 +65,14 @@ public class JDialogEditarUsuario extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jComboBoxId = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldPlanID = new javax.swing.JTextField();
+        jSpinnerPlanId = new javax.swing.JSpinner();
         jLabel11 = new javax.swing.JLabel();
-        jTextFieldUsuario = new javax.swing.JTextField();
+        jTextFieldNombreUsuario = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jPasswordNueva = new javax.swing.JPasswordField();
-        jLabel4 = new javax.swing.JLabel();
-        jPasswordConfirmar = new javax.swing.JPasswordField();
+        jPasswordFieldContrasena = new javax.swing.JPasswordField();
         jLabel12 = new javax.swing.JLabel();
         jComboBoxRol = new javax.swing.JComboBox<>();
         jButtonEditar = new javax.swing.JButton();
@@ -91,23 +84,30 @@ public class JDialogEditarUsuario extends javax.swing.JFrame {
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel1.setText("EDITAR CLIENTES");
 
-        jPanel1.setLayout(new java.awt.GridLayout(6, 2, 10, 10));
+        jPanel1.setLayout(new java.awt.GridLayout(5, 2, 10, 10));
+
+        jLabel3.setText("ID Usuario");
+        jPanel1.add(jLabel3);
+
+        jComboBoxId.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBoxId.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBoxIdItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(jComboBoxId);
 
         jLabel2.setText("Plan_ID");
         jPanel1.add(jLabel2);
-        jPanel1.add(jTextFieldPlanID);
+        jPanel1.add(jSpinnerPlanId);
 
         jLabel11.setText("Usuario");
         jPanel1.add(jLabel11);
-        jPanel1.add(jTextFieldUsuario);
+        jPanel1.add(jTextFieldNombreUsuario);
 
         jLabel8.setText("Nueva Contraseña");
         jPanel1.add(jLabel8);
-        jPanel1.add(jPasswordNueva);
-
-        jLabel4.setText("Confirmar Contraseña");
-        jPanel1.add(jLabel4);
-        jPanel1.add(jPasswordConfirmar);
+        jPanel1.add(jPasswordFieldContrasena);
 
         jLabel12.setText("Rol");
         jPanel1.add(jLabel12);
@@ -162,81 +162,120 @@ public class JDialogEditarUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        String usuario = jTextFieldUsuario.getText().trim();
-        String planIDStr = jTextFieldPlanID.getText().trim();
-        String rol = jComboBoxRol.getSelectedItem().toString();
+        int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+        int planId = (Integer) jSpinnerPlanId.getValue();
+        String nombreUsuario = jTextFieldNombreUsuario.getText().trim();
+        String contrasena = new String(jPasswordFieldContrasena.getPassword()).trim();
+        String rol = jComboBoxRol.getSelectedItem().toString().trim();
 
-        if (usuario.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El Usuario es obligatorio.", "Error", JOptionPane.WARNING_MESSAGE);
+        // Comprobar que los campos obligatorios no estén vacíos
+        if (nombreUsuario.isEmpty() ||
+            contrasena.isEmpty() ||
+            rol.isEmpty()) {
+
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Todos los campos obligatorios deben estar llenos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
             return;
         }
 
+        // Comprobar si el nombre de usuario ya está registrado en otro usuario
         try {
-            Integer planID = null;
-            if (!planIDStr.isEmpty()) {
-                planID = Integer.parseInt(planIDStr);
+            PreparedStatement psCheck = conexion.prepareStatement(
+                "SELECT COUNT(*) FROM usuario WHERE Usuario = ? AND ID_Usuario <> ?"
+            );
+            psCheck.setString(1, nombreUsuario);
+            psCheck.setInt(2, id);
+
+            java.sql.ResultSet rs = psCheck.executeQuery();
+            rs.next();
+            int existe = rs.getInt(1);
+
+            rs.close();
+            psCheck.close();
+
+            if (existe > 0) {
+                javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "El nombre de usuario " + nombreUsuario + " ya está registrado en otro usuario.",
+                    "Usuario duplicado",
+                    javax.swing.JOptionPane.WARNING_MESSAGE
+                );
+                return;
             }
 
-            // Verificar si se quiere cambiar la contraseña
-            String nueva = new String(jPasswordNueva.getPassword());
-            String confirmar = new String(jPasswordConfirmar.getPassword());
-            String contrasenaFinal = null;
+        } catch (SQLException ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Error al comprobar nombre de usuario", ex);
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Error al verificar nombre de usuario en la base de datos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
 
-            // Si alguno de los campos de contraseña tiene contenido
-            if (!nueva.isEmpty() || !confirmar.isEmpty()) {
-                // Ambos deben estar completos
-                if (nueva.isEmpty() || confirmar.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Para cambiar la contraseña debe completar ambos campos de contraseña.", "Error", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+        // Editar el usuario con los datos ingresados
+        Usuario usuarioEditar = LogicaUsuarios.getUsuario(id);
+        usuarioEditar.setPlan_id(planId);
+        usuarioEditar.setNombre_usuario(nombreUsuario);
+        usuarioEditar.setContrasena(contrasena);
+        usuarioEditar.setRol(rol);
 
-                // Verificar que coincidan
-                if (!nueva.equals(confirmar)) {
-                    JOptionPane.showMessageDialog(this, "La nueva contraseña y la confirmación no coinciden.", "Error", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+        // Actualizar en LogicaUsuarios
+        LogicaUsuarios.editUsuario(usuarioEditar);
 
-                contrasenaFinal = nueva;
-            }
+        try {
+            // Actualizar en BBDD
+            PreparedStatement ps = conexion.prepareStatement(
+                "UPDATE usuario SET Plan_ID = ?, Usuario = ?, Contrasena = ?, Rol = ? WHERE ID_Usuario = ?"
+            );
 
-            // Preparar actualización
-            String sql = "UPDATE usuario SET Plan_ID=?, Usuario=?, Rol=?" +
-                         (contrasenaFinal != null ? ", Contrasena=?" : "") +
-                         " WHERE ID_Usuario=?";
-            PreparedStatement ps = conexion.prepareStatement(sql);
-            
-            if (planID != null) {
-                ps.setInt(1, planID);
-            } else {
-                ps.setNull(1, java.sql.Types.INTEGER);
-            }
-            
-            ps.setString(2, usuario);
-            ps.setString(3, rol);
-            int paramIndex = 4;
-            if (contrasenaFinal != null) {
-                ps.setString(4, contrasenaFinal);
-                paramIndex++;
-            }
-            ps.setInt(paramIndex, idUsuario);
+            ps.setInt(1, planId);
+            ps.setString(2, usuarioEditar.getNombre_usuario());
+            ps.setString(3, usuarioEditar.getContrasena());
+            ps.setString(4, usuarioEditar.getRol());
+            ps.setInt(5, id);
 
             ps.executeUpdate();
             ps.close();
 
-            JOptionPane.showMessageDialog(this, "Usuario actualizado correctamente.");
-            jframepadre.cargaUsuariosBD(); // refrescar tabla en el padre
-            dispose();
-
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Plan_ID debe ser un número válido.", "Error", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al actualizar usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            logger.log(java.util.logging.Level.SEVERE, "Error al actualizar usuario", ex);
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Error al actualizar el usuario en la base de datos.",
+                "Error",
+                javax.swing.JOptionPane.ERROR_MESSAGE
+            );
+            return;
         }
+
+        // Refrescar tabla desde LogicaUsuarios y cerrar ventana
+        jframepadre.actualizarTabla();
+        dispose();
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
         dispose();
     }//GEN-LAST:event_jButtonCancelarActionPerformed
+
+    private void jComboBoxIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxIdItemStateChanged
+        // TODO add your handling code here:
+        if (jComboBoxId.getSelectedItem() != null) {
+            int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+            Usuario u = LogicaUsuarios.getUsuario(id);
+            if (u != null) {
+                jSpinnerPlanId.setValue(u.getPlan_id());
+                jTextFieldNombreUsuario.setText(u.getNombre_usuario());
+                jPasswordFieldContrasena.setText(u.getContrasena());
+                jComboBoxRol.setSelectedItem(u.getRol());
+            }
+        }
+    }//GEN-LAST:event_jComboBoxIdItemStateChanged
      
     /**
      * @param args the command line arguments
@@ -266,17 +305,17 @@ public class JDialogEditarUsuario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancelar;
     private javax.swing.JButton jButtonEditar;
+    private javax.swing.JComboBox<String> jComboBoxId;
     private javax.swing.JComboBox<String> jComboBoxRol;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPasswordField jPasswordConfirmar;
-    private javax.swing.JPasswordField jPasswordNueva;
-    private javax.swing.JTextField jTextFieldPlanID;
-    private javax.swing.JTextField jTextFieldUsuario;
+    private javax.swing.JPasswordField jPasswordFieldContrasena;
+    private javax.swing.JSpinner jSpinnerPlanId;
+    private javax.swing.JTextField jTextFieldNombreUsuario;
     // End of variables declaration//GEN-END:variables
 }
