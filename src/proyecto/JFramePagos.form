@@ -85,7 +85,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" pref="488" max="-2" attributes="0"/>
-                      <EmptySpace pref="235" max="32767" attributes="0"/>
+                      <EmptySpace pref="266" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -234,10 +234,11 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldBuscar1" min="-2" pref="113" max="-2" attributes="0"/>
+                          <Component id="jButtonPagosPendientes" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="646" max="-2" attributes="0"/>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -250,6 +251,8 @@
                               <Component id="jLabel13" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jTextFieldBuscar1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
+                              <Component id="jButtonPagosPendientes" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
@@ -293,6 +296,14 @@
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldBuscar1KeyReleased"/>
               </Events>
             </Component>
+            <Component class="javax.swing.JButton" name="jButtonPagosPendientes">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cargar Pagos Pendientes"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPagosPendientesActionPerformed"/>
+              </Events>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="jPanel3">
@@ -312,6 +323,7 @@
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                           <Component id="jTextFieldBuscar" min="-2" pref="113" max="-2" attributes="0"/>
+                          <Component id="jButtonPagos" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jScrollPane2" min="-2" pref="678" max="-2" attributes="0"/>
@@ -328,6 +340,8 @@
                               <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                               <Component id="jTextFieldBuscar" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                              <Component id="jButtonPagos" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
@@ -369,6 +383,14 @@
             <Component class="javax.swing.JTextField" name="jTextFieldBuscar">
               <Events>
                 <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jTextFieldBuscarKeyReleased"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="jButtonPagos">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Cargar Pagos"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonPagosActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

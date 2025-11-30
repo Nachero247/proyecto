@@ -134,7 +134,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jButtonCargaClientes.setText("Carga Clientes");
+        jButtonCargaClientes.setText("Carga Socios");
         jButtonCargaClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCargaClientesActionPerformed(evt);

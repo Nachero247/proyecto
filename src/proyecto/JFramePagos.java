@@ -98,11 +98,13 @@ public class JFramePagos extends javax.swing.JFrame {
         jTablePagosPendientes = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         jTextFieldBuscar1 = new javax.swing.JTextField();
+        jButtonPagosPendientes = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePagos = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldBuscar = new javax.swing.JTextField();
+        jButtonPagos = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButtonTabPrev = new javax.swing.JButton();
         jButtonTabNext = new javax.swing.JButton();
@@ -178,7 +180,7 @@ public class JFramePagos extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(102, 102, 102)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(266, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,6 +212,13 @@ public class JFramePagos extends javax.swing.JFrame {
             }
         });
 
+        jButtonPagosPendientes.setText("Cargar Pagos Pendientes");
+        jButtonPagosPendientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPagosPendientesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -218,10 +227,11 @@ public class JFramePagos extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
-                    .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonPagosPendientes))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -231,7 +241,9 @@ public class JFramePagos extends javax.swing.JFrame {
                         .addGap(36, 36, 36)
                         .addComponent(jLabel13)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(jButtonPagosPendientes))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -261,6 +273,13 @@ public class JFramePagos extends javax.swing.JFrame {
             }
         });
 
+        jButtonPagos.setText("Cargar Pagos");
+        jButtonPagos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPagosActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -269,7 +288,8 @@ public class JFramePagos extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6)
-                    .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonPagos))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -282,7 +302,9 @@ public class JFramePagos extends javax.swing.JFrame {
                         .addGap(31, 31, 31)
                         .addComponent(jLabel6)
                         .addGap(31, 31, 31)
-                        .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(34, 34, 34)
+                        .addComponent(jButtonPagos))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -491,6 +513,16 @@ public class JFramePagos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonRegistrarPagoActionPerformed
 
+    private void jButtonPagosPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagosPendientesActionPerformed
+        LogicaPagos.cargaPrueba();
+        cargarPagosPendientes();
+    }//GEN-LAST:event_jButtonPagosPendientesActionPerformed
+
+    private void jButtonPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagosActionPerformed
+        LogicaPagos.cargaPrueba();
+        listarPagos();
+    }//GEN-LAST:event_jButtonPagosActionPerformed
+
     public void actualizarTablas() {
         listarPagos();
         cargarPagosPendientes();
@@ -593,6 +625,8 @@ public class JFramePagos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonPagos;
+    private javax.swing.JButton jButtonPagosPendientes;
     private javax.swing.JButton jButtonRegistrarPago;
     private javax.swing.JButton jButtonTabNext;
     private javax.swing.JButton jButtonTabPrev;
