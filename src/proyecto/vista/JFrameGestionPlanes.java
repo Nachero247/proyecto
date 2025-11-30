@@ -221,22 +221,33 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
-        // TODO add your handling code here:
-        
-        int socioId = Integer.parseInt(jTextFieldSocio.getText());
-        String descripcion = jTextFieldDescripcion.getText();
-        
-        Date fechaInicio = convertirFecha(jTextFieldFecha_Inicio.getText());
-        Date fechaFin = convertirFecha(jTextFieldFecha_Fin.getText());
-        if(fechaInicio == null || fechaFin == null) return;
-        
-        Plan plan = new Plan(0, socioId, descripcion, fechaInicio, fechaFin);
-        
-        if(dao.insertar(plan)){
-            JOptionPane.showMessageDialog(null, "Plan agregado correctamente");
-            cargarTabla();
-        }else{
-            JOptionPane.showMessageDialog(null, "Error al agregar el plan");
+        try {
+            String textoSocio = jTextFieldSocio.getText().trim();
+            int socioId = 0; // Valor por defecto para "sin socio"
+
+            if (!textoSocio.isEmpty()) {
+                socioId = Integer.parseInt(textoSocio);
+            }
+
+            String descripcion = jTextFieldDescripcion.getText();
+
+            Date fechaInicio = convertirFecha(jTextFieldFecha_Inicio.getText());
+            Date fechaFin = convertirFecha(jTextFieldFecha_Fin.getText());
+            if(fechaInicio == null || fechaFin == null) return;
+
+            Plan plan = new Plan(0, socioId, descripcion, fechaInicio, fechaFin);
+
+            if(dao.insertar(plan)){
+                JOptionPane.showMessageDialog(null, "Plan agregado correctamente");
+                cargarTabla();
+            }else{
+                JOptionPane.showMessageDialog(null, "Error al agregar el plan");
+            }
+
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "El ID de socio debe ser un número válido");
+        } catch(Exception e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
         }
     }//GEN-LAST:event_jButtonAgregarActionPerformed
 
@@ -261,16 +272,29 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonActualizarActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        // TODO add your handling code here:
-           int idPlan = Integer.parseInt(jTextFieldPlan.getText());
-           
-           if(dao.eliminar(idPlan)){
-               JOptionPane.showMessageDialog(null, "Plan eliminado");
-               cargarTabla();
-           }else{
-               JOptionPane.showMessageDialog(null, "No se ha podido eliminar el plan");
-           }
-            
+        String texto = jTextFieldPlan.getText().trim();
+
+        // Validación simple
+        if (texto.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecciona un plan primero");
+            return;
+        }
+
+        try {
+            int idPlan = Integer.parseInt(texto);
+
+            // Eliminar directamente
+            if(dao.eliminar(idPlan)){
+                JOptionPane.showMessageDialog(null, "Plan eliminado");
+                cargarTabla();
+                jTextFieldPlan.setText(""); // Limpiar campo
+            } else {
+                JOptionPane.showMessageDialog(null, "No se pudo eliminar. Puede que tenga usuarios asociados.");
+            }
+
+        } catch(NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "ID inválido");
+        }
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
     private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed

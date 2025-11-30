@@ -52,21 +52,23 @@ public class PlanDAO {
     
     public boolean insertar(Plan p){
         String sql = "INSERT INTO plan(Socio_ID, Descripcion, Fecha_Inicio, Fecha_Fin) VALUES (?,?,?,?)";
-        
-        try(PreparedStatement ps = con.prepareStatement(sql)){
-            ps.setInt(1, p.getSocioId());
-            ps.setString(2, p.getDescripcion());
-            ps.setDate(3, new java.sql.Date(p.getFechaInicio().getTime()));
-            ps.setDate(4, new java.sql.Date(p.getFechaFin().getTime()));
-            
-            return ps.executeUpdate()>0;
-            
-                           
-            
-        }catch(SQLException e){
-            e.printStackTrace();
-            return false;
-        }
+
+           try(PreparedStatement ps = con.prepareStatement(sql)){
+               if (p.getSocioId() == 0) {
+                   ps.setNull(1, 4);
+               } else {
+                   ps.setInt(1, p.getSocioId());
+               }
+               ps.setString(2, p.getDescripcion());
+               ps.setDate(3, new java.sql.Date(p.getFechaInicio().getTime()));
+               ps.setDate(4, new java.sql.Date(p.getFechaFin().getTime()));
+
+               return ps.executeUpdate() > 0;
+
+           } catch(SQLException e) {
+               e.printStackTrace();
+               return false;
+           }
     }
     
     public boolean actualizar(Plan p){
