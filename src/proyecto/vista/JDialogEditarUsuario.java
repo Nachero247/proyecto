@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package proyecto;
+package proyecto.vista;
 
 import java.sql.Connection;
 import java.util.Date;
@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
+import proyecto.logica.LogicaUsuarios;
+import proyecto.modelo.Usuario;
 /**
  *
  * @author DAM2Alu14
@@ -22,7 +24,7 @@ public class JDialogEditarUsuario extends javax.swing.JFrame {
      * Creates new form JDialogAltaCliente
      */
     Connection conexion;
-    JFrameUsuarios jframepadre;
+    JFrameGestionUsuarios jframepadre;
     private Usuario usuario;
     
     // Carga los ids disponibles en el jComboBoxId
@@ -42,7 +44,7 @@ public class JDialogEditarUsuario extends javax.swing.JFrame {
     }
     
     public JDialogEditarUsuario(java.awt.Frame parent, boolean modal, Connection conexion, Usuario usuario) {
-        jframepadre = (JFrameUsuarios)parent;
+        jframepadre = (JFrameGestionUsuarios)parent;
         initComponents();
         this.conexion = conexion;
         this.usuario = usuario;

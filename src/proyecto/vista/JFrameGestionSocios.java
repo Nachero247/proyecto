@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package proyecto;
+package proyecto.vista;
 
 import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
@@ -14,92 +14,75 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import proyecto.logica.LogicaSocios;
+import proyecto.modelo.Socio;
 
 /**
  *
  * @author DAM2Alu14
  */
-public class JFrameUsuarios extends javax.swing.JFrame {
+public class JFrameGestionSocios extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameUsuarios.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGestionSocios.class.getName());
 
-    /**
-     * Creates new form JFrameGestionUsuarios
-     */
     DefaultTableModel dtm;
     ConexionBBDD nueva;
     Connection conexion;
     TableRowSorter<TableModel> order;
-    
     private String rol;
+    
+    // Carga en la tabla los datos desde LogicaSocios
+    public void cargaDesdeLogica() {
+        dtm.setRowCount(0); // Borra filas existentes
 
-    // Actualiza la tabla desde LogicaUsuarios
-    public void actualizarTabla() {
-        dtm.setRowCount(0); // limpiar tabla
-
-        for (Usuario usuario : LogicaUsuarios.getUsuarios()) {
-            Object[] fila = new Object[5];
-            fila[0] = usuario.getId_usuario();
-            fila[1] = usuario.getPlan_id();
-            fila[2] = usuario.getNombre_usuario();
-            fila[3] = usuario.getContrasena();
-            fila[4] = usuario.getRol();
+        for (Socio socio : LogicaSocios.getSocios()) {
+            Object[] fila = new Object[8];
+            fila[0] = socio.getNombre();
+            fila[1] = socio.getApellido1();
+            fila[2] = socio.getApellido2();
+            fila[3] = socio.getDni();
+            fila[4] = socio.getTelefono();
+            fila[5] = socio.getCorreo();
+            fila[6] = socio.getFecha_alta();
+            fila[7] = socio.getEstado();
 
             dtm.addRow(fila);
         }
-    }
-    
-    // Carga usuario desde la base de datos
-    public void cargaUsuariosBD() {
-        String sql = "SELECT ID_Usuario, Plan_ID, Usuario, Contrasena, Rol FROM usuario";
 
-        try (PreparedStatement ps = conexion.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            dtm.setRowCount(0); // limpiar tabla
-
-            while (rs.next()) {
-                Object[] fila = new Object[5];
-                fila[0] = rs.getInt("ID_Usuario");
-                fila[1] = rs.getInt("Plan_ID");
-                fila[2] = rs.getString("Usuario");
-                fila[3] = rs.getString("Contrasena");
-                fila[4] = rs.getString("Rol");
-
-                dtm.addRow(fila);
-            }
-
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,
-                "Error cargando usuarios: " + ex.getMessage(),
-                "Error BD", JOptionPane.ERROR_MESSAGE);
-        }
+        // ACTUALIZACIÓN: Forzar actualización visual
     }
     /**
-     *
-     * @author DAM2Alu14
+     * Creates new form JFrameGestionSocios
      */
+    
+    public void actualizarTabla() {
+        // Recargar datos desde la base de datos
+        LogicaSocios.cargaPrueba();
+        // Actualizar la tabla visual
+        cargaDesdeLogica();
+    }
         
-    // CONSTRUCTOR
-    public JFrameUsuarios(String rol) {
+    public JFrameGestionSocios(String rol) {
         this.rol = rol;
         initComponents();
 
+        // Inicializar conexión y modelo
         nueva = new ConexionBBDD();
         conexion = nueva.getConnection();
         dtm = new DefaultTableModel();
-        jTableUsuarios.setModel(dtm);
+        jTableSocios.setModel(dtm);
 
-        // Definir columnas de la tabla usuario
-        String[] columnas = {"ID_Usuario", "Plan_ID", "Usuario", "Contraseña", "Rol"};
+        // Definir columnas
+        String[] columnas = {"Nombre", "Apellido1", "Apellido2", "DNI", "Telefono", "Correo", "Fecha_Alta", "Estado"};
         dtm.setColumnIdentifiers(columnas);
 
-        // Cargar usuarios desde LogicaUsuarios
-        LogicaUsuarios.cargaPrueba();
-        actualizarTabla();
-
+        // Cargar datos desde la BBDD a LogicaSocios
+        LogicaSocios.cargaPrueba();
+        // Cargar datos en la tabla desde LogicaSocios
+        cargaDesdeLogica();
+        
         order = new TableRowSorter<>(dtm);
-        jTableUsuarios.setRowSorter(order);
+        jTableSocios.setRowSorter(order);
     }
 
     /**
@@ -113,9 +96,9 @@ public class JFrameUsuarios extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTableUsuarios = new javax.swing.JTable();
+        jTableSocios = new javax.swing.JTable();
         jPanel3 = new javax.swing.JPanel();
-        jButtonCargaUsuarios = new javax.swing.JButton();
+        jButtonCargaClientes = new javax.swing.JButton();
         jButtonAlta = new javax.swing.JButton();
         jButtonBaja = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
@@ -125,7 +108,7 @@ public class JFrameUsuarios extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTableUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+        jTableSocios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -136,7 +119,7 @@ public class JFrameUsuarios extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTableUsuarios);
+        jScrollPane1.setViewportView(jTableSocios);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -153,13 +136,13 @@ public class JFrameUsuarios extends javax.swing.JFrame {
 
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jButtonCargaUsuarios.setText("Carga Usuarios");
-        jButtonCargaUsuarios.addActionListener(new java.awt.event.ActionListener() {
+        jButtonCargaClientes.setText("Carga Socios");
+        jButtonCargaClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCargaUsuariosActionPerformed(evt);
+                jButtonCargaClientesActionPerformed(evt);
             }
         });
-        jPanel3.add(jButtonCargaUsuarios);
+        jPanel3.add(jButtonCargaClientes);
 
         jButtonAlta.setText("Alta");
         jButtonAlta.addActionListener(new java.awt.event.ActionListener() {
@@ -224,121 +207,139 @@ public class JFrameUsuarios extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditarActionPerformed
-        int fila = jTableUsuarios.getSelectedRow();
+        int fila = jTableSocios.getSelectedRow();
 
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona un usuario de la tabla");
+            JOptionPane.showMessageDialog(this, "Selecciona un socio de la tabla");
             return;
         }
 
-        int idUsuario = Integer.parseInt(jTableUsuarios.getValueAt(fila, 0).toString());
-        Usuario usuario = LogicaUsuarios.getUsuario(idUsuario);
-
-        if (usuario == null) {
-            JOptionPane.showMessageDialog(this, "No se encontró el usuario");
+        // Obtener el DNI de la fila seleccionada
+        String dni = jTableSocios.getValueAt(fila, 3).toString();
+        
+        // Buscar el socio por DNI en LogicaSocios
+        Socio socioSeleccionado = null;
+        for (Socio s : LogicaSocios.getSocios()) {
+            if (s.getDni().equals(dni)) {
+                socioSeleccionado = s;
+                break;
+            }
+        }
+        
+        if (socioSeleccionado == null) {
+            JOptionPane.showMessageDialog(this, "Error al obtener los datos del socio");
             return;
         }
 
-        // Crear diálogo de editar usuario
-        JDialogEditarUsuario dialog = new JDialogEditarUsuario(this, true, conexion, usuario);
-        dialog.setVisible(true);
+        // Pasar el socio al JDialog
+        JDialogEditarSocio jdec = new JDialogEditarSocio(this, true, conexion, socioSeleccionado);
+        jdec.setVisible(true);
+        
+        // Refrescar la tabla después de editar
+        cargaDesdeLogica();
     }//GEN-LAST:event_jButtonEditarActionPerformed
 
     private void jButtonBajaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBajaActionPerformed
-        if (jTableUsuarios.getSelectedRowCount() == 0) {
-            JOptionPane.showMessageDialog(this, "Seleccione al menos un usuario.");
-            return;
-        }
+        // Comprobar que hay filas seleccionadas
+        if (jTableSocios.getSelectedRowCount() > 0) {
+            int[] seleccionados = jTableSocios.getSelectedRows();
 
-        int[] filasSeleccionadas = jTableUsuarios.getSelectedRows();
-        int confirmacion = JOptionPane.showConfirmDialog(
-            this, 
-            "¿Está seguro de que desea eliminar " + filasSeleccionadas.length + " usuario(s)?", 
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION
-        );
-
-        if (confirmacion == JOptionPane.YES_OPTION) {
             try {
-                // Eliminar de mayor a menor índice para evitar problemas con los índices
-                for (int i = filasSeleccionadas.length - 1; i >= 0; i--) {
-                    int fila = filasSeleccionadas[i];
-                    int idUsuario = Integer.parseInt(jTableUsuarios.getValueAt(fila, 0).toString());
+                PreparedStatement ps = conexion.prepareStatement(
+                    "UPDATE socio SET estado = ? WHERE DNI = ?"
+                );
 
-                    PreparedStatement ps = conexion.prepareStatement("DELETE FROM usuario WHERE ID_Usuario = ?");
-                    ps.setInt(1, idUsuario);
+                // Recorrer los socios seleccionados
+                for (int i = seleccionados.length - 1; i >= 0; i--) {
+
+                    // Obtener DNI desde la tabla
+                    String dni = jTableSocios.getValueAt(seleccionados[i], 3).toString();
+
+                    // Buscar el socio en la lista lógica
+                    Socio socio = null;
+                    for (Socio s : LogicaSocios.getSocios()) {
+                        if (s.getDni().equals(dni)) {
+                            socio = s;
+                            break;
+                        }
+                    }
+
+                    // Si no se encuentra, pasar al siguiente
+                    if (socio == null) continue;
+
+                    // Marcar el socio como baja en la BBDD
+                    ps.setString(1, "Baja");
+                    ps.setString(2, dni);
                     ps.executeUpdate();
-                    ps.close();
 
-                    // Eliminar de LogicaUsuarios
-                    LogicaUsuarios.removeUsuario(idUsuario);
+                    socio.setEstado("Baja");
+                    LogicaSocios.editSocio(socio);
                 }
-                
-                JOptionPane.showMessageDialog(this, "Usuario(s) eliminado(s) correctamente");
 
-                actualizarTabla();
+                ps.close();
+
+                // Avisar al usuario
+                JOptionPane.showMessageDialog(this, "Socio/s dado/s de baja correctamente.");
+
+                // Recargar datos desde la base de datos
+                LogicaSocios.cargaPrueba();
+
+                // Actualizar la tabla en pantalla
+                cargaDesdeLogica();
 
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Error al eliminar usuario: " + ex.getMessage(),
-                        "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(
+                    this,
+                    "Error al dar de baja socio.",
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
             }
+
+        } else {
+            // Aviso si no se seleccionó ningún socio
+            JOptionPane.showMessageDialog(
+                this,
+                "Seleccione al menos un socio para dar de baja.",
+                "Aviso",
+                JOptionPane.WARNING_MESSAGE
+            );
         }
     }//GEN-LAST:event_jButtonBajaActionPerformed
 
     private void jButtonAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAltaActionPerformed
-        JDialogAltaUsuario dialog = new JDialogAltaUsuario(this, true, conexion);
-        dialog.setVisible(true);
+        JDialogAltaSocio jdac = new JDialogAltaSocio(this, true, this.conexion);
+        jdac.setVisible(true);
+
+        LogicaSocios.cargaPrueba(); // Recargar desde BBDD
+        cargaDesdeLogica(); // Actualizar tabla visual
     }//GEN-LAST:event_jButtonAltaActionPerformed
 
-    private void jButtonCargaUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaUsuariosActionPerformed
-       actualizarTabla();
-    }//GEN-LAST:event_jButtonCargaUsuariosActionPerformed
+    private void jButtonCargaClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargaClientesActionPerformed
+        LogicaSocios.cargaPrueba();
+        cargaDesdeLogica();
+    }//GEN-LAST:event_jButtonCargaClientesActionPerformed
 
     private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
         try {
             RowFilter<Object, Object> rf = RowFilter.regexFilter(jTextFieldBuscar.getText());
             order.setRowFilter(rf);
-        } catch (PatternSyntaxException e) {
-            System.out.println("Patrón inválido");
+        } catch (PatternSyntaxException pse) {
+            System.out.println("Bad regex pattern");
         }
     }//GEN-LAST:event_jTextFieldBuscarKeyReleased
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
-        JFrameMenuPrincipal jfmp = new JFrameMenuPrincipal(rol);
-        jfmp.setVisible(true);
+        JFrameMenuPrincipal jfap = new JFrameMenuPrincipal(rol);
+        jfap.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
-    public void cargarUsuarios() {
-        String sql = "SELECT ID_Usuario, Plan_ID, Usuario, Contrasena, Rol FROM usuario";
-
-        try (PreparedStatement ps = conexion.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-
-            dtm.setRowCount(0); // limpiar tabla
-
-            while (rs.next()) {
-                Object[] fila = new Object[]{
-                    rs.getInt("ID_Usuario"),
-                    rs.getInt("Plan_ID"),
-                    rs.getString("Usuario"),
-                    rs.getString("Contrasena"),
-                    rs.getString("Rol")
-                };
-                dtm.addRow(fila);
-            }
-
-        } catch (SQLException ex) {
-            logger.log(java.util.logging.Level.SEVERE, "Error al cargar usuarios", ex);
-            JOptionPane.showMessageDialog(
-                this,
-                "Error cargando usuarios desde la base de datos",
-                "Error",
-                JOptionPane.ERROR_MESSAGE
-            );
-        }
+    public void addSocio(Socio s) {
+        LogicaSocios.addSocio(s);
+        cargaDesdeLogica();
     }
-
+    
     /**
      * @param args the command line arguments
      */
@@ -361,20 +362,20 @@ public class JFrameUsuarios extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(() -> new JFrameUsuarios("Administrador").setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionSocios("Administrador").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAlta;
     private javax.swing.JButton jButtonBaja;
-    private javax.swing.JButton jButtonCargaUsuarios;
+    private javax.swing.JButton jButtonCargaClientes;
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTableUsuarios;
+    private javax.swing.JTable jTableSocios;
     private javax.swing.JTextField jTextFieldBuscar;
     // End of variables declaration//GEN-END:variables
 }

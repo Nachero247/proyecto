@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package proyecto;
+package proyecto.vista;
 
 import java.sql.Connection;
 import java.awt.Image;
@@ -291,7 +291,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPagosActionPerformed
         // TODO add your handling code here:
-        JFramePagos pagos = new JFramePagos(rol);
+        JFrameGestionPagos pagos = new JFrameGestionPagos(rol);
         pagos.setVisible(true);
         pagos.setLocationRelativeTo(null);
         this.dispose();
@@ -344,7 +344,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuariosActionPerformed
         // TODO add your handling code here:
-        JFrameUsuarios usuario = new JFrameUsuarios(rol);
+        JFrameGestionUsuarios usuario = new JFrameGestionUsuarios(rol);
         usuario.setVisible(true);
         usuario.setLocationRelativeTo(null);
         this.dispose();

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package proyecto;
+package proyecto.vista;
 
 
 import ConexionBBDD.ConexionBBDD;
@@ -15,14 +15,18 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import proyecto.logica.LogicaPagos;
+import proyecto.logica.LogicaSocios;
+import proyecto.modelo.Pago;
+import proyecto.modelo.Socio;
 
 /**
  *
  * @author DAM2Alu14
  */
-public class JFramePagos extends javax.swing.JFrame {
+public class JFrameGestionPagos extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFramePagos.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGestionPagos.class.getName());
 
     // Variables
     DefaultTableModel dtm;
@@ -37,7 +41,7 @@ public class JFramePagos extends javax.swing.JFrame {
     /**
      * Creates new form JFramePagos
      */
-    public JFramePagos(String rol) {
+    public JFrameGestionPagos(String rol) {
         this.rol = rol;
         initComponents();
         
@@ -621,7 +625,7 @@ public class JFramePagos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(() -> new JFramePagos("Administrador").setVisible(true));
+        //java.awt.EventQueue.invokeLater(() -> new JFrameGestionPagos("Administrador").setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

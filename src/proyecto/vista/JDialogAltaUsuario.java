@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package proyecto;
+package proyecto.vista;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -10,6 +10,8 @@ import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
+import proyecto.logica.LogicaUsuarios;
+import proyecto.modelo.Usuario;
 
 /**
  *
@@ -24,10 +26,10 @@ public class JDialogAltaUsuario extends javax.swing.JFrame {
      * Creates new form JDialogAltaCliente
      */
     Connection conexion;
-    JFrameUsuarios jframepadre;
+    JFrameGestionUsuarios jframepadre;
     
     public JDialogAltaUsuario(java.awt.Frame parent, boolean modal, Connection conexionPadre) {
-        jframepadre = (JFrameUsuarios)parent;
+        jframepadre = (JFrameGestionUsuarios)parent;
         initComponents();
         this.conexion = conexionPadre;
     }

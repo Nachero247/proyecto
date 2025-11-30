@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package proyecto;
+package proyecto.vista;
 
 import java.sql.*;
 import java.sql.Connection;
@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import proyecto.modelo.Plan;
+import proyecto.logica.PlanDAO;
 
 /**
  *
