@@ -172,6 +172,11 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jPanel3.add(jLabel1);
 
         jTextFieldBuscar.setPreferredSize(new java.awt.Dimension(80, 22));
+        jTextFieldBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldBuscarActionPerformed(evt);
+            }
+        });
         jTextFieldBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldBuscarKeyReleased(evt);
@@ -334,6 +339,10 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jfap.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
+
+    private void jTextFieldBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldBuscarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldBuscarActionPerformed
 
     public void addSocio(Socio s) {
         LogicaSocios.addSocio(s);

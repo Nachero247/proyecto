@@ -10,7 +10,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Date;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import proyecto.modelo.Plan;
 import proyecto.logica.PlanDAO;
@@ -25,6 +27,8 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     
     
     PlanDAO dao = new PlanDAO();
+    private javax.swing.table.TableRowSorter<DefaultTableModel> sorter;
+
     /**
      * Creates new form JFrameGestionPagos
      */
@@ -33,6 +37,10 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         this.rol = rol;
         initComponents();
         cargarTabla();
+        
+        DefaultTableModel model = (DefaultTableModel) jTablePlanes.getModel();
+        sorter = new javax.swing.table.TableRowSorter<>(model);
+        jTablePlanes.setRowSorter(sorter);
     }
 
     /**
@@ -63,6 +71,8 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         jButtonEliminar = new javax.swing.JButton();
         jButtonActualizar = new javax.swing.JButton();
         jButtonVolver = new javax.swing.JButton();
+        jLabelBuscar = new javax.swing.JLabel();
+        jTextFieldBuscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -197,6 +207,21 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         });
         jPanel2.add(jButtonVolver);
 
+        jLabelBuscar.setText("Buscar");
+        jLabelBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jLabelBuscarKeyReleased(evt);
+            }
+        });
+        jPanel2.add(jLabelBuscar);
+
+        jTextFieldBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscarKeyReleased(evt);
+            }
+        });
+        jPanel2.add(jTextFieldBuscar);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -330,6 +355,28 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
        this.dispose();
     }//GEN-LAST:event_jButtonVolverActionPerformed
 
+    private void jLabelBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jLabelBuscarKeyReleased
+            // TODO add your handling code here:
+    }//GEN-LAST:event_jLabelBuscarKeyReleased
+
+    private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
+        // TODO add your handling code here:
+                                                 
+    String texto = jTextFieldBuscar.getText();
+
+    if (texto.trim().length() == 0) {
+        sorter.setRowFilter(null); // Mostrar todo
+    } else {
+        try {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+        } catch (PatternSyntaxException e) {
+            System.out.println("Patrón inválido");
+        }
+    }
+
+
+    }//GEN-LAST:event_jTextFieldBuscarKeyReleased
+
     
     private void cargarTabla(){
         DefaultTableModel model = (DefaultTableModel) jTablePlanes.getModel();
@@ -392,10 +439,12 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabelBuscar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePlanes;
+    private javax.swing.JTextField jTextFieldBuscar;
     private javax.swing.JTextField jTextFieldDescripcion;
     private javax.swing.JTextField jTextFieldFecha_Fin;
     private javax.swing.JTextField jTextFieldFecha_Inicio;

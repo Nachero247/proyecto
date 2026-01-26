@@ -5,8 +5,10 @@
 package proyecto.vista;
 
 import java.util.List;
+import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import proyecto.modelo.Asistencia;
 import proyecto.logica.AsistenciaDAO;
@@ -20,6 +22,8 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGestionAsistencias.class.getName());
 
     AsistenciaDAO dao = new AsistenciaDAO();
+    private javax.swing.table.TableRowSorter<DefaultTableModel> sorter;
+
     /**
      * Creates new form JFrameGestionAsistencias
      */
@@ -29,6 +33,10 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         this.rol = rol;
         initComponents();
         cargaTabla();
+        
+        DefaultTableModel model = (DefaultTableModel) jTableAsistencia.getModel();
+        sorter = new javax.swing.table.TableRowSorter<>(model);
+        jTableAsistencia.setRowSorter(sorter);
     }
 
     /**
@@ -45,10 +53,11 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         jTableAsistencia = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jButtonRegistrarAsistencia = new javax.swing.JButton();
-        jButtonBuscar = new javax.swing.JButton();
         jButtonEliminar = new javax.swing.JButton();
         jButtonActualizar = new javax.swing.JButton();
         jButtonVolver = new javax.swing.JButton();
+        jLabelBuscar = new javax.swing.JLabel();
+        jTextFieldBuscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -90,14 +99,6 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         });
         jPanel1.add(jButtonRegistrarAsistencia);
 
-        jButtonBuscar.setText("Buscar");
-        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBuscarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jButtonBuscar);
-
         jButtonEliminar.setText("Eliminar");
         jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -121,6 +122,16 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButtonVolver);
+
+        jLabelBuscar.setText("Buscar");
+        jPanel1.add(jLabelBuscar);
+
+        jTextFieldBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldBuscarKeyReleased(evt);
+            }
+        });
+        jPanel1.add(jTextFieldBuscar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,45 +176,6 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButtonRegistrarAsistenciaActionPerformed
 
-    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        // TODO add your handling code here:
-        String input = JOptionPane.showInputDialog("Introduce el Id del socio que quieres buscar");
-        
-        if(input != null){
-            try{
-            
-                int idSocio = Integer.parseInt(input);
-                
-                DefaultTableModel model = (DefaultTableModel) jTableAsistencia.getModel();
-                model.setRowCount(0);
-                
-                List <Asistencia> lista = dao.ListarAsistencia();
-                boolean encontrado = false;
-                
-                for(Asistencia a : lista){
-                    if(a.getId_socio() == idSocio){
-                        model.addRow(new Object[]{
-                        a.getId(),
-                        a.getId_socio(),
-                        a.getFecha(),
-                        a.getHora()
-                        });
-                    encontrado = true;
-                    }
-                }
-                
-                if(!encontrado){
-                    JOptionPane.showMessageDialog(null, "No hay asistencias para ese Id de Socio");
-                }
-                
-        }catch(NumberFormatException e){
-            JOptionPane.showMessageDialog(null, "Introduce un Id de socio válido");
-        }
-        }
-        
-        
-    }//GEN-LAST:event_jButtonBuscarActionPerformed
-
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
         // TODO add your handling code here:
         
@@ -239,6 +211,21 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         this.dispose();
         
     }//GEN-LAST:event_jButtonVolverActionPerformed
+
+    private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
+        // TODO add your handling code here:
+          String texto = jTextFieldBuscar.getText();
+
+    if (texto.trim().length() == 0) {
+        sorter.setRowFilter(null); // Mostrar todo
+    } else {
+        try {
+            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+        } catch (PatternSyntaxException e) {
+            System.out.println("Patrón inválido");
+        }
+    }
+    }//GEN-LAST:event_jTextFieldBuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -287,14 +274,15 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
-    private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonEliminar;
     private javax.swing.JButton jButtonRegistrarAsistencia;
     private javax.swing.JButton jButtonVolver;
+    private javax.swing.JLabel jLabelBuscar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableAsistencia;
+    private javax.swing.JTextField jTextFieldBuscar;
     // End of variables declaration//GEN-END:variables
 }
 
