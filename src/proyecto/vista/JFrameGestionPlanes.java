@@ -215,6 +215,7 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         });
         jPanel2.add(jLabelBuscar);
 
+        jTextFieldBuscar.setPreferredSize(new java.awt.Dimension(84, 22));
         jTextFieldBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 jTextFieldBuscarKeyReleased(evt);

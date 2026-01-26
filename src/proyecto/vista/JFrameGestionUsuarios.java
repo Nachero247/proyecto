@@ -121,9 +121,9 @@ public class JFrameGestionUsuarios extends javax.swing.JFrame {
         jButtonAlta = new javax.swing.JButton();
         jButtonBaja = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
+        jButtonVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldBuscar = new javax.swing.JTextField();
-        jButtonVolver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -187,6 +187,14 @@ public class JFrameGestionUsuarios extends javax.swing.JFrame {
         });
         jPanel3.add(jButtonEditar);
 
+        jButtonVolver.setText("Volver");
+        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVolverActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButtonVolver);
+
         jLabel1.setText("Buscar");
         jPanel3.add(jLabel1);
 
@@ -197,14 +205,6 @@ public class JFrameGestionUsuarios extends javax.swing.JFrame {
             }
         });
         jPanel3.add(jTextFieldBuscar);
-
-        jButtonVolver.setText("Volver");
-        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVolverActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButtonVolver);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
