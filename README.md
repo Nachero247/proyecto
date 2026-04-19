@@ -38,7 +38,7 @@ La aplicación cuenta con un menú principal con botones, desde el cual se acced
 - Comprobar que todas las librerías de la carpeta 'lib' están añadidas correctamente
 7. Ejecutar el proyecto:
 - Ejecutar archivo JFrameLogin.java
-- 
+  
 ---
 
 ## 📖 Manual de usuario
