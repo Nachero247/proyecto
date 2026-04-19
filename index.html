@@ -1,16 +1,469 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Mi aplicación</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Pedro Sanchez">
+    <title>Gym Manager | Sistema Integral para Gestión de Gimnasios</title>
+<style>
+/* ---------- GLOBAL ---------- */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:system-ui,'Segoe UI','Helvetica Neue',sans-serif;
+    background:#e6f0fa;
+    color:#0b2b3b;
+    scroll-behavior:smooth;
+    line-height:1.5;
+}
+
+.container{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 24px;
+}
+
+/* ---------- HEADER ---------- */
+.header{
+    background:#0a2f6c;
+    position:sticky;
+    top:0;
+    z-index:100;
+    border-bottom:3px solid #7c3aed;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+.nav-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    padding:12px 0;
+}
+
+/* ---------- LOGO ---------- */
+.logo-area{display:flex;align-items:center;gap:8px;}
+.logo-img{width:40px;height:40px;background:#fff;border-radius:20px;padding:4px;}
+.logo-text{font-weight:bold;font-size:1.3rem;color:#fff;}
+.logo-area small{font-size:.65rem;color:#b9d0ff;display:block;}
+
+/* ---------- NAV ---------- */
+.nav-links{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px 20px;
+}
+
+.nav-links a{
+    color:#f0f4ff;
+    text-decoration:none;
+    font-weight:500;
+    font-size:.95rem;
+    padding:6px 0;
+    border-bottom:2px solid transparent;
+}
+
+.nav-links a:hover{
+    color:#a78bfa;
+    border-bottom-color:#7c3aed;
+}
+
+.repo-link{padding:6px 0;}
+
+/* ---------- HERO ---------- */
+.hero{
+    background:linear-gradient(120deg,#0a2f6c,#1e1a5e);
+    color:#fff;
+    padding:3rem 0 3.5rem;
+    border-radius:0 0 3rem 3rem;
+    margin-bottom:2.5rem;
+}
+
+.hero-content{max-width:850px;margin:auto;text-align:center;}
+
+.hero h1{
+    font-size:2.5rem;
+    font-weight:800;
+    margin-bottom:1rem;
+    letter-spacing:-.5px;
+}
+
+.hero p{font-size:1.2rem;opacity:.95;margin-bottom:1rem;}
+
+.tech-badge{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+    margin-top:24px;
+}
+
+.tech-badge span{
+    background:rgba(255,255,255,.15);
+    padding:6px 16px;
+    border-radius:40px;
+    font-size:.85rem;
+}
+
+/* ---------- SECCIONES ---------- */
+section{margin:4rem 0;scroll-margin-top:90px;}
+
+.section-title{
+    font-size:2rem;
+    font-weight:700;
+    text-align:center;
+    margin-bottom:2rem;
+    color:#071c3c;
+}
+
+.section-title span{color:#7c3aed;}
+
+.title-decoration{
+    width:80px;
+    height:4px;
+    background:#7c3aed;
+    margin:.5rem auto 2rem;
+    border-radius:4px;
+}
+
+/* ---------- CARDS ---------- */
+.features-grid,
+.roles-grid,
+.financial-states,
+.financial-features,
+.planes-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:2rem;
+}
+
+.feature-card,
+.role-card,
+.plan-card{
+    background:#fff;
+    border-radius:28px;
+    padding:1.8rem;
+}
+
+.feature-card{
+    flex:1 1 280px;
+    min-width:250px;
+    border:1px solid rgba(124,58,237,.15);
+}
+
+.feature-card h3{
+    font-size:1.5rem;
+    margin-bottom:.75rem;
+    color:#0a2f6c;
+}
+
+.feature-icon{font-size:2.4rem;margin-bottom:1rem;}
+
+.plan-card{
+    width:210px;
+    text-align:center;
+    border-top:5px solid #7c3aed;
+}
+
+.plan-card.popular{border-top-color:#f59e0b;background:#fffef7;}
+
+.plan-price{font-size:1.8rem;font-weight:800;color:#0a2f6c;margin:.5rem 0;}
+
+.plan-duration{color:#4b5563;}
+
+.badge-popular{
+    background:#f59e0b;
+    color:#fff;
+    font-size:.7rem;
+    border-radius:50px;
+    padding:4px 12px;
+    display:inline-block;
+}
+
+/* ---------- ROLES ---------- */
+.role-perm{list-style:none;margin-top:1rem;}
+
+.role-perm li{
+    margin:.7rem 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.perm-true{color:#10b981;}
+.perm-false{color:#ef4444;}
+
+/* ---------- FINANZAS ---------- */
+.state-badge{
+    background:#fff;
+    border-radius:60px;
+    padding:.8rem 2rem;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:700;
+}
+
+.fin-feature{
+    background:#f1f5f9;
+    padding:1rem 1.2rem;
+    border-radius:28px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1 1 200px;
+}
+
+/* ---------- TECH ---------- */
+.tech-stack{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:1rem;
+    background:#0a2f6c;
+    padding:2.5rem 1rem;
+    border-radius:48px;
+}
+
+.tech-item{
+    background:rgba(255,255,255,.1);
+    padding:.7rem 1.6rem;
+    border-radius:80px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+    background:#071c3c;
+    color:#b9d0ff;
+    text-align:center;
+    padding:2rem 0;
+    border-radius:2rem 2rem 0 0;
+    margin-top:3rem;
+}
+
+.footer a{color:#c084fc;text-decoration:none;}
+</style>
 </head>
 <body>
-  <h1>Mi proyecto en NetBeans</h1>
-  <p>Esta es mi aplicación.</p>
 
-  <h2>Descripción</h2>
-  <p>Aquí explicas qué hace tu programa.</p>
+<header class="header">
+    <div class="container nav-bar">
+        <div class="logo-area">
+    	  <img class="logo-img" src="img/logo_GymManager.png" alt="Logo GymManager">
+            <div>
+                <div class="logo-text">GymManager</div>
+                <small>gestión integral</small>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Funcionalidades</a>
+            <a href="#planes">Planes</a>
+            <a href="#roles">Roles y Accesos</a>
+            <a href="#financiero">Control Financiero</a>
+            <a href="#tecnologia">Tecnología</a>
+            <a href="https://github.com/Nachero247/proyecto" target="_blank" class="repo-link">GitHub Repositorio</a>
+        </div>
+    </div>
+</header>
 
-  <h2>Descarga</h2>
-  <p><a href="app.jar">Descargar aplicación</a></p>
+<main>
+    <div class="hero">
+        <div class="container hero-content">
+            <h1>GYMMANAGER · POTENCIA TU GIMNASIO</h1>
+            <p>Aplicación desarrollada en <strong>Java con NetBeans</strong> y base de datos <strong>MySQL</strong> para gestionar un gimnasio de forma centralizada. Administra usuarios, socios, pagos, planes de entrenamiento y asistencias con total sencillez.</p>
+            <div class="tech-badge">
+                <span>☕ Java / NetBeans</span>
+                <span>🐬 MySQL</span>
+                <span>📊 Informes XML/JSON</span>
+                <span>🔐 Roles + Permisos</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- SECCIÓN FUNCIONALIDADES -->
+        <section id="features">
+            <h2 class="section-title"><span>⚙️ Funcionalidades</span> · Todo lo que necesitas</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem;">Una plataforma completa que cubre cada aspecto de la gestión de tu gimnasio desde un solo lugar.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Gestión de Socios</h3>
+                    <p>Crea, edita y controla el estado de cada socio: alta, baja o suspendido. Almacena DNI, teléfono, correo electrónico y toda la información relevante de forma centralizada.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Control de Pagos</h3>
+                    <p>Registra pagos con estado: Pagado, Pendiente o Vencido. Filtra por DNI, estado o fecha. Imprime informes detallados de pagos pendientes o por socio en segundos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏋️</div>
+                    <h3>Planes de Suscripción</h3>
+                    <p>Crea planes personalizados con precio y duración: 1 mes, 3 meses, 6 meses, anual o los que necesites. Asigna planes a cada socio y controla sus vencimientos automáticamente.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Registro de Asistencias</h3>
+                    <p>Guarda la fecha exacta de cada visita al gimnasio por socio. Genera informes de asistencia y analiza la frecuencia de uso para tomar mejores decisiones.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Informes Imprimibles</h3>
+                    <p>Imprime informes de socios, pagos y planes filtrando por cualquier criterio. Exporta e importa datos desde archivos XML y JSON para máxima flexibilidad.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Usuarios del Sistema</h3>
+                    <p>Administra los accesos con roles diferenciados: Administrador, Entrenador y Profesor. Cada rol tiene permisos específicos sobre los módulos de la aplicación.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PLANES DE SUSCRIPCIÓN -->
+        <section id="planes">
+            <h2 class="section-title"><span>💪 Suscripciones</span> · Planes configurables</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 1rem;">Define tus propios planes de suscripción con el precio y duración que mejor se adapten a tu gimnasio. Ejemplos incluidos por defecto:</p>
+            <div class="planes-container">
+                <div class="plan-card">
+                    <h4>1 Mes</h4>
+                    <div class="plan-price">€30</div>
+                    <div class="plan-duration">Acceso mensual</div>
+                    <p style="margin-top: 12px;">Acceso completo · Asistencias · Control de pago</p>
+                </div>
+                <div class="plan-card popular">
+                    <span class="badge-popular">⭐ MÁS POPULAR</span>
+                    <h4>3 Meses</h4>
+                    <div class="plan-price">€75</div>
+                    <div class="plan-duration">Trimestral</div>
+                    <p>Acceso completo · Ahorro vs mensual</p>
+                </div>
+                <div class="plan-card">
+                    <h4>6 Meses</h4>
+                    <div class="plan-price">€130</div>
+                    <div class="plan-duration">Semestral</div>
+                    <p>Mayor ahorro · Prioridad</p>
+                </div>
+                <div class="plan-card">
+                    <h4>Anual</h4>
+                    <div class="plan-price">€220</div>
+                    <div class="plan-duration">12 meses</div>
+                    <p>Máximo ahorro · Beneficios extra</p>
+                </div>
+            </div>
+            <div class="custom-plan">
+                ➕ Plan Personalizado: Crea cualquier plan con el precio y duración que necesites directamente desde la aplicación
+            </div>
+        </section>
+
+        <!-- SECCIÓN ROLES Y ACCESOS -->
+        <section id="roles">
+            <h2 class="section-title"><span>🛡️ Roles y Accesos</span> · Control de permisos</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align: center;">Tres roles de usuario con accesos diferenciados para mantener la seguridad y organización de tu equipo.</p>
+            <div class="roles-grid">
+                <div class="role-card">
+                    <h3>🛡️ Administrador</h3>
+                    <ul class="role-perm">
+                        <li>✅ Gestión completa de socios</li>
+                        <li>✅ Control de pagos y cuotas</li>
+                        <li>✅ Gestión de planes</li>
+                        <li>✅ Administración de usuarios</li>
+                        <li>✅ Todos los informes / Importar-Exportar</li>
+                    </ul>
+                </div>
+                <div class="role-card">
+                    <h3>💪 Entrenador</h3>
+                    <ul class="role-perm">
+                        <li>✅ Ver y editar socios</li>
+                        <li>✅ Registro de asistencias</li>
+                        <li>✅ Consultar planes / Informes asistencia</li>
+                        <li>❌ Sin acceso a pagos</li>
+                        <li>❌ Sin gestión de usuarios</li>
+                    </ul>
+                </div>
+                <div class="role-card">
+                    <h3>📚 Profesor</h3>
+                    <ul class="role-perm">
+                        <li>✅ Consulta de socios</li>
+                        <li>✅ Registro de asistencias</li>
+                        <li>✅ Ver planes asignados</li>
+                        <li>❌ Sin edición de datos</li>
+                        <li>❌ Sin acceso a pagos / gestión usuarios</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CONTROL FINANCIERO -->
+        <section id="financiero">
+            <h2 class="section-title"><span>💰 Control Financiero</span> · Pagos bajo control</h2>
+            <div class="title-decoration"></div>
+            <div class="financial-states">
+                <div class="state-badge"><span style="color:#10b981; font-size:1.6rem;">✓</span> <strong>Pagado</strong> · Cuota abonada</div>
+                <div class="state-badge"><span style="color:#f59e0b; font-size:1.6rem;">⏳</span> <strong>Pendiente</strong> · Sin confirmar</div>
+                <div class="state-badge"><span style="color:#dc2626; font-size:1.6rem;">⚠️</span> <strong>Vencido</strong> · Alerta prioritaria</div>
+            </div>
+            <div class="financial-features">
+                <div class="fin-feature">🔍 Filtrado por DNI y Estado</div>
+                <div class="fin-feature">🖨️ Impresión de informes (socio, rango de fechas)</div>
+                <div class="fin-feature">📅 Control de Vencimientos automático</div>
+                <div class="fin-feature">📥 Importar desde XML y JSON</div>
+                <div class="fin-feature">📊 Resumen de Pagos Pendientes</div>
+                <div class="fin-feature">👁️ Vista global de pagos sin saldar</div>
+            </div>
+            <p style="background: #e0f2fe; padding: 1rem; border-radius: 28px; text-align: center;"><strong>✅ Pagado:</strong> El socio ha abonado correctamente su cuota · <strong>⏳ Pendiente:</strong> Pago registrado aún no confirmado · <strong>🔴 Vencido:</strong> Cuota superó fecha límite sin abonar. Actúa antes de que se acumulen impagos.</p>
+        </section>
+
+        <!-- SECCIÓN TECNOLÓGIA -->
+        <section id="tecnologia">
+            <h2 class="section-title"><span>⚡ Tecnología utilizada</span> · Construido con tecnología fiable y eficiente</h2>
+            <div class="title-decoration"></div>
+            <div class="tech-stack">
+                <span class="tech-item">☕ Java</span>
+                <span class="tech-item">🎨 NetBeans IDE</span>
+                <span class="tech-item">🐬 MySQL</span>
+                <span class="tech-item">🔌 JDBC Connector</span>
+                <span class="tech-item">📄 Exportación XML</span>
+                <span class="tech-item">🔧 Exportación JSON</span>
+                <span class="tech-item">🖨️ Motor de Informes</span>
+                <span class="tech-item">🔐 Gestión de Roles</span>
+                <span class="tech-item">🗄️ BD Relacional</span>
+                <span class="tech-item">🖥️ Interfaz Swing/GUI</span>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">GymManager integra un robusto backend Java + MySQL, gestión de roles, importación/exportación XML/JSON e informes imprimibles. Máxima eficiencia para tu negocio.</p>
+        </section>
+
+        <!-- IMPORTACIÓN MASIVA -->
+        <div style="background: linear-gradient(110deg, #eef2ff, #f3e8ff); border-radius: 2rem; padding: 2rem; margin: 2rem 0; text-align: center;">
+            <span style="font-size: 2rem;">☁️</span>
+            <h3 style="margin: 0.5rem 0">Importación masiva · Informes personalizados</h3>
+            <p>Carga datos de socios, pagos y asistencias desde XML/JSON, exporta informes con filtros y mantén todo sincronizado. La administración nunca fue tan ágil.</p>
+            <div style="margin-top: 12px;">✔️ Compatible con roles: Admin, Entrenador, Profesor</div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>☕ GymManager · Aplicación de escritorio desarrollada con NetBeans + MySQL | Gestión integral de gimnasios</p>
+        <p style="margin-top: 0.8rem; font-size: 0.85rem;">📍 Control de socios · pagos · planes · asistencias · informes · roles de usuario</p>
+        <p style="margin-top: 1rem;"><a href="https://github.com/Nachero247/proyecto" target="_blank">📦 Repositorio oficial del proyecto</a> — ¡Explora el código y contribuye!</p>
+        <p style="margin-top: 1rem;">&copy; 2026 GymManager - Solución todo en uno para gestión de gimnasios/p>
+    </div>
+</footer>
+
 </body>
 </html>
