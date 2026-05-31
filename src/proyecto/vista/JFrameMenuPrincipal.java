@@ -266,7 +266,7 @@ public void icono1() {
         jPanelLateral.add(jSeparator);
 
         jButtonCargarDatos.setBackground(new java.awt.Color(153, 153, 153));
-        jButtonCargarDatos.setText("Cargar Datos Prueba");
+        jButtonCargarDatos.setText("Cargar Datos");
         jButtonCargarDatos.setActionCommand("");
         jButtonCargarDatos.setAlignmentY(0.0F);
         jButtonCargarDatos.addActionListener(new java.awt.event.ActionListener() {
