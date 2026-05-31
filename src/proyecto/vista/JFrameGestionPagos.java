@@ -9,12 +9,24 @@ import ConexionBBDD.ConexionBBDD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.*;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.view.JasperViewer;
 import proyecto.logica.LogicaPagos;
 import proyecto.logica.LogicaSocios;
 import proyecto.modelo.Pago;
@@ -103,12 +115,14 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jTextFieldBuscar1 = new javax.swing.JTextField();
         jButtonPagosPendientes = new javax.swing.JButton();
+        jButtonImprimirPagosPendientes = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTablePagos = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jTextFieldBuscar = new javax.swing.JTextField();
         jButtonPagos = new javax.swing.JButton();
+        jButtonImprimirPagosPorCliente1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jButtonTabPrev = new javax.swing.JButton();
         jButtonTabNext = new javax.swing.JButton();
@@ -119,7 +133,7 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 102, 204));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("APLICACION INTEGRAL PARA LA GESTION DE PAGOS");
+        jLabel2.setText("GESTIÓN DE PAGOS");
 
         jPanel1.setLayout(new java.awt.GridLayout(9, 2, 10, 10));
 
@@ -184,7 +198,7 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(102, 102, 102)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(266, Short.MAX_VALUE))
+                .addContainerGap(335, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,10 +230,17 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
             }
         });
 
-        jButtonPagosPendientes.setText("Cargar Pagos Pendientes");
+        jButtonPagosPendientes.setText("Recargar Pagos Pendientes");
         jButtonPagosPendientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPagosPendientesActionPerformed(evt);
+            }
+        });
+
+        jButtonImprimirPagosPendientes.setText("Imprimir Pagos Pendientes");
+        jButtonImprimirPagosPendientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImprimirPagosPendientesActionPerformed(evt);
             }
         });
 
@@ -229,13 +250,14 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel13)
                     .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonPagosPendientes))
+                    .addComponent(jButtonPagosPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonImprimirPagosPendientes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 646, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,7 +269,9 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jTextFieldBuscar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
-                        .addComponent(jButtonPagosPendientes))
+                        .addComponent(jButtonPagosPendientes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButtonImprimirPagosPendientes))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(16, 16, 16)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -277,10 +301,17 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
             }
         });
 
-        jButtonPagos.setText("Cargar Pagos");
+        jButtonPagos.setText("Recargar Pagos");
         jButtonPagos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPagosActionPerformed(evt);
+            }
+        });
+
+        jButtonImprimirPagosPorCliente1.setText("Imprimir Pagos Por DNI y Estado");
+        jButtonImprimirPagosPorCliente1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImprimirPagosPorCliente1ActionPerformed(evt);
             }
         });
 
@@ -291,27 +322,33 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(16, 16, 16)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonPagos))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(jButtonImprimirPagosPorCliente1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jButtonPagos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jLabel6)
-                        .addGap(31, 31, 31)
-                        .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(34, 34, 34)
-                        .addComponent(jButtonPagos))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextFieldBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonPagos)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonImprimirPagosPorCliente1)))
                 .addContainerGap(43, Short.MAX_VALUE))
         );
 
@@ -416,13 +453,30 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
 
     // Acutalizo los campos nombre y apellidos segun el id seleccionado
     private void jComboBoxIdItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxIdItemStateChanged
-        // TODO add your handling code here:
         if(jComboBoxId.getSelectedItem() != null) {
             int id = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
             Socio s = LogicaSocios.getSocio(id);
             jTextFieldNombre.setText(s.getNombre());
             jTextFieldApellido1.setText(s.getApellido1());
             jTextFieldApellido2.setText(s.getApellido2());
+
+            // Buscar el importe del plan del socio
+            try {
+                PreparedStatement ps = conexion.prepareStatement(
+                    "SELECT Importe FROM plan WHERE Socio_ID = ?"
+                );
+                ps.setInt(1, id);
+                ResultSet rs = ps.executeQuery();
+                if (rs.next()) {
+                    jTextFieldImporte.setText(String.valueOf(rs.getDouble("Importe")));
+                    jTextFieldImporte.setEditable(false); // No editable, viene del plan
+                } else {
+                    jTextFieldImporte.setText("");
+                    jTextFieldImporte.setEditable(true); // Sin plan, se introduce manualmente
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error al buscar plan: " + e.getMessage());
+            }
         }
     }//GEN-LAST:event_jComboBoxIdItemStateChanged
 
@@ -436,84 +490,121 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldBuscar1KeyReleased
 
     private void jButtonRegistrarPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarPagoActionPerformed
-        // Validar campos obligatorios
-        if (jComboBoxId.getSelectedItem() == null || 
-            jTextFieldImporte.getText().isEmpty()) {
-
-            JOptionPane.showMessageDialog(this, 
-                    "Debe seleccionar un socio y poner un importe.", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+                                                     
+        if (jComboBoxId.getSelectedItem() == null || jTextFieldImporte.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Debe seleccionar un socio con un plan asignado.",
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            // Recojo los datos de la ventana
             int socioId = Integer.parseInt(jComboBoxId.getSelectedItem().toString());
+
+            // Verificar que el socio tiene plan
+            PreparedStatement checkPlan = conexion.prepareStatement(
+                "SELECT COUNT(*) FROM plan WHERE Socio_ID = ?"
+            );
+            checkPlan.setInt(1, socioId);
+            ResultSet rsPlan = checkPlan.executeQuery();
+            rsPlan.next();
+            if (rsPlan.getInt(1) == 0) {
+                JOptionPane.showMessageDialog(this,
+                    "El socio no tiene un plan asignado. No se puede registrar el pago.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                rsPlan.close();
+                checkPlan.close();
+                return;
+            }
+            rsPlan.close();
+            checkPlan.close();
+
             java.util.Date fechaUtil = (java.util.Date) jSpinnerFechaPago.getValue();
             double importe = Double.parseDouble(jTextFieldImporte.getText());
             String estado = jComboBoxEstado.getSelectedItem().toString();
 
-            // Consulta SQL para insertar
-            String sqlInsert = "INSERT INTO pago (socio_id, fecha_pago, importe, estado) "
-                             + "VALUES (?, ?, ?, ?)";
+            // Buscar si el socio tiene un pago pendiente
+            PreparedStatement checkPendiente = conexion.prepareStatement(
+                "SELECT id_pago FROM pago WHERE socio_id = ? AND estado = 'Pendiente' LIMIT 1"
+            );
+            checkPendiente.setInt(1, socioId);
+            ResultSet rsPendiente = checkPendiente.executeQuery();
 
-            PreparedStatement ps = conexion.prepareStatement(sqlInsert);
-            ps.setInt(1, socioId);
-            ps.setDate(2, new java.sql.Date(fechaUtil.getTime()));
-            ps.setDouble(3, importe);
-            ps.setString(4, estado);
+            if (rsPendiente.next() && !estado.equals("Pendiente")) {
+                // Existe pendiente Y estamos pagando → actualizar el pendiente existente
+                int idPendiente = rsPendiente.getInt("id_pago");
+                rsPendiente.close();
+                checkPendiente.close();
 
-            int filas = ps.executeUpdate();
-            ps.close();
+                PreparedStatement psUpdate = conexion.prepareStatement(
+                    "UPDATE pago SET fecha_pago = ?, importe = ?, estado = ? WHERE id_pago = ?"
+                );
+                psUpdate.setDate(1, new java.sql.Date(fechaUtil.getTime()));
+                psUpdate.setDouble(2, importe);
+                psUpdate.setString(3, estado);
+                psUpdate.setInt(4, idPendiente);
+                psUpdate.executeUpdate();
+                psUpdate.close();
 
-            if (filas > 0) {
-
-                // Obtener el último ID insertado
-                int ultimoId = -1;
-                String sqlID = "SELECT MAX(id_pago) FROM pago";
-                Statement st = conexion.createStatement();
-                ResultSet rs = st.executeQuery(sqlID);
-
-                if (rs.next()) {
-                    ultimoId = rs.getInt(1);
+                // Actualizar también en memoria
+                for (Pago pago : LogicaPagos.getPagos()) {
+                    if (pago.getId_pago() == idPendiente) {
+                        pago.setFecha_pago(fechaUtil);
+                        pago.setImporte(importe);
+                        pago.setEstado(estado);
+                        break;
+                    }
                 }
 
+                JOptionPane.showMessageDialog(this,
+                    "Pago pendiente actualizado correctamente.",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
+
+            } else {
+                // No hay pendiente O se está creando un nuevo pago pendiente → insertar
+                rsPendiente.close();
+                checkPendiente.close();
+
+                String sqlInsert = "INSERT INTO pago (socio_id, fecha_pago, importe, estado) VALUES (?, ?, ?, ?)";
+                PreparedStatement ps = conexion.prepareStatement(sqlInsert);
+                ps.setInt(1, socioId);
+                ps.setDate(2, new java.sql.Date(fechaUtil.getTime()));
+                ps.setDouble(3, importe);
+                ps.setString(4, estado);
+                ps.executeUpdate();
+                ps.close();
+
+                // Obtener el id generado y añadir a memoria
+                int ultimoId = -1;
+                Statement st = conexion.createStatement();
+                ResultSet rs = st.executeQuery("SELECT MAX(id_pago) FROM pago");
+                if (rs.next()) ultimoId = rs.getInt(1);
                 rs.close();
                 st.close();
 
-                // Crear el pago con el ID obtenido
-                Pago nuevoPago = new Pago(
-                    socioId,
-                    fechaUtil,
-                    importe,
-                    estado
-                );
-                nuevoPago.setId_pago(ultimoId); // Asignar ID
-
-                // Guardar en la lógica de negocio
+                Pago nuevoPago = new Pago(socioId, fechaUtil, importe, estado);
+                nuevoPago.setId_pago(ultimoId);
                 LogicaPagos.addPago(nuevoPago);
 
-                JOptionPane.showMessageDialog(this, 
-                        "Pago registrado correctamente", 
-                        "Éxito", JOptionPane.INFORMATION_MESSAGE);
-
-                // Limpiar campos
-                jTextFieldImporte.setText("");
-                jSpinnerFechaPago.setValue(new java.util.Date());
-                jComboBoxEstado.setSelectedIndex(0);
-
-                actualizarTablas();
+                JOptionPane.showMessageDialog(this,
+                    "Pago registrado correctamente.",
+                    "Éxito", JOptionPane.INFORMATION_MESSAGE);
             }
 
-        } catch (NumberFormatException nf) {
-            JOptionPane.showMessageDialog(this, 
-                    "El importe debe ser un número válido.", 
-                    "Error", JOptionPane.ERROR_MESSAGE);
+            // Limpiar campos y recargar tablas
+            jTextFieldImporte.setText("");
+            jSpinnerFechaPago.setValue(new java.util.Date());
+            jComboBoxEstado.setSelectedIndex(0);
+            actualizarTablas();
 
+        } catch (NumberFormatException nf) {
+            JOptionPane.showMessageDialog(this,
+                "El importe debe ser un número válido.",
+                "Error", JOptionPane.ERROR_MESSAGE);
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, 
-                    "Error al registrar el pago: " + ex.getMessage(), 
-                    "Error SQL", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                "Error al registrar el pago: " + ex.getMessage(),
+                "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButtonRegistrarPagoActionPerformed
 
@@ -526,6 +617,96 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
         LogicaPagos.cargaPrueba();
         listarPagos();
     }//GEN-LAST:event_jButtonPagosActionPerformed
+
+    private void jButtonImprimirPagosPendientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirPagosPendientesActionPerformed
+            String fileJasper = "informes/pagosPendientes.jrxml";
+            try{
+                JasperReport report = JasperCompileManager.compileReport(fileJasper);
+                //Map parameters = new HashMap();
+                //parameters.put("PAIS", jComboBoxPaises.getSelectedItem().toString());
+                JasperPrint print
+                        = JasperFillManager.fillReport(report, null, nueva.getConnection());
+                JasperExportManager.exportReportToPdfFile(print, "informes\\pagosPendientes.pdf");
+                JRXlsxExporter exporter = new JRXlsxExporter();
+                exporter.setExporterInput(new SimpleExporterInput(print));
+                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("informes\\pagosPendientes.xlsx"));
+                exporter.exportReport();
+                JasperViewer.viewReport(print, false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,"Se produjo un error al leer el archivo .jrxml");
+            }
+    }//GEN-LAST:event_jButtonImprimirPagosPendientesActionPerformed
+
+    private void jButtonImprimirPagosPorCliente1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirPagosPorCliente1ActionPerformed
+        String fileJasper = "informes/pagosPorEstadoDNI.jrxml";
+
+        try {
+            // Pedir DNI
+            String dni = JOptionPane.showInputDialog(null, "Ingrese el DNI del socio:");
+
+            if (dni == null || dni.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "DNI no válido.");
+                return;
+            }
+
+            // IMPORTANTE: limpiar espacios ocultos
+            dni = dni.trim();
+
+            // Estados reales de tu tabla pago
+            String[] estados = {"Pagado", "Pendiente"};
+            String estado = (String) JOptionPane.showInputDialog(
+                    null,
+                    "Seleccione el estado del pago:",
+                    "Estado",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    estados,
+                    estados[0]);
+
+            if (estado == null || estado.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Estado no seleccionado.");
+                return;
+            }
+
+            estado = estado.trim();
+
+            // Parámetros EXACTOS que usa el JRXML
+            Map<String, Object> parametros = new HashMap<>();
+            parametros.put("DNI", dni);        // debe llamarse DNI
+            parametros.put("Estado", estado);  // debe llamarse Estado
+
+            // Compilar informe
+            JasperReport report = JasperCompileManager.compileReport(fileJasper);
+
+            // Rellenar informe con conexión
+            JasperPrint print = JasperFillManager.fillReport(
+                    report,
+                    parametros,
+                    nueva.getConnection()
+            );
+
+            // Comprobación clave (esto te dirá si hay datos o no)
+            if (print.getPages().isEmpty()) {
+                JOptionPane.showMessageDialog(null, 
+                    "No hay pagos para ese DNI y estado.");
+                return;
+            }
+
+            // Exportar PDF
+            String nombreArchivo = "informes/pagos_" + dni + "_" + estado + ".pdf";
+            JasperExportManager.exportReportToPdfFile(print, nombreArchivo);
+
+            // Mostrar visor
+            JasperViewer.viewReport(print, false);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                "Error al generar el informe: " + e.getMessage());
+        }
+    }//GEN-LAST:event_jButtonImprimirPagosPorCliente1ActionPerformed
 
     public void actualizarTablas() {
         listarPagos();
@@ -629,6 +810,8 @@ public class JFrameGestionPagos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonImprimirPagosPendientes;
+    private javax.swing.JButton jButtonImprimirPagosPorCliente1;
     private javax.swing.JButton jButtonPagos;
     private javax.swing.JButton jButtonPagosPendientes;
     private javax.swing.JButton jButtonRegistrarPago;
