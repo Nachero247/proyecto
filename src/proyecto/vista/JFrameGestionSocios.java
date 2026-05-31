@@ -14,6 +14,15 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.view.JasperViewer;
 import proyecto.logica.LogicaSocios;
 import proyecto.modelo.Socio;
 
@@ -73,7 +82,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jTableSocios.setModel(dtm);
 
         // Definir columnas
-        String[] columnas = {"Nombre", "Apellido1", "Apellido2", "DNI", "Telefono", "Correo", "Fecha_Alta", "Estado"};
+        String[] columnas = {"Nombre", "Apellido1", "Apellido2", "DNI", "Telefono", "Correo", "Fecha Alta", "Estado"};
         dtm.setColumnIdentifiers(columnas);
 
         // Cargar datos desde la BBDD a LogicaSocios
@@ -97,14 +106,16 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableSocios = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButtonCargaClientes = new javax.swing.JButton();
         jButtonAlta = new javax.swing.JButton();
         jButtonBaja = new javax.swing.JButton();
         jButtonEditar = new javax.swing.JButton();
-        jButtonVolver = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTextFieldBuscar = new javax.swing.JTextField();
+        jButtonVolver = new javax.swing.JButton();
+        jButtonImprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -121,22 +132,30 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableSocios);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 102, 204));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("GESTIÓN DE SOCIOS");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 918, Short.MAX_VALUE)
+            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 22, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jPanel3.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
 
-        jButtonCargaClientes.setText("Carga Socios");
+        jButtonCargaClientes.setText("Recargar Socios");
         jButtonCargaClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonCargaClientesActionPerformed(evt);
@@ -168,14 +187,6 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         });
         jPanel3.add(jButtonEditar);
 
-        jButtonVolver.setText("Volver");
-        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonVolverActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButtonVolver);
-
         jLabel1.setText("Buscar");
         jPanel3.add(jLabel1);
 
@@ -192,6 +203,22 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         });
         jPanel3.add(jTextFieldBuscar);
 
+        jButtonVolver.setText("Volver");
+        jButtonVolver.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonVolverActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButtonVolver);
+
+        jButtonImprimir.setText("Imprimir");
+        jButtonImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImprimirActionPerformed(evt);
+            }
+        });
+        jPanel3.add(jButtonImprimir);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,6 +229,7 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -344,6 +372,30 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldBuscarActionPerformed
 
+    private void jButtonImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirActionPerformed
+        String fileJasper = "informes/socios.jrxml";
+
+        // Ignorar fuentes no disponibles en la JVM
+        System.setProperty("net.sf.jasperreports.awt.ignore.missing.font", "true");
+
+        try {
+            JasperReport report = JasperCompileManager.compileReport(fileJasper);
+            JasperPrint print = JasperFillManager.fillReport(report, null, nueva.getConnection());
+            JasperExportManager.exportReportToPdfFile(print, "informes\\socios.pdf");
+            JRXlsxExporter exporter = new JRXlsxExporter();
+            exporter.setExporterInput(new SimpleExporterInput(print));
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("informes\\socios.xlsx"));
+            exporter.exportReport();
+            JasperViewer.viewReport(print, false);
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                e.getClass().getSimpleName() + ":\n" + e.getMessage(),
+                "Error detallado",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_jButtonImprimirActionPerformed
+
     public void addSocio(Socio s) {
         LogicaSocios.addSocio(s);
         cargaDesdeLogica();
@@ -379,8 +431,10 @@ public class JFrameGestionSocios extends javax.swing.JFrame {
     private javax.swing.JButton jButtonBaja;
     private javax.swing.JButton jButtonCargaClientes;
     private javax.swing.JButton jButtonEditar;
+    private javax.swing.JButton jButtonImprimir;
     private javax.swing.JButton jButtonVolver;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;

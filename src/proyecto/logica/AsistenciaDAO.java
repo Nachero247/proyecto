@@ -7,6 +7,7 @@ package proyecto.logica;
 import proyecto.modelo.Asistencia;
 import ConexionBBDD.ConexionBBDD;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -22,38 +23,39 @@ public class AsistenciaDAO {
         con = nueva.getConnection();
     }
     
-    public boolean registrarAsistencias(int idSocio){
-        String sql = "INSERT INTO asistencia(socio_id, Fecha_Asistencia, Hora_Entrada) VALUES (?,CURDATE(), NOW())";
-        
-        try{
+    public boolean registrarAsistencias(int idSocio, java.time.LocalDate fecha, LocalTime hora) {
+        String sql = "INSERT INTO asistencia(socio_id, Fecha_Asistencia, Hora_Entrada) VALUES (?, ?, ?)";
+
+        try {
             PreparedStatement ps = con.prepareStatement(sql);
             ps.setInt(1, idSocio);
+            ps.setDate(2, java.sql.Date.valueOf(fecha));
+            ps.setTime(3, java.sql.Time.valueOf(hora));
             ps.executeUpdate();
             return true;
-            
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
     
-    public List <Asistencia> ListarAsistencia(){
+    public List<Asistencia> ListarAsistencia() {
         List<Asistencia> Lista = new ArrayList<>();
         String sql = "SELECT * FROM asistencia";
-        
-        try{
+
+        try {
             PreparedStatement ps = con.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Asistencia a = new Asistencia(
-                rs.getInt("id_asistencia"),
-                rs.getInt("socio_id"),
-                rs.getDate("fecha_asistencia"),
-                rs.getDate("hora_entrada")
+                    rs.getInt("id_asistencia"),
+                    rs.getInt("socio_id"),
+                    rs.getDate("fecha_asistencia").toLocalDate(),
+                    rs.getTime("hora_entrada").toLocalTime()
                 );
                 Lista.add(a);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return Lista;

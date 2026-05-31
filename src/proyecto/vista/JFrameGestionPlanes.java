@@ -4,16 +4,27 @@
  */
 package proyecto.vista;
 
+import ConexionBBDD.ConexionBBDD;
 import java.sql.*;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.view.JasperViewer;
 import proyecto.modelo.Plan;
 import proyecto.logica.PlanDAO;
 
@@ -25,6 +36,8 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGestionPlanes.class.getName());
     
+    ConexionBBDD nueva;
+    Connection conexion;
     
     PlanDAO dao = new PlanDAO();
     private javax.swing.table.TableRowSorter<DefaultTableModel> sorter;
@@ -36,11 +49,17 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     public JFrameGestionPlanes(String rol) {
         this.rol = rol;
         initComponents();
+        
+        nueva = new ConexionBBDD();
+        conexion = nueva.getConnection();
+        
         cargarTabla();
         
         DefaultTableModel model = (DefaultTableModel) jTablePlanes.getModel();
         sorter = new javax.swing.table.TableRowSorter<>(model);
         jTablePlanes.setRowSorter(sorter);
+        
+
     }
 
     /**
@@ -55,24 +74,15 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePlanes = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
-        jTextFieldPlan = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldDescripcion = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jTextFieldSocio = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldFecha_Inicio = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jTextFieldFecha_Fin = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jButtonAgregar = new javax.swing.JButton();
-        jButtonBuscar = new javax.swing.JButton();
         jButtonEliminar = new javax.swing.JButton();
         jButtonActualizar = new javax.swing.JButton();
         jButtonVolver = new javax.swing.JButton();
         jLabelBuscar = new javax.swing.JLabel();
         jTextFieldBuscar = new javax.swing.JTextField();
+        jButtonImprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,77 +99,27 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTablePlanes);
 
-        jLabel1.setText("ID Plan");
-
-        jTextFieldPlan.setMinimumSize(new java.awt.Dimension(90, 40));
-        jTextFieldPlan.setName(""); // NOI18N
-
-        jLabel2.setText("Descripcion");
-
-        jTextFieldDescripcion.setMinimumSize(new java.awt.Dimension(90, 40));
-
-        jLabel3.setText("Socio ID");
-
-        jTextFieldSocio.setMinimumSize(new java.awt.Dimension(90, 40));
-
-        jLabel4.setText("Fecha Inicio");
-
-        jTextFieldFecha_Inicio.setMinimumSize(new java.awt.Dimension(90, 40));
-
-        jLabel5.setText("Fecha Fin");
-
-        jTextFieldFecha_Fin.setMinimumSize(new java.awt.Dimension(90, 40));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 102, 204));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("GESTIÓN DE PLANES");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(46, 46, 46)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-                    .addComponent(jTextFieldPlan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(70, 70, 70)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextFieldSocio, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(100, 100, 100)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jTextFieldFecha_Fin, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jTextFieldFecha_Inicio, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(96, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(15, Short.MAX_VALUE)
+                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jTextFieldPlan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextFieldSocio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextFieldFecha_Fin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextFieldDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldFecha_Inicio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -174,14 +134,6 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
             }
         });
         jPanel2.add(jButtonAgregar);
-
-        jButtonBuscar.setText("Buscar");
-        jButtonBuscar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonBuscarActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jButtonBuscar);
 
         jButtonEliminar.setText("Eliminar");
         jButtonEliminar.addActionListener(new java.awt.event.ActionListener() {
@@ -223,6 +175,14 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
         });
         jPanel2.add(jTextFieldBuscar);
 
+        jButtonImprimir.setText("Imprimir Planes");
+        jButtonImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImprimirActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonImprimir);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -247,107 +207,167 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAgregarActionPerformed
+        String dni = JOptionPane.showInputDialog(this, "Introduce el DNI del socio:");
+        if (dni == null || dni.trim().isEmpty()) return;
+
+        int socioId = -1;
+        String nombreSocio = "";
         try {
-            String textoSocio = jTextFieldSocio.getText().trim();
-            int socioId = 0; // Valor por defecto para "sin socio"
-
-            if (!textoSocio.isEmpty()) {
-                socioId = Integer.parseInt(textoSocio);
+            PreparedStatement ps = conexion.prepareStatement(
+                "SELECT id_socio, CONCAT(nombre,' ',apellido1) AS nombre FROM socio WHERE dni = ?"
+            );
+            ps.setString(1, dni.trim());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                socioId = rs.getInt("id_socio");
+                nombreSocio = rs.getString("nombre");
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró ningún socio con ese DNI");
+                return;
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar socio: " + e.getMessage());
+            return;
+        }
 
-            String descripcion = jTextFieldDescripcion.getText();
-
-            Date fechaInicio = convertirFecha(jTextFieldFecha_Inicio.getText());
-            Date fechaFin = convertirFecha(jTextFieldFecha_Fin.getText());
-            if(fechaInicio == null || fechaFin == null) return;
-
-            Plan plan = new Plan(0, socioId, descripcion, fechaInicio, fechaFin);
-
-            if(dao.insertar(plan)){
-                JOptionPane.showMessageDialog(null, "Plan agregado correctamente");
-                cargarTabla();
-            }else{
-                JOptionPane.showMessageDialog(null, "Error al agregar el plan");
+        // Comprobar si el socio ya tiene un plan
+        try {
+            PreparedStatement check = conexion.prepareStatement(
+                "SELECT COUNT(*) FROM plan WHERE Socio_ID = ?"
+            );
+            check.setInt(1, socioId);
+            ResultSet rsCheck = check.executeQuery();
+            rsCheck.next();
+            if (rsCheck.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(null,
+                    "El socio " + nombreSocio + " ya tiene un plan asignado");
+                return;
             }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al verificar plan existente: " + e.getMessage());
+            return;
+        }
 
-        } catch(NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "El ID de socio debe ser un número válido");
-        } catch(Exception e) {
-            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+        String descripcion = JOptionPane.showInputDialog(this,
+            "Socio encontrado: " + nombreSocio + "\nIntroduce la descripción del plan:");
+        if (descripcion == null || descripcion.trim().isEmpty()) return;
+
+        String importeStr = JOptionPane.showInputDialog(this, "Importe del plan (ej: 30.00):");
+        if (importeStr == null || importeStr.trim().isEmpty()) return;
+        double importe;
+        try {
+            importe = Double.parseDouble(importeStr.replace(",", "."));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Importe inválido");
+            return;
+        }
+
+        String fechaInicioStr = JOptionPane.showInputDialog(this, "Fecha de inicio (yyyy-MM-dd):");
+        if (fechaInicioStr == null) return;
+
+        String fechaFinStr = JOptionPane.showInputDialog(this, "Fecha de fin (yyyy-MM-dd):");
+        if (fechaFinStr == null) return;
+
+        Date fechaInicio = convertirFecha(fechaInicioStr);
+        Date fechaFin = convertirFecha(fechaFinStr);
+        if (fechaInicio == null || fechaFin == null) return;
+
+        Plan plan = new Plan(0, socioId, descripcion, importe, fechaInicio, fechaFin);
+        if (dao.insertar(plan)) {
+            JOptionPane.showMessageDialog(null, "Plan agregado correctamente");
+            cargarTabla();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al agregar el plan");
         }
     }//GEN-LAST:event_jButtonAgregarActionPerformed
 
     private void jButtonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonActualizarActionPerformed
-        // TODO add your handling code here:
-        int idPlan = Integer.parseInt(jTextFieldPlan.getText());
-        int socioId = Integer.parseInt(jTextFieldSocio.getText());
-        String descripcion = jTextFieldDescripcion.getText();
-        
-        Date fechaInicio = convertirFecha(jTextFieldFecha_Inicio.getText());
-        Date fechaFin = convertirFecha(jTextFieldFecha_Fin.getText());
-        if(fechaInicio == null || fechaFin == null) return;
-        
-        Plan plan = new Plan(idPlan, socioId, descripcion, fechaInicio, fechaFin);
-        
-        if(dao.actualizar(plan)){
+        int filaVista = jTablePlanes.getSelectedRow();
+
+        if (filaVista == -1) {
+            JOptionPane.showMessageDialog(null, "Selecciona un plan de la tabla primero");
+            return;
+        }
+
+        int filaModelo = jTablePlanes.convertRowIndexToModel(filaVista);
+        DefaultTableModel model = (DefaultTableModel) jTablePlanes.getModel();
+        int idPlan = (int) model.getValueAt(filaModelo, 0);
+
+        Plan planActual = dao.buscar(idPlan);
+        if (planActual == null) {
+            JOptionPane.showMessageDialog(null, "No se pudo encontrar el plan");
+            return;
+        }
+
+        String nuevaDesc = JOptionPane.showInputDialog(this,
+            "Nueva descripción:", planActual.getDescripcion());
+        if (nuevaDesc == null || nuevaDesc.trim().isEmpty()) return;
+
+        String importeStr = JOptionPane.showInputDialog(this,
+            "Nuevo importe:", planActual.getImporte());
+        if (importeStr == null || importeStr.trim().isEmpty()) return;
+        double importe;
+        try {
+            importe = Double.parseDouble(importeStr.replace(",", "."));
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Importe inválido");
+            return;
+        }
+
+        String fechaInicioStr = JOptionPane.showInputDialog(this,
+            "Nueva fecha de inicio (yyyy-MM-dd):", planActual.getFechaInicio().toString());
+        if (fechaInicioStr == null) return;
+
+        String fechaFinStr = JOptionPane.showInputDialog(this,
+            "Nueva fecha de fin (yyyy-MM-dd):", planActual.getFechaFin().toString());
+        if (fechaFinStr == null) return;
+
+        Date fechaInicio = convertirFecha(fechaInicioStr);
+        Date fechaFin = convertirFecha(fechaFinStr);
+        if (fechaInicio == null || fechaFin == null) return;
+
+        Plan planActualizado = new Plan(idPlan, planActual.getSocioId(), nuevaDesc, importe, fechaInicio, fechaFin);
+
+        if (dao.actualizar(planActualizado)) {
             JOptionPane.showMessageDialog(null, "Plan actualizado correctamente");
             cargarTabla();
-        }else{
-            JOptionPane.showMessageDialog(null, "No se ha podido actualizar el plan");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo actualizar el plan");
         }
     }//GEN-LAST:event_jButtonActualizarActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        String texto = jTextFieldPlan.getText().trim();
+        int[] filasVista = jTablePlanes.getSelectedRows();
 
-        // Validación simple
-        if (texto.isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Selecciona un plan primero");
+        if (filasVista.length == 0) {
+            JOptionPane.showMessageDialog(null, "Selecciona al menos un plan de la tabla");
             return;
         }
 
-        try {
-            int idPlan = Integer.parseInt(texto);
+        int confirmar = JOptionPane.showConfirmDialog(null,
+            "¿Seguro que quieres eliminar " + filasVista.length + " plan(es)?",
+            "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
 
-            // Eliminar directamente
-            if(dao.eliminar(idPlan)){
-                JOptionPane.showMessageDialog(null, "Plan eliminado");
-                cargarTabla();
-                jTextFieldPlan.setText(""); // Limpiar campo
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo eliminar. Puede que tenga usuarios asociados.");
-            }
+        if (confirmar != JOptionPane.YES_OPTION) return;
 
-        } catch(NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "ID inválido");
+        DefaultTableModel model = (DefaultTableModel) jTablePlanes.getModel();
+
+        // Primero recogemos todos los IDs
+        List<Integer> idsAEliminar = new ArrayList<>();
+        for (int filaVista : filasVista) {
+            int filaModelo = jTablePlanes.convertRowIndexToModel(filaVista);
+            idsAEliminar.add((int) model.getValueAt(filaModelo, 0));
         }
+
+        // Luego borramos
+        int eliminados = 0;
+        for (int idPlan : idsAEliminar) {
+            if (dao.eliminar(idPlan)) eliminados++;
+        }
+
+        JOptionPane.showMessageDialog(null, eliminados + " plan(es) eliminado(s) correctamente");
+        cargarTabla();
     }//GEN-LAST:event_jButtonEliminarActionPerformed
-
-    private void jButtonBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonBuscarActionPerformed
-        // TODO add your handling code here:
-        String input = JOptionPane.showInputDialog("Introduce el Id del plan: ");
-        
-        if(input != null) try{
-            int idPlan = Integer.parseInt(input);
-            
-            Plan p = dao.buscar(idPlan);
-            
-            if(p != null){
-                jTextFieldPlan.setText(String.valueOf(p.getIdPlan()));
-                jTextFieldSocio.setText(String.valueOf(p.getSocioId()));
-                jTextFieldDescripcion.setText(p.getDescripcion());
-                jTextFieldFecha_Inicio.setText(p.getFechaInicio().toString());
-                jTextFieldFecha_Fin.setText(p.getFechaFin().toString());
-                
-            }else{
-                JOptionPane.showMessageDialog(null, "No existe un plan con ese ID");
-            }
-            
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null, "ID inválido");
-            
-        }
-    }//GEN-LAST:event_jButtonBuscarActionPerformed
 
     private void jButtonVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVolverActionPerformed
         // TODO add your handling code here:
@@ -361,39 +381,92 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelBuscarKeyReleased
 
     private void jTextFieldBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldBuscarKeyReleased
-        // TODO add your handling code here:
-                                                 
-    String texto = jTextFieldBuscar.getText();
+                               
+        String texto = jTextFieldBuscar.getText().trim();
 
-    if (texto.trim().length() == 0) {
-        sorter.setRowFilter(null); // Mostrar todo
-    } else {
-        try {
-            sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
-        } catch (PatternSyntaxException e) {
-            System.out.println("Patrón inválido");
+        if (texto.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else {
+            try {
+                sorter.setRowFilter(RowFilter.regexFilter("(?i)" + texto));
+            } catch (PatternSyntaxException e) {
+                System.out.println("Patrón inválido");
+            }
         }
-    }
-
-
     }//GEN-LAST:event_jTextFieldBuscarKeyReleased
 
-    
-    private void cargarTabla(){
+    private void jButtonImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirActionPerformed
+            String fileJasper = "informes/planes.jrxml";
+            try{
+                JasperReport report = JasperCompileManager.compileReport(fileJasper);
+                JasperPrint print
+                        = JasperFillManager.fillReport(report, null, nueva.getConnection());
+                JasperExportManager.exportReportToPdfFile(print, "informes\\planes.pdf");
+                JRXlsxExporter exporter = new JRXlsxExporter();
+                exporter.setExporterInput(new SimpleExporterInput(print));
+                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("informes\\planes.xlsx"));
+                exporter.exportReport();
+                JasperViewer.viewReport(print, false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,"Se produjo un error al leer el archivo .jrxml");
+            }
+    }//GEN-LAST:event_jButtonImprimirActionPerformed
+
+
+    private void cargarTabla() {
         DefaultTableModel model = (DefaultTableModel) jTablePlanes.getModel();
         model.setRowCount(0);
-        
-        List<Plan> lista = dao.listar();
-        
-        for (Plan p : lista) {
-            model.addRow(new Object[]{
-                p.getIdPlan(),
-                p.getSocioId(),
-                p.getDescripcion(),
-                p.getFechaInicio(),
-                p.getFechaFin()
-            });
+        model.setColumnIdentifiers(new String[]{
+            "id_plan", "Nombre Socio", "DNI", "Descripcion", "Importe", "Fecha Inicio", "Fecha Fin"
+        });
+
+        try {
+            String sql = "SELECT p.id_plan, " +
+                         "CONCAT(s.nombre, ' ', s.apellido1, " +
+                         "CASE WHEN s.apellido2 IS NOT NULL AND s.apellido2 != '' " +
+                         "THEN CONCAT(' ', s.apellido2) ELSE '' END) AS NombreCompleto, " +
+                         "s.dni, p.Descripcion, p.Importe, p.Fecha_Inicio, p.Fecha_Fin " +
+                         "FROM plan p JOIN socio s ON p.Socio_ID = s.id_socio";
+
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("id_plan"),
+                    rs.getString("NombreCompleto"),
+                    rs.getString("dni"),
+                    rs.getString("Descripcion"),
+                    rs.getDouble("Importe"),
+                    rs.getDate("Fecha_Inicio"),
+                    rs.getDate("Fecha_Fin")
+                });
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar tabla: " + e.getMessage());
         }
+
+        jTablePlanes.getColumnModel().getColumn(0).setMinWidth(0);
+        jTablePlanes.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTablePlanes.getColumnModel().getColumn(0).setWidth(0);
+        jTablePlanes.setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+    }
+    
+    private int buscarIdPlan(String dni, String descripcion) {
+        try {
+            String sql = "SELECT p.id_plan FROM plan p " +
+                         "JOIN socio s ON p.Socio_ID = s.id_socio " +
+                         "WHERE s.dni = ? AND p.Descripcion = ?";
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, dni);
+            ps.setString(2, descripcion);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt("id_plan");
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al buscar ID del plan: " + e.getMessage());
+        }
+        return -1;
     }
     
     private Date convertirFecha(String fechaTexto){
@@ -404,6 +477,8 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
             return null;
         }
     }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -432,24 +507,15 @@ public class JFrameGestionPlanes extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
     private javax.swing.JButton jButtonAgregar;
-    private javax.swing.JButton jButtonBuscar;
     private javax.swing.JButton jButtonEliminar;
+    private javax.swing.JButton jButtonImprimir;
     private javax.swing.JButton jButtonVolver;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabelBuscar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePlanes;
     private javax.swing.JTextField jTextFieldBuscar;
-    private javax.swing.JTextField jTextFieldDescripcion;
-    private javax.swing.JTextField jTextFieldFecha_Fin;
-    private javax.swing.JTextField jTextFieldFecha_Inicio;
-    private javax.swing.JTextField jTextFieldPlan;
-    private javax.swing.JTextField jTextFieldSocio;
     // End of variables declaration//GEN-END:variables
 }

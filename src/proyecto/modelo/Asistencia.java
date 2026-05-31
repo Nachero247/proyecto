@@ -1,31 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package proyecto.modelo;
 
-import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
-
-/**
- *
- * @author DAM2Alu9
- */
 public class Asistencia {
+
     private int id_asistencia;
     private int socio_id;
-    private Date fecha;
-    private Date hora;
+    private LocalDate fecha;
+    private LocalTime hora;
 
-    public Asistencia(int id_asistencia, int socio_id, Date fecha, Date hora) {
+    public Asistencia(int id_asistencia, int socio_id, LocalDate fecha, LocalTime hora) {
         this.id_asistencia = id_asistencia;
         this.socio_id = socio_id;
         this.fecha = fecha;
         this.hora = hora;
     }
-
-    
-    // getters y setters
 
     public int getId() {
         return id_asistencia;
@@ -43,20 +33,19 @@ public class Asistencia {
         this.socio_id = id_socio;
     }
 
-    public Date getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
 
-    public Date getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(Date hora) {
+    public void setHora(LocalTime hora) {
         this.hora = hora;
     }
 }
-

@@ -108,11 +108,11 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         });
         jPanel1.add(jComboBoxId);
 
-        jLabel2.setText("Nombre");
+        jLabel2.setText("Nombre *");
         jPanel1.add(jLabel2);
         jPanel1.add(jTextFieldNombre);
 
-        jLabel3.setText("Primer Apellido");
+        jLabel3.setText("Primer Apellido *");
         jPanel1.add(jLabel3);
         jPanel1.add(jTextFieldApellido1);
 
@@ -120,26 +120,26 @@ public class JDialogEditarSocio extends javax.swing.JFrame {
         jPanel1.add(jLabel8);
         jPanel1.add(jTextFieldApellido2);
 
-        jLabel4.setText("DNI");
+        jLabel4.setText("DNI *");
         jPanel1.add(jLabel4);
         jPanel1.add(jTextFieldDNI);
 
-        jLabel6.setText("Telefono");
+        jLabel6.setText("Telefono *");
         jPanel1.add(jLabel6);
         jPanel1.add(jTextFieldTelefono);
 
-        jLabel5.setText("Email");
+        jLabel5.setText("Email *");
         jPanel1.add(jLabel5);
         jPanel1.add(jTextFieldEmail);
 
-        jLabel7.setText("Fecha Alta");
+        jLabel7.setText("Fecha Alta *");
         jPanel1.add(jLabel7);
 
         jSpinnerFechaAlta.setModel(new javax.swing.SpinnerDateModel());
         jSpinnerFechaAlta.setEditor(new javax.swing.JSpinner.DateEditor(jSpinnerFechaAlta, "dd/MM/yy hh:mm"));
         jPanel1.add(jSpinnerFechaAlta);
 
-        jLabel9.setText("Estado");
+        jLabel9.setText("Estado *");
         jPanel1.add(jLabel9);
 
         jComboBoxEstado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alta", "Baja", "Suspendido" }));

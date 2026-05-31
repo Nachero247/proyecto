@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Gestión de Usuarios</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  .accion { background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; padding: 8px 14px; margin: 8px 0; }
+  .campo { font-family: monospace; background: #eee; padding: 1px 5px; border-radius: 3px; }
+  .alerta { background: #f8d7da; border-left: 3px solid #cc3300; padding: 8px 12px; margin: 10px 0; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Gestión de Usuarios</h1>
+<p>Módulo exclusivo del <strong>Administrador</strong>. Permite administrar las cuentas de acceso al sistema (usuarios, contraseñas y roles).</p>
+
+<h2>Acciones disponibles</h2>
+<div class="accion">➕ <strong>Nuevo Usuario</strong> – Abre el diálogo de Alta de Usuario.</div>
+<div class="accion">✏️ <strong>Editar Usuario</strong> – Modifica los datos del usuario seleccionado.</div>
+<div class="accion">🗑️ <strong>Eliminar Usuario</strong> – Elimina la cuenta del usuario seleccionado.</div>
+
+<h2>Campos de la tabla</h2>
+<p>
+  <span class="campo">ID</span> · 
+  <span class="campo">Usuario</span> · 
+  <span class="campo">Rol</span> · 
+  <span class="campo">Plan asociado</span>
+</p>
+
+<p>Por seguridad, la contraseña <strong>no se muestra</strong> en la tabla de gestión.</p>
+
+<h2>Relación con Socios y Planes</h2>
+<p>Un usuario puede tener asociado un Plan (campo <span class="campo">Plan_ID</span>), que enlaza con los planes de membresía de los socios. Esta relación es opcional.</p>
+
+<div class="alerta">🔒 <strong>Solo el Administrador</strong> puede acceder a este módulo. Si otro rol intenta acceder, el sistema lo redirigirá al Menú Principal.</div>
+</body>
+</html>

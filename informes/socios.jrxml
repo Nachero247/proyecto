@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4_Landscape" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8694fff1-f295-4fe1-868c-633c8149f20d">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<subDataset name="TablaSocios" uuid="5e107ce2-59c7-4f29-8d6a-1cb5d36fe6f8">
+		<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL_World"/>
+		<queryString language="SQL">
+			<![CDATA[SELECT `Nombre`,
+	`Apellido1`,
+	`Apellido2`,
+	`DNI`,
+	`Telefono`,
+	`Correo`,
+	`Fecha_Alta`,
+	`Estado`
+FROM gym.socio]]>
+		</queryString>
+		<field name="Nombre" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Nombre"/>
+			<property name="com.jaspersoft.studio.field.label" value="Nombre"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="Apellido1" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Apellido1"/>
+			<property name="com.jaspersoft.studio.field.label" value="Apellido1"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="Apellido2" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Apellido2"/>
+			<property name="com.jaspersoft.studio.field.label" value="Apellido2"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="DNI" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="DNI"/>
+			<property name="com.jaspersoft.studio.field.label" value="DNI"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="Telefono" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Telefono"/>
+			<property name="com.jaspersoft.studio.field.label" value="Telefono"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="Correo" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Correo"/>
+			<property name="com.jaspersoft.studio.field.label" value="Correo"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="Fecha_Alta" class="java.sql.Date">
+			<property name="com.jaspersoft.studio.field.name" value="Fecha_Alta"/>
+			<property name="com.jaspersoft.studio.field.label" value="Fecha_Alta"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+		<field name="Estado" class="java.lang.String">
+			<property name="com.jaspersoft.studio.field.name" value="Estado"/>
+			<property name="com.jaspersoft.studio.field.label" value="Estado"/>
+			<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+		</field>
+	</subDataset>
+	<queryString language="SQL">
+		<![CDATA[SELECT `Nombre`,
+       `Apellido1`,
+       `Apellido2`,
+       `DNI`,
+       `Telefono`,
+       `Correo`,
+       `Fecha_Alta`,
+       `Estado`
+FROM gym.socio]]>
+	</queryString>
+	<field name="Nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Apellido1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Apellido1"/>
+		<property name="com.jaspersoft.studio.field.label" value="Apellido1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Apellido2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Apellido2"/>
+		<property name="com.jaspersoft.studio.field.label" value="Apellido2"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="DNI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNI"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNI"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Telefono" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Telefono"/>
+		<property name="com.jaspersoft.studio.field.label" value="Telefono"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Correo" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Correo"/>
+		<property name="com.jaspersoft.studio.field.label" value="Correo"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Fecha_Alta" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="Fecha_Alta"/>
+		<property name="com.jaspersoft.studio.field.label" value="Fecha_Alta"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="Estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="117" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="530" y="92" width="255" height="20" forecolor="#666666" uuid="c8ab6458-5eac-4228-87ed-373ba341255c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="13" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="14" width="430" height="76" uuid="465f7d59-7593-449f-93c6-92d56f653c55"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="36" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SOCIOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="90" width="192" height="22" forecolor="#666666" uuid="983a1a96-eca3-4537-8a51-78e1af3ceaaa"/>
+				<textElement textAlignment="Right">
+					<font fontName="Calibri" size="18"/>
+				</textElement>
+				<text><![CDATA[GymManager]]></text>
+			</staticText>
+			<image>
+				<reportElement x="472" y="11" width="320" height="77" uuid="b3884480-7eb7-4f28-a977-333fcb7c32a6"/>
+				<imageExpression><![CDATA["imagenes/logo_GymManager.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="300" height="30" uuid="6069b6c6-c92d-4dde-98e2-d8656d1fb135">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bd9119b-a8f3-44bc-a71a-e804ac03b55d"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="302" y="0" width="100" height="30" uuid="2645fd29-223f-4a2e-bff7-6d2a862ac2c8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ad686b76-5b67-4bca-a48b-1e1367522b67"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="402" y="0" width="100" height="30" uuid="52f90ad1-e9fe-42da-b305-935dd8abbbf9">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="337a1040-0d95-41c1-80d6-0fd720203fb2"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefono]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="502" y="0" width="100" height="30" uuid="64a9bf4a-1f57-4625-99c3-da1f025180bf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="962e0b06-5dee-46e9-b36a-4e9ac20cb27b"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Correo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="602" y="0" width="100" height="30" uuid="00f7ce06-77d6-4f23-94ef-79927ffee9b0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c98ebf93-5a7e-4b59-8f87-678c9d45279f"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha_Alta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="702" y="0" width="100" height="30" uuid="8ead1e7f-2708-4fcf-a9d8-0f8880f1ba8e">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b9fdf8b5-43ea-4853-b7ed-f69cfcd7c5b3"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="290" height="30" uuid="2f16c09d-de89-4c47-9b81-e256d3c97905">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="8bd9119b-a8f3-44bc-a71a-e804ac03b55d"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Nombre} + " " + $F{Apellido1} + " " + $F{Apellido2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="302" y="0" width="100" height="30" uuid="0591fd08-659c-4c39-8fe5-6e89ecafc631">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ad686b76-5b67-4bca-a48b-1e1367522b67"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="402" y="0" width="100" height="30" uuid="14aab61d-c491-4c54-8a39-9c89099876cc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="337a1040-0d95-41c1-80d6-0fd720203fb2"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="502" y="0" width="100" height="30" uuid="bab4dd09-67a5-468f-bb65-7bdb2b3d57e0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="962e0b06-5dee-46e9-b36a-4e9ac20cb27b"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Correo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="602" y="0" width="100" height="30" uuid="42227c83-6177-453e-b320-0f5254982fcf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c98ebf93-5a7e-4b59-8f87-678c9d45279f"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha_Alta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="702" y="0" width="100" height="30" uuid="3c562269-7709-469c-92a9-2fe9da55be8b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b9fdf8b5-43ea-4853-b7ed-f69cfcd7c5b3"/>
+				</reportElement>
+				<textElement>
+					<font fontName="Calibri" size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="688" y="30" width="52" height="30" forecolor="#666666" uuid="477e3fb8-5e11-44b7-ac7a-a7e403145fec"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="752" y="30" width="50" height="30" forecolor="#666666" uuid="9f3d32ba-d4db-407f-82c0-b1c668715cfd"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="740" y="30" width="12" height="30" forecolor="#666666" uuid="4df698ea-e31f-42c5-9962-275a253dbc51"/>
+				<textElement>
+					<font fontName="Calibri" size="12"/>
+				</textElement>
+				<text><![CDATA[/]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

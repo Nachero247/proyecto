@@ -98,14 +98,14 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Nombre"/>
+            <Property name="text" type="java.lang.String" value="Nombre *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldNombre">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Primer Apellido"/>
+            <Property name="text" type="java.lang.String" value="Primer Apellido *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldApellido1">
@@ -119,28 +119,28 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel4">
           <Properties>
-            <Property name="text" type="java.lang.String" value="DNI"/>
+            <Property name="text" type="java.lang.String" value="DNI *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldDNI">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Telefono"/>
+            <Property name="text" type="java.lang.String" value="Telefono *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldTelefono">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel5">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Email"/>
+            <Property name="text" type="java.lang.String" value="Email *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextFieldEmail">
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Fecha Alta"/>
+            <Property name="text" type="java.lang.String" value="Fecha Alta *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JSpinner" name="jSpinnerFechaAlta">
@@ -155,7 +155,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel9">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Estado"/>
+            <Property name="text" type="java.lang.String" value="Estado *"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JComboBox" name="jComboBoxEstado">

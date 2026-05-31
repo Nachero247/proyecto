@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<map version="2.0">
+  <mapID target="inicio"               url="html/inicio.html"/>
+  <mapID target="login"                url="html/login.html"/>
+  <mapID target="menu_principal"       url="html/menu_principal.html"/>
+  <mapID target="roles"                url="html/roles.html"/>
+  <mapID target="gestion_socios"       url="html/gestion_socios.html"/>
+  <mapID target="alta_socio"           url="html/alta_socio.html"/>
+  <mapID target="editar_socio"         url="html/editar_socio.html"/>
+  <mapID target="gestion_usuarios"     url="html/gestion_usuarios.html"/>
+  <mapID target="alta_usuario"         url="html/alta_usuario.html"/>
+  <mapID target="editar_usuario"       url="html/editar_usuario.html"/>
+  <mapID target="gestion_pagos"        url="html/gestion_pagos.html"/>
+  <mapID target="gestion_planes"       url="html/gestion_planes.html"/>
+  <mapID target="gestion_asistencias"  url="html/gestion_asistencias.html"/>
+</map>

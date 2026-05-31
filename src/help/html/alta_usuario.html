@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Alta de Usuario</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; }
+  th { background: #2c6e49; color: white; padding: 7px 10px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 6px 10px; }
+  tr:nth-child(even) { background: #f4f4f4; }
+  .req { color: #cc3300; font-weight: bold; }
+  .aviso { background: #fff3cd; border-left: 3px solid #f0a500; padding: 8px 12px; margin: 10px 0; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Alta de Usuario (JDialog)</h1>
+<p>Permite crear una nueva cuenta de acceso al sistema. Solo accesible para el rol <strong>Administrador</strong>.</p>
+
+<h2>Campos del formulario</h2>
+<table>
+  <tr><th>Campo</th><th>Descripción</th><th>Obligatorio</th></tr>
+  <tr><td>Nombre de usuario</td><td>Identificador único de acceso (máx. 30 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Contraseña</td><td>Clave de acceso (máx. 50 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Rol</td><td>Seleccione: Administrador, Entrenador o Profesor</td><td class="req">*</td></tr>
+  <tr><td>Plan asociado</td><td>Plan de membresía vinculado (opcional)</td><td></td></tr>
+</table>
+
+<div class="aviso">⚠️ El <strong>nombre de usuario</strong> debe ser único. No se permiten espacios ni caracteres especiales.</div>
+
+<h2>Botones</h2>
+<p><strong>Guardar</strong> – Crea la cuenta de usuario.<br>
+<strong>Cancelar</strong> – Cierra sin guardar.</p>
+</body>
+</html>

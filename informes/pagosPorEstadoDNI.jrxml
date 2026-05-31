@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pagosPorEstado" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8e15d519-eab3-497d-b483-a5c1caac3ee0">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="New Data Adapter"/>
+	<style name="Title" fontName="Arial" fontSize="26" isBold="true"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
+	<style name="Column header" forecolor="#666666" fontName="Arial" fontSize="12" isBold="true"/>
+	<style name="Detail" fontName="Arial" fontSize="12"/>
+	<parameter name="Estado" class="java.lang.String"/>
+	<parameter name="DNI" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+    p.ID_Pago,
+    p.Socio_ID,
+    p.Fecha_Pago,
+    s.Nombre,
+    s.Apellido1,
+    s.Apellido2,
+    s.DNI,
+    p.Importe,
+    p.Estado
+FROM pago p
+INNER JOIN socio s 
+    ON p.Socio_ID = s.ID_Socio
+WHERE 
+    s.DNI = $P{DNI}
+    AND p.Estado = $P{Estado}
+ORDER BY 
+    s.Apellido1 DESC,
+    s.Apellido2 DESC,
+    s.Nombre DESC,
+    p.Fecha_Pago DESC]]>
+	</queryString>
+	<field name="ID_Pago" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ID_Pago"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID_Pago"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Socio_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Socio_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="Socio_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Fecha_Pago" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="Fecha_Pago"/>
+		<property name="com.jaspersoft.studio.field.label" value="Fecha_Pago"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Apellido1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Apellido1"/>
+		<property name="com.jaspersoft.studio.field.label" value="Apellido1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Apellido2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Apellido2"/>
+		<property name="com.jaspersoft.studio.field.label" value="Apellido2"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="DNI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNI"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNI"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Importe" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Importe"/>
+		<property name="com.jaspersoft.studio.field.label" value="Importe"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="Estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<group name="Group2">
+		<groupExpression><![CDATA[$F{Socio_ID}]]></groupExpression>
+	</group>
+	<group name="Fecha_Pago">
+		<groupExpression><![CDATA[$F{Fecha_Pago}]]></groupExpression>
+	</group>
+	<group name="Importe">
+		<groupExpression><![CDATA[$F{Importe}]]></groupExpression>
+	</group>
+	<group name="Estado">
+		<groupExpression><![CDATA[$F{Estado}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="111" splitType="Stretch">
+			<image>
+				<reportElement x="433" y="12" width="119" height="77" uuid="ea5ad761-92e5-4024-9d51-efba4363bb54"/>
+				<imageExpression><![CDATA["imagenes/logo_GymManager.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement style="Title" x="0" y="13" width="400" height="76" uuid="845ba342-7cdf-4295-9fec-0b19aadbaa8e"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Pagos de\n" 
++ $F{Nombre} + " " 
++ $F{Apellido1} + " " 
++ $F{Apellido2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement style="SubTitle" x="130" y="89" width="143" height="22" uuid="6931f6fc-c9e8-4cc3-9eec-607a123c87f7"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[GymManager]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement style="Column header" x="378" y="90" width="197" height="20" uuid="c49bc611-71b3-4860-8112-76288860b48d"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="19" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="6" width="81" height="30" uuid="0b670847-d0f8-4d43-a22c-2cdf5e75143b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="66286805-2b92-4383-b954-d687b167fbb7"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha del Pago]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="83" y="6" width="208" height="30" uuid="eaf1d8a4-0c23-4e4f-8965-285bbf02ec50">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e2ec93ef-c376-459b-b154-0feee6e57d71"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="6" width="100" height="30" uuid="075f31a1-c68e-4751-9606-6103ae4051d3">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9d216172-f38e-4833-9a56-a8490601c6bb"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="391" y="6" width="61" height="30" uuid="0546b5e8-7d4a-48ab-ad96-0543e1efee7f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bfbd895b-4dba-4a59-beba-6b3eeee0d32d"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="6" width="61" height="30" uuid="57a73d84-27ff-4bbb-8bf6-0c5f32e1b63d">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b6b7e89-b96f-4417-b802-4feeaf2c33c9"/>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="53" splitType="Stretch">
+			<line>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="15" width="555" height="1" uuid="ffde0804-90e8-496b-86fb-ee363619f187"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineColor="#999999"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="2" y="23" width="81" height="30" uuid="4e2da3ec-e80a-4caa-9aa4-ccdd74fbc805">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="66286805-2b92-4383-b954-d687b167fbb7"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Fecha_Pago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="23" width="208" height="30" uuid="8973e25e-d9ab-49f9-8660-df3f7a8f6c6f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e2ec93ef-c376-459b-b154-0feee6e57d71"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Nombre} + " " + $F{Apellido1} + " " + $F{Apellido2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="291" y="23" width="100" height="30" uuid="740ef3fb-3673-46a7-b2d7-b47fa7d5d03a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9d216172-f38e-4833-9a56-a8490601c6bb"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="391" y="23" width="61" height="30" uuid="b13e860b-f1bb-4c63-837b-19948b5b0668">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="bfbd895b-4dba-4a59-beba-6b3eeee0d32d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="23" width="61" height="30" uuid="b2574bb5-3abc-46c7-98ca-119bba61998b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4b6b7e89-b96f-4417-b802-4feeaf2c33c9"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement style="Column header" x="433" y="0" width="80" height="20" uuid="c9e9a989-76ae-4c92-a08c-dba3c3185f04"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement style="Column header" x="513" y="0" width="40" height="20" uuid="736cac2d-8f9a-48bb-b4e7-09302ce0e313"/>
+				<textElement>
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

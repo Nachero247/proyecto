@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.6.final using JasperReports Library version 6.20.6-5c96b6aa8a39ac1dc6b6bea4b81168e16dd39231  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="pagosPendientes" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b455fb73-feb7-40ba-b537-baae8aa4c784">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="MySQL_World"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT 
+    p.`ID_Pago`,
+    p.`Socio_ID`,
+    p.`Fecha_Pago`,
+    s.`Nombre`,
+    s.`Apellido1`,
+    s.`Apellido2`,
+    s.`DNI`,
+    p.`Importe`,
+    p.`Estado`
+FROM gym.pago AS p
+INNER JOIN gym.socio AS s
+    ON p.`Socio_ID` = s.`ID_Socio`
+WHERE p.`Estado` = 'Pendiente';]]>
+	</queryString>
+	<field name="ID_Pago" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="ID_Pago"/>
+		<property name="com.jaspersoft.studio.field.label" value="ID_Pago"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Socio_ID" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="Socio_ID"/>
+		<property name="com.jaspersoft.studio.field.label" value="Socio_ID"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Fecha_Pago" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="Fecha_Pago"/>
+		<property name="com.jaspersoft.studio.field.label" value="Fecha_Pago"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Nombre" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Nombre"/>
+		<property name="com.jaspersoft.studio.field.label" value="Nombre"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Apellido1" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Apellido1"/>
+		<property name="com.jaspersoft.studio.field.label" value="Apellido1"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Apellido2" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Apellido2"/>
+		<property name="com.jaspersoft.studio.field.label" value="Apellido2"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="DNI" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="DNI"/>
+		<property name="com.jaspersoft.studio.field.label" value="DNI"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="socio"/>
+	</field>
+	<field name="Importe" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="Importe"/>
+		<property name="com.jaspersoft.studio.field.label" value="Importe"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<field name="Estado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="Estado"/>
+		<property name="com.jaspersoft.studio.field.label" value="Estado"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="pago"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="111" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="378" y="90" width="197" height="20" forecolor="#666666" uuid="df7432a6-5e65-468a-8c55-ebd78000ab04"/>
+				<textElement textAlignment="Center">
+					<font fontName="Calibri" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="13" width="400" height="76" uuid="720156c9-a4f5-4a3c-b1d6-1981cc19bcc3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="25" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAGOS PENDIENTES]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="130" y="89" width="143" height="22" forecolor="#666666" uuid="5251571a-dd61-4db8-858c-1d2493a03fbe"/>
+				<textElement textAlignment="Right">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<text><![CDATA[GymManager]]></text>
+			</staticText>
+			<image>
+				<reportElement x="433" y="12" width="119" height="77" uuid="f0957879-b4fb-41e8-bc1f-a0a2080da080"/>
+				<imageExpression><![CDATA["imagenes/logo_GymManager.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<staticText>
+				<reportElement x="3" y="-30" width="197" height="30" uuid="4cf7a090-2faf-41cf-af7f-e8561aeb1754">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e64d730-a97c-471d-8ca0-380814073d2e"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Socio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="-30" width="100" height="30" uuid="36d0949e-57ce-494e-bbd1-655b9a50ed85">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6044f1ef-b17f-4e59-bc2d-28c7a0933a87"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fecha del Pago]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="3" y="0" width="197" height="30" uuid="2133c1b9-1707-47a2-8a40-63f2f3a68bc8">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6e64d730-a97c-471d-8ca0-380814073d2e"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Nombre} +" "  + $F{Apellido1} + " " + $F{Apellido2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="407" y="0" width="61" height="30" uuid="ca8d0a47-1748-4a3a-94ba-7ba9c32cd058">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31d45b85-0302-4a5e-abc6-471f443266b0"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Importe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="30" uuid="fac01390-49ef-4669-914a-7766deac0b6c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6044f1ef-b17f-4e59-bc2d-28c7a0933a87"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Fecha_Pago}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="468" y="0" width="78" height="30" uuid="4e9eed8b-cc01-4ba9-9975-fefd545e446b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f3bec996-e472-47c6-8bdd-a8a0d1b5c3ee"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Estado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="407" y="-30" width="61" height="30" uuid="9e625fde-6590-4846-b55c-40bd87761344">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="31d45b85-0302-4a5e-abc6-471f443266b0"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Importe]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="300" y="0" width="107" height="30" uuid="90dbd69a-c649-418d-8529-5619e600ffc7">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2026e572-597a-429e-9e80-3cd915dbfbb4"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="-30" width="107" height="30" uuid="0a82e2c9-d3e1-48da-a320-e3ee452eddd6">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2026e572-597a-429e-9e80-3cd915dbfbb4"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DNI]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="468" y="-30" width="78" height="30" uuid="b7beb636-9971-4678-860b-018cfb3be263">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="f3bec996-e472-47c6-8bdd-a8a0d1b5c3ee"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<box padding="5">
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estado]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="433" y="0" width="80" height="20" forecolor="#666666" uuid="b004b93b-7d45-4bee-b49d-8e0a24321700"/>
+				<textElement textAlignment="Right">
+					<font fontName="Calibri" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="513" y="0" width="40" height="20" forecolor="#666666" uuid="6ffa0f55-d359-41f8-9a56-826864ad24d2"/>
+				<textElement>
+					<font fontName="Calibri" size="14" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

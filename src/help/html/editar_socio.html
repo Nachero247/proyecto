@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Editar Socio</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  .aviso { background: #d4edda; border-left: 3px solid #2c6e49; padding: 8px 12px; margin: 10px 0; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Editar Socio (JDialog)</h1>
+<p>Este diálogo permite modificar los datos de un socio ya registrado. Se abre seleccionando un socio en la tabla de <em>Gestión de Socios</em> y pulsando <strong>Editar</strong>.</p>
+
+<h2>Funcionamiento</h2>
+<p>Al abrirse, el formulario carga automáticamente todos los datos actuales del socio seleccionado. Modifique únicamente los campos que necesite cambiar y pulse <strong>Guardar</strong> para aplicar los cambios.</p>
+
+<h2>Campos modificables</h2>
+<p>Todos los campos del socio son editables: Nombre, Apellidos, DNI, Teléfono, Correo electrónico, Fecha de Alta y Estado. El <strong>ID del socio</strong> no es editable, ya que es el identificador interno del sistema.</p>
+
+<h2>Cambio de estado</h2>
+<p>Puede cambiar el estado del socio entre <strong>Alta</strong>, <strong>Baja</strong> y <strong>Suspendido</strong> desde este mismo formulario usando el selector de estado.</p>
+
+<div class="aviso">✔ Los cambios solo se aplican a la base de datos cuando pulsa <strong>Guardar</strong>. Si cierra el diálogo con <strong>Cancelar</strong>, no se guardará ninguna modificación.</div>
+
+<h2>Botones</h2>
+<p><strong>Guardar</strong> – Aplica los cambios y cierra el diálogo.<br>
+<strong>Cancelar</strong> – Descarta los cambios y cierra el diálogo.</p>
+</body>
+</html>

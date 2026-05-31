@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Alta de Socio</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; }
+  th { background: #2c6e49; color: white; padding: 7px 10px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 6px 10px; }
+  tr:nth-child(even) { background: #f4f4f4; }
+  .req { color: #cc3300; font-weight: bold; }
+  .aviso { background: #fff3cd; border-left: 3px solid #f0a500; padding: 8px 12px; margin: 10px 0; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Alta de Socio (JDialog)</h1>
+<p>Este diálogo permite registrar un nuevo socio en el sistema. Todos los campos marcados con <span class="req">*</span> son obligatorios.</p>
+
+<h2>Campos del formulario</h2>
+<table>
+  <tr><th>Campo</th><th>Descripción</th><th>Obligatorio</th></tr>
+  <tr><td>Nombre</td><td>Nombre del socio (máx. 30 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Primer Apellido</td><td>Primer apellido (máx. 30 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Segundo Apellido</td><td>Segundo apellido (máx. 30 caracteres)</td><td></td></tr>
+  <tr><td>DNI</td><td>Documento de identidad único (máx. 20 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Teléfono</td><td>Número de contacto (máx. 30 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Correo electrónico</td><td>Email válido del socio (máx. 60 caracteres)</td><td class="req">*</td></tr>
+  <tr><td>Fecha de Alta</td><td>Fecha en que se registra el socio (formato: AAAA-MM-DD)</td><td class="req">*</td></tr>
+  <tr><td>Estado</td><td>Estado inicial: <em>Alta</em>, <em>Baja</em> o <em>Suspendido</em></td><td class="req">*</td></tr>
+</table>
+
+<h2>Botones</h2>
+<p><strong>Guardar</strong> – Valida los datos y registra el nuevo socio en la base de datos.<br>
+<strong>Cancelar</strong> – Cierra el diálogo sin guardar ningún cambio.</p>
+
+<div class="aviso">⚠️ El <strong>DNI</strong> debe ser único. Si ya existe un socio con ese DNI, el sistema mostrará un error de duplicado.</div>
+</body>
+</html>

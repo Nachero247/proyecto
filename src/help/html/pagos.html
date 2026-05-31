@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Gestión de Pagos</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  .accion { background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; padding: 8px 14px; margin: 8px 0; }
+  .campo { font-family: monospace; background: #eee; padding: 1px 5px; border-radius: 3px; }
+  .estado-pag { color: #155724; font-weight: bold; }
+  .estado-pen { color: #856404; font-weight: bold; }
+</style>
+</head>
+<body>
+<h1>Gestión de Pagos</h1>
+<p>Permite registrar y consultar los pagos realizados por los socios del gimnasio.</p>
+
+<h2>Acciones disponibles</h2>
+<div class="accion">➕ <strong>Nuevo Pago</strong> – Registra un pago para un socio.</div>
+<div class="accion">✏️ <strong>Editar Pago</strong> – Modifica el importe, fecha o estado de un pago.</div>
+<div class="accion">🗑️ <strong>Eliminar Pago</strong> – Elimina el pago seleccionado (solo Administrador).</div>
+<div class="accion">🔍 <strong>Filtrar por socio / estado</strong> – Localice pagos fácilmente.</div>
+
+<h2>Campos de la tabla</h2>
+<p>
+  <span class="campo">ID_Pago</span> · 
+  <span class="campo">Socio</span> · 
+  <span class="campo">Fecha de Pago</span> · 
+  <span class="campo">Importe (€)</span> · 
+  <span class="campo">Estado</span>
+</p>
+
+<h2>Estados del pago</h2>
+<p>
+  <span class="estado-pag">Pagado</span> – El pago ha sido recibido correctamente.<br>
+  <span class="estado-pen">Pendiente</span> – El pago está registrado pero aún no se ha cobrado.
+</p>
+
+<h2>Acceso por rol</h2>
+<p>El <strong>Administrador</strong> puede crear, editar y eliminar pagos. El <strong>Profesor</strong> solo puede consultar el listado.</p>
+</body>
+</html>

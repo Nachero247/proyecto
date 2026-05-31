@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Menú Principal</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+  th { background: #2c6e49; color: white; padding: 8px; text-align: left; }
+  td { border: 1px solid #ccc; padding: 7px 10px; }
+  tr:nth-child(even) { background: #f4f4f4; }
+  .check { color: #2c6e49; font-weight: bold; }
+  .cross { color: #cc3300; }
+</style>
+</head>
+<body>
+<h1>Menú Principal</h1>
+<p>El Menú Principal es la pantalla central desde la que accede a todos los módulos del sistema. Las opciones visibles dependen de su <strong>rol</strong>.</p>
+
+<h2>Opciones del menú</h2>
+<table>
+  <tr>
+    <th>Módulo</th>
+    <th>Administrador</th>
+    <th>Entrenador</th>
+    <th>Profesor</th>
+  </tr>
+  <tr>
+    <td>Gestión de Socios</td>
+    <td class="check">✔ Acceso total</td>
+    <td class="check">✔ Solo consulta</td>
+    <td class="cross">✘</td>
+  </tr>
+  <tr>
+    <td>Gestión de Usuarios</td>
+    <td class="check">✔ Acceso total</td>
+    <td class="cross">✘</td>
+    <td class="cross">✘</td>
+  </tr>
+  <tr>
+    <td>Gestión de Pagos</td>
+    <td class="check">✔ Acceso total</td>
+    <td class="cross">✘</td>
+    <td class="check">✔ Solo consulta</td>
+  </tr>
+  <tr>
+    <td>Gestión de Planes</td>
+    <td class="check">✔ Acceso total</td>
+    <td class="check">✔ Solo consulta</td>
+    <td class="check">✔ Solo consulta</td>
+  </tr>
+  <tr>
+    <td>Gestión de Asistencias</td>
+    <td class="check">✔ Acceso total</td>
+    <td class="check">✔ Acceso total</td>
+    <td class="cross">✘</td>
+  </tr>
+</table>
+
+<h2>Cerrar sesión</h2>
+<p>Para salir del sistema de forma segura utilice la opción <strong>Cerrar Sesión</strong> del menú o el botón correspondiente. Esto le devolverá a la pantalla de Login.</p>
+</body>
+</html>

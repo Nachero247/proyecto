@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 2.0//EN"
+         "http://java.sun.com/products/javahelp/toc_2_0.dtd">
+<toc version="2.0">
+  <tocitem text="Bienvenido" target="inicio"/>
+  <tocitem text="Inicio de Sesión (Login)" target="login"/>
+  <tocitem text="Menú Principal" target="menu_principal"/>
+  <tocitem text="Roles y Permisos" target="roles"/>
+
+  <tocitem text="Gestión de Socios" target="gestion_socios">
+    <tocitem text="Alta de Socio" target="alta_socio"/>
+    <tocitem text="Editar Socio" target="editar_socio"/>
+  </tocitem>
+
+  <tocitem text="Gestión de Usuarios" target="gestion_usuarios">
+    <tocitem text="Alta de Usuario" target="alta_usuario"/>
+    <tocitem text="Editar Usuario" target="editar_usuario"/>
+  </tocitem>
+
+  <tocitem text="Gestión de Pagos" target="gestion_pagos"/>
+  <tocitem text="Gestión de Planes" target="gestion_planes"/>
+  <tocitem text="Gestión de Asistencias" target="gestion_asistencias"/>
+</toc>

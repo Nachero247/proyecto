@@ -4,14 +4,29 @@
  */
 package proyecto.vista;
 
+import ConexionBBDD.ConexionBBDD;
+import java.sql.Connection;
 import java.util.List;
 import java.util.regex.PatternSyntaxException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import java.time.LocalTime;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.ooxml.JRXlsxExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.view.JasperViewer;
 import proyecto.modelo.Asistencia;
 import proyecto.logica.AsistenciaDAO;
+import java.time.format.DateTimeFormatter;
+import proyecto.logica.LogicaSocios;
+import proyecto.modelo.Socio;
 
 /**
  *
@@ -21,6 +36,10 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFrameGestionAsistencias.class.getName());
 
+    
+    ConexionBBDD nueva;
+    Connection conexion;
+    
     AsistenciaDAO dao = new AsistenciaDAO();
     private javax.swing.table.TableRowSorter<DefaultTableModel> sorter;
 
@@ -32,11 +51,17 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     public JFrameGestionAsistencias(String rol) {
         this.rol = rol;
         initComponents();
+        
+        nueva = new ConexionBBDD();
+        conexion = nueva.getConnection();
+        
         cargaTabla();
         
         DefaultTableModel model = (DefaultTableModel) jTableAsistencia.getModel();
         sorter = new javax.swing.table.TableRowSorter<>(model);
         jTableAsistencia.setRowSorter(sorter);
+        
+        
     }
 
     /**
@@ -51,6 +76,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableAsistencia = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jButtonRegistrarAsistencia = new javax.swing.JButton();
         jButtonEliminar = new javax.swing.JButton();
@@ -58,6 +84,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         jButtonVolver = new javax.swing.JButton();
         jLabelBuscar = new javax.swing.JLabel();
         jTextFieldBuscar = new javax.swing.JTextField();
+        jButtonImprimir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -74,18 +101,30 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTableAsistencia);
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 102, 204));
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("GESTIÓN DE ASISTENCIAS");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 970, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jLabel3)
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -107,7 +146,7 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         });
         jPanel1.add(jButtonEliminar);
 
-        jButtonActualizar.setText("Actualizar");
+        jButtonActualizar.setText("Recargar");
         jButtonActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonActualizarActionPerformed(evt);
@@ -139,6 +178,14 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         });
         jPanel1.add(jTextFieldBuscar);
 
+        jButtonImprimir.setText("Imprimir Asistencias");
+        jButtonImprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImprimirActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButtonImprimir);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -163,44 +210,92 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonRegistrarAsistenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarAsistenciaActionPerformed
-        // TODO add your handling code here:
-        String input = JOptionPane.showInputDialog("Introduce el ID del socio");
-        
-        if(input != null){
-            try{
-                int idSocio = Integer.parseInt(input);
-                if(dao.registrarAsistencias(idSocio)){
-                    JOptionPane.showMessageDialog(null, "Asistencia registrada con exito");
-                    cargaTabla();
-                    
-                }else{
-                    JOptionPane.showMessageDialog(null, "Error al registrar la asistencia");
-                }
-            }catch(NumberFormatException e){
-                JOptionPane.showMessageDialog(null, "Id no válido");
+        String input = JOptionPane.showInputDialog("Introduce el DNI del socio");
+        if (input == null) return;
+
+        Socio socio = LogicaSocios.buscarPorDni(input.trim());
+        if (socio == null) {
+            JOptionPane.showMessageDialog(null, "No se encontró ningún socio con ese DNI");
+            return;
+        }
+
+        // --- ELEGIR FECHA Y HORA ---
+        int opcion = JOptionPane.showConfirmDialog(null,
+            "¿Usar la fecha y hora actuales?\n(No = introducir manualmente)",
+            "Fecha y Hora", JOptionPane.YES_NO_OPTION);
+
+        java.time.LocalDate fecha;
+        LocalTime hora;
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            fecha = java.time.LocalDate.now();
+            hora = LocalTime.now().withSecond(0).withNano(0);
+        } else {
+            String fechaStr = JOptionPane.showInputDialog("Introduce la fecha (YYYY-MM-DD):");
+            if (fechaStr == null) return;
+            String horaStr = JOptionPane.showInputDialog("Introduce la hora (HH:MM):");
+            if (horaStr == null) return;
+            try {
+                fecha = java.time.LocalDate.parse(fechaStr.trim());
+                hora = LocalTime.parse(horaStr.trim());
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Formato inválido. Usa YYYY-MM-DD y HH:MM");
+                return;
             }
+        }
+
+        if (dao.registrarAsistencias(socio.getId_socio(), fecha, hora)) {
+            JOptionPane.showMessageDialog(null,
+                "Asistencia registrada para: " + socio.getNombre() + " " + socio.getApellido1());
+            cargaTabla();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al registrar la asistencia");
         }
     }//GEN-LAST:event_jButtonRegistrarAsistenciaActionPerformed
 
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
-        // TODO add your handling code here:
-        
         int fila = jTableAsistencia.getSelectedRow();
-        
-        if(fila>= 0){
-            int id = (int) jTableAsistencia.getValueAt(fila, 0);
-            
-            if(dao.eliminar(id)){
+
+        if (fila >= 0) {
+            // Convertir fila visual a fila del modelo (por si hay filtro activo)
+            int filaModelo = jTableAsistencia.convertRowIndexToModel(fila);
+
+            // Buscar el ID de la asistencia por nombre y fecha
+            String nombreSocio = (String) jTableAsistencia.getModel().getValueAt(filaModelo, 0);
+            Object fecha = jTableAsistencia.getModel().getValueAt(filaModelo, 2);
+
+            List<Asistencia> lista = dao.ListarAsistencia();
+            LogicaSocios.cargaPrueba();
+
+            int idAsistencia = -1;
+            for (Asistencia a : lista) {
+                Socio socio = LogicaSocios.getSocio(a.getId_socio());
+                if (socio != null && a.getFecha().toString().equals(fecha.toString())) {
+                    String nombre = socio.getNombre() + " " + socio.getApellido1();
+                    if (socio.getApellido2() != null && !socio.getApellido2().trim().isEmpty()) {
+                        nombre += " " + socio.getApellido2();
+                    }
+                    if (nombre.equals(nombreSocio)) {
+                        idAsistencia = a.getId();
+                        break;
+                    }
+                }
+            }
+
+            if (idAsistencia == -1) {
+                JOptionPane.showMessageDialog(null, "No se pudo identificar la asistencia");
+                return;
+            }
+
+            if (dao.eliminar(idAsistencia)) {
                 JOptionPane.showMessageDialog(null, "Asistencia eliminada");
                 cargaTabla();
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "No se pudo eliminar la asistencia");
             }
-            
-            
-        }else{
+
+        } else {
             JOptionPane.showMessageDialog(null, "Selecciona una fila");
-            
         }
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
@@ -237,6 +332,25 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldBuscarActionPerformed
 
+    private void jButtonImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImprimirActionPerformed
+            String fileJasper = "informes/asistencias.jrxml";
+            try{
+                JasperReport report = JasperCompileManager.compileReport(fileJasper);
+                JasperPrint print
+                        = JasperFillManager.fillReport(report, null, nueva.getConnection());
+                JasperExportManager.exportReportToPdfFile(print, "informes\\asistencias.pdf");
+                JRXlsxExporter exporter = new JRXlsxExporter();
+                exporter.setExporterInput(new SimpleExporterInput(print));
+                exporter.setExporterOutput(new SimpleOutputStreamExporterOutput("informes\\asistencias.xlsx"));
+                exporter.exportReport();
+                JasperViewer.viewReport(print, false);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,"Se produjo un error al leer el archivo .jrxml");
+            }
+    }//GEN-LAST:event_jButtonImprimirActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -264,20 +378,41 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     }
     
     
-    private void cargaTabla(){
+    private void cargaTabla() {
         DefaultTableModel model = (DefaultTableModel) jTableAsistencia.getModel();
         model.setRowCount(0);
-        
+        model.setColumnIdentifiers(new String[]{"Socio", "DNI", "Fecha Asistencia", "Hora Entrada"});
+
         List<Asistencia> lista = dao.ListarAsistencia();
-        for(Asistencia a: lista){
+        LogicaSocios.cargaPrueba();
+
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
+
+        for (Asistencia a : lista) {
+            String horaFormateada = "";
+            if (a.getHora() != null) {
+                horaFormateada = a.getHora().format(formato);
+            }
+
+            Socio socio = LogicaSocios.getSocio(a.getId_socio());
+            String nombreSocio = "ID: " + a.getId_socio();
+            String dni = "";
+            if (socio != null) {
+                nombreSocio = socio.getNombre() + " " + socio.getApellido1();
+                if (socio.getApellido2() != null && !socio.getApellido2().trim().isEmpty()) {
+                    nombreSocio += " " + socio.getApellido2();
+                }
+                dni = socio.getDni();
+            }
+
             model.addRow(new Object[]{
-            a.getId(),
-            a.getId_socio(),
-            a.getFecha(),
-            a.getHora()
-        })  ;
+                nombreSocio,
+                dni,
+                a.getFecha(),
+                horaFormateada
+            });
         }
-}
+    }
     
     
     
@@ -285,8 +420,10 @@ public class JFrameGestionAsistencias extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonActualizar;
     private javax.swing.JButton jButtonEliminar;
+    private javax.swing.JButton jButtonImprimir;
     private javax.swing.JButton jButtonRegistrarAsistencia;
     private javax.swing.JButton jButtonVolver;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelBuscar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

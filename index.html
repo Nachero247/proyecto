@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Nacho Rubio">
+    <title>Gym Manager | Gestión de Gimnasios</title>
+<style>
+/* ---------- GLOBAL ---------- */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:system-ui,'Segoe UI','Helvetica Neue',sans-serif;
+    background:#e6f0fa;
+    color:#0b2b3b;
+    scroll-behavior:smooth;
+    line-height:1.5;
+}
+
+.container{
+    max-width:1280px;
+    margin:0 auto;
+    padding:0 24px;
+}
+
+/* ---------- HEADER ---------- */
+.header{
+    background:#0a2f6c;
+    position:sticky;
+    top:0;
+    z-index:100;
+    border-bottom:3px solid #7c3aed;
+    box-shadow:0 4px 12px rgba(0,0,0,.1);
+}
+
+.nav-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:16px;
+    padding:12px 0;
+}
+
+/* ---------- LOGO ---------- */
+.logo-area {
+    display: flex;
+    align-items: center;
+}
+
+.logo-img {
+    width: 120px;
+    height: 100px;
+    padding: 12px;
+    border-radius: 0;
+}
+
+.logo-text {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* ---------- NAV ---------- */
+.nav-links{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px 20px;
+}
+
+.nav-links a{
+    color:#f0f4ff;
+    text-decoration:none;
+    font-weight:500;
+    font-size:.95rem;
+    padding:6px 0;
+    border-bottom:2px solid transparent;
+    transition: color .2s, border-color .2s;
+}
+
+.nav-links a:hover{
+    color:#a78bfa;
+    border-bottom-color:#7c3aed;
+}
+
+.nav-links a.manual-link {
+    background: #7c3aed;
+    color: #fff;
+    padding: 7px 18px;
+    border-radius: 40px;
+    border-bottom: none;
+    font-weight: 600;
+}
+
+.nav-links a.manual-link:hover {
+    background: #6d28d9;
+    color: #fff;
+    border-bottom: none;
+}
+
+.repo-link{padding:6px 0;}
+
+/* ---------- HERO ---------- */
+.hero{
+    background:linear-gradient(120deg,#0a2f6c,#1e1a5e);
+    color:#fff;
+    padding:3rem 0 3.5rem;
+    border-radius:0 0 3rem 3rem;
+    margin-bottom:2.5rem;
+}
+
+.hero-content{max-width:850px;margin:auto;text-align:center;}
+
+.hero h1{
+    font-size:2.5rem;
+    font-weight:800;
+    margin-bottom:1rem;
+    letter-spacing:-.5px;
+}
+
+.hero p{font-size:1.2rem;opacity:.95;margin-bottom:1rem;}
+
+.tech-badge{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:12px;
+    margin-top:24px;
+}
+
+.tech-badge span{
+    background:rgba(255,255,255,.15);
+    padding:6px 16px;
+    border-radius:40px;
+    font-size:.85rem;
+}
+
+/* ---------- SECCIONES ---------- */
+section{margin:4rem 0;scroll-margin-top:90px;}
+
+.section-title{
+    font-size:2rem;
+    font-weight:700;
+    text-align:center;
+    margin-bottom:2rem;
+    color:#071c3c;
+}
+
+.section-title span{color:#7c3aed;}
+
+.title-decoration{
+    width:80px;
+    height:4px;
+    background:#7c3aed;
+    margin:.5rem auto 2rem;
+    border-radius:4px;
+}
+
+/* ---------- CARDS ---------- */
+.features-grid,
+.roles-grid,
+.financial-states,
+.financial-features,
+.planes-container{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:2rem;
+}
+
+.feature-card,
+.role-card,
+.plan-card{
+    background:#fff;
+    border-radius:28px;
+    padding:1.8rem;
+}
+
+.feature-card{
+    flex:1 1 280px;
+    min-width:250px;
+    border:1px solid rgba(124,58,237,.15);
+}
+
+.feature-card h3{
+    font-size:1.5rem;
+    margin-bottom:.75rem;
+    color:#0a2f6c;
+}
+
+.feature-icon{font-size:2.4rem;margin-bottom:1rem;}
+
+.plan-card{
+    width:210px;
+    text-align:center;
+    border-top:5px solid #7c3aed;
+}
+
+.plan-card.popular{border-top-color:#f59e0b;background:#fffef7;}
+
+.plan-price{font-size:1.8rem;font-weight:800;color:#0a2f6c;margin:.5rem 0;}
+
+.plan-duration{color:#4b5563;}
+
+.badge-popular{
+    background:#f59e0b;
+    color:#fff;
+    font-size:.7rem;
+    border-radius:50px;
+    padding:4px 12px;
+    display:inline-block;
+}
+
+/* ---------- ROLES ---------- */
+.role-perm{list-style:none;margin-top:1rem;}
+
+.role-perm li{
+    margin:.7rem 0;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.perm-true{color:#10b981;}
+.perm-false{color:#ef4444;}
+
+/* ---------- FINANZAS ---------- */
+.state-badge{
+    background:#fff;
+    border-radius:60px;
+    padding:.8rem 2rem;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:700;
+}
+
+.fin-feature{
+    background:#f1f5f9;
+    padding:1rem 1.2rem;
+    border-radius:28px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1 1 200px;
+}
+
+/* ---------- TECH ---------- */
+.tech-stack{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:1rem;
+    background:#0a2f6c;
+    padding:2.5rem 1rem;
+    border-radius:48px;
+}
+
+.tech-item{
+    background:rgba(255,255,255,.1);
+    padding:.7rem 1.6rem;
+    border-radius:80px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+/* ---------- FOOTER ---------- */
+.footer{
+    background:#071c3c;
+    color:#b9d0ff;
+    text-align:center;
+    padding:2rem 0;
+    border-radius:2rem 2rem 0 0;
+    margin-top:3rem;
+}
+
+.footer a{color:#c084fc;text-decoration:none;}
+
+/* ========== MANUAL DE USUARIO ========== */
+#manual {
+    scroll-margin-top: 90px;
+}
+
+.manual-wrapper {
+    background: #fff;
+    border-radius: 32px;
+    box-shadow: 0 8px 40px rgba(10,47,108,.10);
+    overflow: hidden;
+    border: 1px solid rgba(124,58,237,.12);
+}
+
+/* Panels */
+.manual-panels {
+    padding: 2.5rem 2rem;
+}
+
+.manual-panel {
+    display: block;
+}
+
+.manual-panel + .manual-panel {
+    border-top: 2px solid #e2e8f0;
+    margin-top: 2rem;
+    padding-top: 2rem;
+}
+
+/* Subsección dentro del manual */
+.man-section {
+    margin-bottom: 2.2rem;
+}
+
+.man-section h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0a2f6c;
+    margin-bottom: .8rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.man-section p {
+    color: #374151;
+    margin-bottom: .6rem;
+    line-height: 1.7;
+}
+
+/* Tabla de campos */
+.man-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: .8rem 0 1.2rem;
+    font-size: .92rem;
+}
+
+.man-table th {
+    background: #0a2f6c;
+    color: #fff;
+    padding: 8px 12px;
+    text-align: left;
+}
+
+.man-table td {
+    border: 1px solid #e2e8f0;
+    padding: 7px 12px;
+}
+
+.man-table tr:nth-child(even) td { background: #f8fafc; }
+
+.man-req { color: #dc2626; font-weight: 700; }
+
+/* Pasos numerados */
+.man-steps { list-style: decimal; padding-left: 1.4rem; margin: .8rem 0; }
+
+.man-steps li {
+    margin-bottom: .7rem;
+    line-height: 1.6;
+}
+
+/* Permisos por rol */
+.man-roles-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: .8rem 0;
+}
+
+.man-role-box {
+    flex: 1 1 200px;
+    background: #f0f7f4;
+    border-left: 4px solid #2c6e49;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+}
+
+.man-role-box h4 {
+    color: #0a2f6c;
+    margin-bottom: .5rem;
+    font-size: .95rem;
+}
+
+.man-role-box ul { list-style: none; }
+
+.man-role-box li {
+    font-size: .88rem;
+    color: #374151;
+    margin: .35rem 0;
+    display: flex;
+    gap: 6px;
+}
+
+/* Aviso */
+.man-aviso {
+    background: #fff3cd;
+    border-left: 4px solid #f0a500;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin: 1rem 0;
+    font-size: .92rem;
+    color: #555;
+}
+
+.man-aviso.ok {
+    background: #d4edda;
+    border-left-color: #2c6e49;
+    color: #1a3a28;
+}
+
+.man-aviso.alert {
+    background: #f8d7da;
+    border-left-color: #dc2626;
+    color: #5a1a1a;
+}
+
+/* Campo inline */
+.f { font-family: monospace; background: #eee; padding: 1px 6px; border-radius: 4px; font-size: .88rem; }
+
+/* Separador entre secciones del panel */
+.man-divider {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 2rem 0;
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container nav-bar">
+        <div class="logo-area">
+            <img class="logo-img" src="img/logo_GymManager.png" alt="Logo GymManager">
+            <div>
+                <div class="logo-text">Gym Manager</div>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Funcionalidades</a>
+            <a href="#planes">Planes</a>
+            <a href="#roles">Roles y Accesos</a>
+            <a href="#financiero">Control Financiero</a>
+            <a href="#tecnologia">Tecnología</a>
+            <a href="#manual" class="manual-link">📖 Manual de Usuario</a>
+            <a href="https://github.com/Nachero247/proyecto" target="_blank" class="repo-link">GitHub Repositorio</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="hero">
+        <div class="container hero-content">
+            <h1>GYM MANAGER · POTENCIA TU GIMNASIO</h1>
+            <p>Aplicación desarrollada en <strong>Java con NetBeans</strong> y base de datos <strong>MySQL</strong> para gestionar un gimnasio de forma centralizada. Administra usuarios, socios, pagos, planes de entrenamiento y asistencias con total sencillez.</p>
+            <div class="tech-badge">
+                <span>☕ Java / NetBeans</span>
+                <span>🐬 MySQL</span>
+                <span>📊 Informes XML/JSON</span>
+                <span>🔐 Roles + Permisos</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- SECCIÓN FUNCIONALIDADES -->
+        <section id="features">
+            <h2 class="section-title"><span>⚙️ Funcionalidades</span> · Todo lo que necesitas</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align: center; margin-bottom: 2rem; font-size: 1.2rem;">Una plataforma completa que cubre cada aspecto de la gestión de tu gimnasio desde un solo lugar.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Gestión de Socios</h3>
+                    <p>Crea, edita y controla el estado de cada socio: alta, baja o suspendido. Almacena DNI, teléfono, correo electrónico y toda la información relevante de forma centralizada.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💳</div>
+                    <h3>Control de Pagos</h3>
+                    <p>Registra pagos con estado: Pagado, Pendiente o Vencido. Filtra por DNI, estado o fecha. Imprime informes detallados de pagos pendientes o por socio en segundos.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏋️</div>
+                    <h3>Planes de Suscripción</h3>
+                    <p>Crea planes personalizados con precio y duración: 1 mes, 3 meses, 6 meses, anual o los que necesites. Asigna planes a cada socio y controla sus vencimientos automáticamente.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Registro de Asistencias</h3>
+                    <p>Guarda la fecha exacta de cada visita al gimnasio por socio. Genera informes de asistencia y analiza la frecuencia de uso para tomar mejores decisiones.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Informes Imprimibles</h3>
+                    <p>Imprime informes de socios, pagos y planes filtrando por cualquier criterio. Exporta e importa datos desde archivos XML y JSON para máxima flexibilidad.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔐</div>
+                    <h3>Usuarios del Sistema</h3>
+                    <p>Administra los accesos con roles diferenciados: Administrador, Entrenador y Profesor. Cada rol tiene permisos específicos sobre los módulos de la aplicación.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN PLANES DE SUSCRIPCIÓN -->
+        <section id="planes">
+            <h2 class="section-title"><span>💪 Suscripciones</span> · Planes configurables</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 1rem;">Define tus propios planes de suscripción con el precio y duración que mejor se adapten a tu gimnasio. Ejemplos incluidos por defecto:</p>
+            <div class="planes-container">
+                <div class="plan-card">
+                    <h4>1 Mes</h4>
+                    <div class="plan-price">€30</div>
+                    <div class="plan-duration">Acceso mensual</div>
+                    <p style="margin-top: 12px;">Acceso completo · Asistencias · Control de pago</p>
+                </div>
+                <div class="plan-card popular">
+                    <span class="badge-popular">⭐ MÁS POPULAR</span>
+                    <h4>3 Meses</h4>
+                    <div class="plan-price">€75</div>
+                    <div class="plan-duration">Trimestral</div>
+                    <p>Acceso completo · Ahorro vs mensual</p>
+                </div>
+                <div class="plan-card">
+                    <h4>6 Meses</h4>
+                    <div class="plan-price">€130</div>
+                    <div class="plan-duration">Semestral</div>
+                    <p>Mayor ahorro · Prioridad</p>
+                </div>
+                <div class="plan-card">
+                    <h4>Anual</h4>
+                    <div class="plan-price">€220</div>
+                    <div class="plan-duration">12 meses</div>
+                    <p>Máximo ahorro · Beneficios extra</p>
+                </div>
+            </div>
+            <div class="custom-plan">
+                ➕ Plan Personalizado: Crea cualquier plan con el precio y duración que necesites directamente desde la aplicación
+            </div>
+        </section>
+
+        <!-- SECCIÓN ROLES Y ACCESOS -->
+        <section id="roles">
+            <h2 class="section-title"><span>🛡️ Roles y Accesos</span> · Control de permisos</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align: center;">Tres roles de usuario con accesos diferenciados para mantener la seguridad y organización de tu equipo.</p>
+            <div class="roles-grid">
+                <div class="role-card">
+                    <h3>🛡️ Administrador</h3>
+                    <ul class="role-perm">
+                        <li>✅ Gestión completa de socios</li>
+                        <li>✅ Control de pagos y cuotas</li>
+                        <li>✅ Gestión de planes</li>
+                        <li>✅ Administración de usuarios</li>
+                        <li>✅ Todos los informes / Importar-Exportar</li>
+                    </ul>
+                </div>
+                <div class="role-card">
+                    <h3>💪 Entrenador</h3>
+                    <ul class="role-perm">
+                        <li>✅ Ver y editar socios</li>
+                        <li>✅ Registro de asistencias</li>
+                        <li>✅ Consultar planes / Informes asistencia</li>
+                        <li>❌ Sin acceso a pagos</li>
+                        <li>❌ Sin gestión de usuarios</li>
+                    </ul>
+                </div>
+                <div class="role-card">
+                    <h3>📚 Profesor</h3>
+                    <ul class="role-perm">
+                        <li>✅ Consulta de socios</li>
+                        <li>✅ Registro de asistencias</li>
+                        <li>✅ Ver planes asignados</li>
+                        <li>❌ Sin edición de datos</li>
+                        <li>❌ Sin acceso a pagos / gestión usuarios</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN CONTROL FINANCIERO -->
+        <section id="financiero">
+            <h2 class="section-title"><span>💰 Control Financiero</span> · Pagos bajo control</h2>
+            <div class="title-decoration"></div>
+            <div class="financial-states">
+                <div class="state-badge"><span style="color:#10b981; font-size:1.6rem;">✓</span> <strong>Pagado</strong> · Cuota abonada</div>
+                <div class="state-badge"><span style="color:#f59e0b; font-size:1.6rem;">⏳</span> <strong>Pendiente</strong> · Sin confirmar</div>
+                <div class="state-badge"><span style="color:#dc2626; font-size:1.6rem;">⚠️</span> <strong>Vencido</strong> · Alerta prioritaria</div>
+            </div>
+            <div class="financial-features">
+                <div class="fin-feature">🔍 Filtrado por DNI y Estado</div>
+                <div class="fin-feature">🖨️ Impresión de informes (socio, rango de fechas)</div>
+                <div class="fin-feature">📅 Control de Vencimientos automático</div>
+                <div class="fin-feature">📥 Importar desde XML y JSON</div>
+                <div class="fin-feature">📊 Resumen de Pagos Pendientes</div>
+                <div class="fin-feature">👁️ Vista global de pagos sin saldar</div>
+            </div>
+            <p style="background: #e0f2fe; padding: 1rem; border-radius: 28px; text-align: center;"><strong>✅ Pagado:</strong> El socio ha abonado correctamente su cuota · <strong>⏳ Pendiente:</strong> Pago registrado aún no confirmado · <strong>🔴 Vencido:</strong> Cuota superó fecha límite sin abonar. Actúa antes de que se acumulen impagos.</p>
+        </section>
+
+        <!-- SECCIÓN TECNOLOGÍA -->
+        <section id="tecnologia">
+            <h2 class="section-title"><span>⚡ Tecnología utilizada</span> · Construido con tecnología fiable y eficiente</h2>
+            <div class="title-decoration"></div>
+            <div class="tech-stack">
+                <span class="tech-item">☕ Java</span>
+                <span class="tech-item">🎨 NetBeans IDE</span>
+                <span class="tech-item">🐬 MySQL</span>
+                <span class="tech-item">🔌 JDBC Connector</span>
+                <span class="tech-item">📄 Exportación XML</span>
+                <span class="tech-item">🔧 Exportación JSON</span>
+                <span class="tech-item">🖨️ Motor de Informes</span>
+                <span class="tech-item">🔐 Gestión de Roles</span>
+                <span class="tech-item">🗄️ BD Relacional</span>
+                <span class="tech-item">🖥️ Interfaz Swing/GUI</span>
+            </div>
+            <p style="text-align: center; margin-top: 1rem;">GymManager integra un robusto backend Java + MySQL, gestión de roles, importación/exportación XML/JSON e informes imprimibles. Máxima eficiencia para tu negocio.</p>
+        </section>
+
+        <!-- IMPORTACIÓN MASIVA -->
+        <div style="background: linear-gradient(110deg, #eef2ff, #f3e8ff); border-radius: 2rem; padding: 2rem; margin: 2rem 0; text-align: center;">
+            <span style="font-size: 2rem;">☁️</span>
+            <h3 style="margin: 0.5rem 0">Importación masiva · Informes personalizados</h3>
+            <p>Carga datos de socios, pagos y asistencias desde XML/JSON, exporta informes con filtros y mantén todo sincronizado. La administración nunca fue tan ágil.</p>
+            <div style="margin-top: 12px;">✔️ Compatible con roles: Admin, Entrenador, Profesor</div>
+        </div>
+
+        <!-- ===== MANUAL DE USUARIO ===== -->
+        <section id="manual">
+            <h2 class="section-title"><span>Manual de Usuario</span> · Guía paso a paso</h2>
+            <div class="title-decoration"></div>
+            <p style="text-align:center;margin-bottom:2rem;max-width:800px;margin-left:auto;margin-right:auto;">
+                Todo lo que necesitas saber para usar GymManager. Selecciona el módulo sobre el que quieres obtener ayuda.
+            </p>
+
+            <div class="manual-wrapper">
+
+                <!-- PANELS -->
+                <div class="manual-panels">
+
+                    <!-- LOGIN -->
+                    <div class="manual-panel" id="panel-login">
+                        <div class="man-section">
+                            <h3>🔑 Inicio de sesión</h3>
+                            <p>La pantalla de Login es el punto de entrada al sistema. Solo los usuarios registrados por el Administrador pueden acceder.</p>
+                            <ol class="man-steps">
+                                <li>Introduzca su <strong>nombre de usuario</strong> en el campo <span class="f">Usuario</span>.</li>
+                                <li>Introduzca su <strong>contraseña</strong> en el campo <span class="f">Contraseña</span>.</li>
+                                <li>Pulse el botón <strong>Iniciar Sesión</strong>.</li>
+                                <li>Si las credenciales son correctas, accederá al <strong>Menú Principal</strong> con las opciones correspondientes a su rol.</li>
+                            </ol>
+                            <div class="man-aviso">⚠️ Si las credenciales son incorrectas el sistema mostrará un error. Compruebe mayúsculas y espacios. Si no recuerda su contraseña, contacte con el Administrador.</div>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>🏠 Menú Principal</h3>
+                            <p>Tras el login verá el Menú Principal con los módulos habilitados para su rol. Use <strong>Cerrar Sesión</strong> para volver a la pantalla de Login de forma segura.</p>
+                            <table class="man-table">
+                                <tr><th>Módulo</th><th>Administrador</th><th>Entrenador</th><th>Profesor</th></tr>
+                                <tr><td>Gestión de Socios</td><td>✔ Total</td><td>✔ Consulta</td><td>✘</td></tr>
+                                <tr><td>Gestión de Usuarios</td><td>✔ Total</td><td>✘</td><td>✘</td></tr>
+                                <tr><td>Gestión de Pagos</td><td>✔ Total</td><td>✘</td><td>✔ Consulta</td></tr>
+                                <tr><td>Gestión de Planes</td><td>✔ Total</td><td>✔ Consulta</td><td>✔ Consulta</td></tr>
+                                <tr><td>Gestión de Asistencias</td><td>✔ Total</td><td>✔ Total</td><td>✘</td></tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SOCIOS -->
+                    <div class="manual-panel" id="panel-socios">
+                        <div class="man-section">
+                            <h3>👥 Gestión de Socios</h3>
+                            <p>Muestra la tabla completa de socios registrados. Permite filtrar por nombre, DNI o estado para localizar cualquier miembro rápidamente.</p>
+                            <p>Acciones disponibles: <strong>Nuevo Socio</strong>, <strong>Editar Socio</strong>, <strong>Eliminar Socio</strong> (solo Administrador) y <strong>Buscar / Filtrar</strong>.</p>
+                            <p>Campos visibles en la tabla: <span class="f">ID</span> · <span class="f">Nombre</span> · <span class="f">Apellidos</span> · <span class="f">DNI</span> · <span class="f">Teléfono</span> · <span class="f">Correo</span> · <span class="f">Fecha Alta</span> · <span class="f">Estado</span></p>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>➕ Dar de alta un nuevo socio</h3>
+                            <p>Pulse <strong>Nuevo Socio</strong> para abrir el formulario de alta. Rellene los siguientes campos:</p>
+                            <table class="man-table">
+                                <tr><th>Campo</th><th>Descripción</th><th>Obligatorio</th></tr>
+                                <tr><td>Nombre</td><td>Nombre del socio (máx. 30 car.)</td><td class="man-req">*</td></tr>
+                                <tr><td>Primer Apellido</td><td>Primer apellido (máx. 30 car.)</td><td class="man-req">*</td></tr>
+                                <tr><td>Segundo Apellido</td><td>Segundo apellido (máx. 30 car.)</td><td></td></tr>
+                                <tr><td>DNI</td><td>Identificador único (máx. 20 car.)</td><td class="man-req">*</td></tr>
+                                <tr><td>Teléfono</td><td>Número de contacto (máx. 30 car.)</td><td class="man-req">*</td></tr>
+                                <tr><td>Correo electrónico</td><td>Email válido (máx. 60 car.)</td><td class="man-req">*</td></tr>
+                                <tr><td>Fecha de Alta</td><td>Formato AAAA-MM-DD</td><td class="man-req">*</td></tr>
+                                <tr><td>Estado</td><td>Alta, Baja o Suspendido</td><td class="man-req">*</td></tr>
+                            </table>
+                            <div class="man-aviso">⚠️ El <strong>DNI debe ser único</strong>. Si ya existe un socio con ese DNI el sistema mostrará un error.</div>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>✏️ Editar un socio</h3>
+                            <p>Seleccione el socio en la tabla y pulse <strong>Editar</strong>. El formulario cargará los datos actuales. Modifique lo que necesite y pulse <strong>Guardar</strong>. El <span class="f">ID</span> del socio no es editable.</p>
+                            <p>Puede cambiar el estado entre <strong>Alta</strong>, <strong>Baja</strong> y <strong>Suspendido</strong> desde el selector de estado del mismo formulario.</p>
+                            <div class="man-aviso ok">✔ Los cambios solo se aplican al pulsar <strong>Guardar</strong>. <strong>Cancelar</strong> cierra sin guardar.</div>
+                        </div>
+                    </div>
+
+                    <!-- USUARIOS -->
+                    <div class="manual-panel" id="panel-usuarios">
+                        <div class="man-section">
+                            <h3>🧑‍💼 Gestión de Usuarios</h3>
+                            <p>Módulo <strong>exclusivo del Administrador</strong>. Permite crear, editar y eliminar las cuentas de acceso al sistema. Si otro rol intenta acceder será redirigido al Menú Principal.</p>
+                            <p>Campos visibles: <span class="f">ID</span> · <span class="f">Usuario</span> · <span class="f">Rol</span> · <span class="f">Plan asociado</span>. La contraseña no se muestra en la tabla por seguridad.</p>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>➕ Crear un nuevo usuario</h3>
+                            <table class="man-table">
+                                <tr><th>Campo</th><th>Descripción</th><th>Obligatorio</th></tr>
+                                <tr><td>Nombre de usuario</td><td>Identificador único de acceso (máx. 30 car., sin espacios)</td><td class="man-req">*</td></tr>
+                                <tr><td>Contraseña</td><td>Clave de acceso (máx. 50 car.)</td><td class="man-req">*</td></tr>
+                                <tr><td>Rol</td><td>Administrador, Entrenador o Profesor</td><td class="man-req">*</td></tr>
+                                <tr><td>Plan asociado</td><td>Plan de membresía vinculado (opcional)</td><td></td></tr>
+                            </table>
+                            <div class="man-aviso">⚠️ El nombre de usuario debe ser <strong>único</strong>. No se permiten espacios ni caracteres especiales.</div>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>✏️ Editar un usuario</h3>
+                            <p>Seleccione el usuario y pulse <strong>Editar</strong>. Puede modificar el nombre, contraseña, rol y plan asociado.</p>
+                            <p>Si deja el campo <strong>Contraseña vacío</strong>, la contraseña actual no se modificará. El cambio de rol tiene efecto en el próximo inicio de sesión del usuario.</p>
+                        </div>
+                    </div>
+
+                    <!-- PAGOS -->
+                    <div class="manual-panel" id="panel-pagos">
+                        <div class="man-section">
+                            <h3>💳 Gestión de Pagos</h3>
+                            <p>Permite registrar y consultar los pagos de los socios. Filtre por socio o estado para localizar registros rápidamente.</p>
+                            <p>Campos de la tabla: <span class="f">ID_Pago</span> · <span class="f">Socio</span> · <span class="f">Fecha de Pago</span> · <span class="f">Importe (€)</span> · <span class="f">Estado</span></p>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>💡 Estados del pago</h3>
+                            <div class="man-roles-grid">
+                                <div class="man-role-box" style="border-left-color:#10b981;background:#f0fdf4;">
+                                    <h4>✅ Pagado</h4>
+                                    <ul><li>El pago ha sido recibido correctamente.</li></ul>
+                                </div>
+                                <div class="man-role-box" style="border-left-color:#f59e0b;background:#fffbeb;">
+                                    <h4>⏳ Pendiente</h4>
+                                    <ul><li>Registrado pero aún no cobrado.</li></ul>
+                                </div>
+                                <div class="man-role-box" style="border-left-color:#dc2626;background:#fef2f2;">
+                                    <h4>🔴 Vencido</h4>
+                                    <ul><li>Superó la fecha límite sin abonarse.</li></ul>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>➕ Registrar un nuevo pago</h3>
+                            <ol class="man-steps">
+                                <li>Pulse <strong>Nuevo Pago</strong> en la pantalla de Gestión de Pagos.</li>
+                                <li>Seleccione el <strong>socio</strong> de la lista desplegable.</li>
+                                <li>Introduzca el <strong>importe</strong> y la <strong>fecha</strong>.</li>
+                                <li>Seleccione el <strong>estado</strong> inicial (Pagado o Pendiente).</li>
+                                <li>Pulse <strong>Guardar</strong> para registrar el pago.</li>
+                            </ol>
+                            <div class="man-aviso alert">🔒 Solo el <strong>Administrador</strong> puede eliminar pagos. El Profesor únicamente puede consultar el listado.</div>
+                        </div>
+                    </div>
+
+                    <!-- PLANES -->
+                    <div class="manual-panel" id="panel-planes">
+                        <div class="man-section">
+                            <h3>🏋️ Gestión de Planes</h3>
+                            <p>Administra los planes de membresía asociados a los socios: mensual, trimestral, semestral, anual o cualquier duración personalizada.</p>
+                            <p>Campos de la tabla: <span class="f">ID_Plan</span> · <span class="f">Socio</span> · <span class="f">Descripción</span> · <span class="f">Importe (€)</span> · <span class="f">Fecha Inicio</span> · <span class="f">Fecha Fin</span></p>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>➕ Asignar un nuevo plan</h3>
+                            <ol class="man-steps">
+                                <li>Pulse <strong>Nuevo Plan</strong>.</li>
+                                <li>Seleccione el <strong>socio</strong> al que se asignará el plan.</li>
+                                <li>Escriba una <strong>descripción</strong> (p. ej. "Plan mensual básico").</li>
+                                <li>Introduzca el <strong>importe</strong> en euros correspondiente al plan.</li>
+                                <li>Indique la <strong>Fecha Inicio</strong> y la <strong>Fecha Fin</strong> del plan.</li>
+                                <li>Pulse <strong>Guardar</strong>.</li>
+                            </ol>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>📅 Vigencia del plan</h3>
+                            <p>Un plan está vigente cuando la fecha actual se encuentra entre la <strong>Fecha Inicio</strong> y la <strong>Fecha Fin</strong>.</p>
+                            <div class="man-aviso">⚠️ El sistema <strong>no bloquea el acceso automáticamente</strong> al vencer un plan. Debe gestionarse manualmente cambiando el estado del socio a <em>Baja</em> o <em>Suspendido</em>.</div>
+                            <p>El <strong>Administrador</strong> tiene acceso completo. Entrenador y Profesor solo pueden consultar.</p>
+                        </div>
+                    </div>
+
+                    <!-- ASISTENCIAS -->
+                    <div class="manual-panel" id="panel-asistencias">
+                        <div class="man-section">
+                            <h3>📅 Gestión de Asistencias</h3>
+                            <p>Permite registrar y consultar las entradas de los socios al gimnasio, controlando fecha y hora de cada visita.</p>
+                            <p>Campos de la tabla: <span class="f">ID_Asistencia</span> · <span class="f">Socio</span> · <span class="f">Fecha de Asistencia</span> · <span class="f">Hora de Entrada</span></p>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>➕ Registrar una asistencia</h3>
+                            <ol class="man-steps">
+                                <li>Pulse <strong>Registrar Asistencia</strong>.</li>
+                                <li>Seleccione el <strong>socio</strong> de la lista desplegable.</li>
+                                <li>La <strong>fecha y hora</strong> se rellenan automáticamente con el momento actual. Pueden modificarse manualmente si fuera necesario.</li>
+                                <li>Pulse <strong>Guardar</strong>.</li>
+                            </ol>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <h3>🔍 Filtrar por socio o fecha</h3>
+                            <p>Use los filtros disponibles para consultar el historial de asistencias de un socio concreto o de un periodo determinado. Ideal para generar informes de frecuencia de uso.</p>
+                            <div class="man-aviso alert">🔒 El <strong>Administrador</strong> y el <strong>Entrenador</strong> pueden registrar y gestionar asistencias. El <strong>Profesor</strong> no tiene acceso a este módulo.</div>
+                        </div>
+                    </div>
+
+                    <!-- ROLES -->
+                    <div class="manual-panel" id="panel-roles">
+                        <div class="man-section">
+                            <h3>🛡️ Roles y permisos del sistema</h3>
+                            <p>El acceso a cada módulo depende del rol asignado a su cuenta. El rol se establece al crear o editar un usuario desde <em>Gestión de Usuarios</em>.</p>
+                        </div>
+                        <div class="man-roles-grid">
+                            <div class="man-role-box">
+                                <h4>🛡️ Administrador</h4>
+                                <ul>
+                                    <li>✅ Acceso total a todos los módulos</li>
+                                    <li>✅ Crear, editar y eliminar socios</li>
+                                    <li>✅ Gestionar cuentas de usuario</li>
+                                    <li>✅ Control completo de pagos y planes</li>
+                                    <li>✅ Importar / exportar XML y JSON</li>
+                                    <li>✅ Imprimir todos los informes</li>
+                                </ul>
+                            </div>
+                            <div class="man-role-box">
+                                <h4>🏋️ Entrenador</h4>
+                                <ul>
+                                    <li>✅ Consultar y editar socios</li>
+                                    <li>✅ Registrar y gestionar asistencias</li>
+                                    <li>✅ Consultar planes</li>
+                                    <li>❌ Sin acceso a pagos</li>
+                                    <li>❌ Sin gestión de usuarios</li>
+                                </ul>
+                            </div>
+                            <div class="man-role-box">
+                                <h4>📚 Profesor</h4>
+                                <ul>
+                                    <li>✅ Consultar socios</li>
+                                    <li>✅ Consultar pagos y planes</li>
+                                    <li>❌ Sin edición de datos</li>
+                                    <li>❌ Sin acceso a asistencias</li>
+                                    <li>❌ Sin gestión de usuarios</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <hr class="man-divider">
+                        <div class="man-section">
+                            <div class="man-aviso">⚠️ Si necesita cambiar su rol, contacte con el <strong>Administrador</strong> del sistema para que lo modifique desde <em>Gestión de Usuarios → Editar Usuario</em>.</div>
+                        </div>
+                    </div>
+
+                </div><!-- /manual-panels -->
+            </div><!-- /manual-wrapper -->
+        </section>
+
+    </div><!-- /container -->
+</main>
+
+<footer class="footer">
+    <div class="container">
+        <p>☕ GymManager · Aplicación de escritorio desarrollada con NetBeans + MySQL | Gestión integral de gimnasios</p>
+        <p style="margin-top: 0.8rem; font-size: 0.85rem;">📍 Control de socios · pagos · planes · asistencias · informes · roles de usuario</p>
+        <p style="margin-top: 1rem;"><a href="https://github.com/Nachero247/proyecto" target="_blank">📦 Repositorio oficial del proyecto</a> — ¡Explora el código y contribuye!</p>
+        <p style="margin-top: 1rem;">&copy; 2026 GymManager - Solución todo en uno para gestión de gimnasios</p>
+    </div>
+</footer>
+
+</body>
+</html>

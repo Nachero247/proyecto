@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Roles y Permisos</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  .rol { background: #f0f7f4; border-left: 4px solid #2c6e49; padding: 10px 16px; margin: 12px 0; border-radius: 3px; }
+  .rol h3 { margin: 0 0 6px 0; color: #2c6e49; }
+</style>
+</head>
+<body>
+<h1>Roles y Permisos</h1>
+<p>El sistema de gimnasio gestiona el acceso mediante tres roles diferenciados. El rol se asigna al crear o editar un usuario desde <em>Gestión de Usuarios</em>.</p>
+
+<div class="rol">
+  <h3>🛡️ Administrador</h3>
+  <p>Tiene acceso completo a todos los módulos: puede crear, editar y eliminar socios, usuarios, pagos, planes y asistencias. Es el único rol que puede gestionar cuentas de usuario.</p>
+</div>
+
+<div class="rol">
+  <h3>🏋️ Entrenador</h3>
+  <p>Puede consultar socios y planes, y gestionar asistencias (registrar entradas). No tiene acceso a pagos ni a la gestión de usuarios.</p>
+</div>
+
+<div class="rol">
+  <h3>📚 Profesor</h3>
+  <p>Puede consultar planes y pagos, pero no puede modificar datos de socios, usuarios ni asistencias.</p>
+</div>
+
+<p><strong>Nota:</strong> Si necesita cambiar el rol de un usuario, contacte con el Administrador del sistema.</p>
+</body>
+</html>

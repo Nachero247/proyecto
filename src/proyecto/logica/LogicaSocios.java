@@ -102,5 +102,33 @@ public static void removeSocio(int id){
     public static List<Socio> getSocios() {
         return listaSocios;
     }
+    
+    public static Socio buscarPorDni(String dni) {
+        String sql = "SELECT id_socio, nombre, apellido1, apellido2, dni, telefono, correo, fecha_alta, estado FROM socio WHERE dni = ?";
+        try {
+            ConexionBBDD nueva = new ConexionBBDD();
+            Connection conexion = nueva.getConnection();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, dni);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Socio socio = new Socio(
+                    rs.getString("nombre"),
+                    rs.getString("apellido1"),
+                    rs.getString("apellido2"),
+                    rs.getString("dni"),
+                    rs.getString("telefono"),
+                    rs.getString("correo"),
+                    rs.getDate("fecha_alta"),
+                    rs.getString("estado")
+                );
+                socio.setId_socio(rs.getInt("id_socio"));
+                return socio;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
  
 }

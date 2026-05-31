@@ -8,8 +8,11 @@ import java.sql.Connection;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
+import proyecto.logica.Ayuda;
 
 /**
  *
@@ -37,6 +40,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         icono6();
         icono7();
         icono8();
+        icono9();
         
         configurarBotones(jButtonAsistencias);
         configurarBotones(jButtonAyuda);
@@ -45,16 +49,42 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         configurarBotones(jButtonPlanes);
         configurarBotones(jButtonSocios);
         configurarBotones(jButtonUsuarios);
+        configurarBotones(jButtonCargarDatos);
         configurarMenu();
+        
+        // Abrir ayuda con F1
+        this.getRootPane().registerKeyboardAction(
+            e -> {
+                new Ayuda().mostrarAyuda();
+            },
+            javax.swing.KeyStroke.getKeyStroke("F1"),
+            javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW
+        );
+    
     }
     
     
     
-    public void icono1(){
-         ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/logo_GymManager.png"));
-        Image imagenEscalada = original.getImage().getScaledInstance(jLabelTitulo.getWidth(), jLabelTitulo.getHeight(), Image.SCALE_SMOOTH);
-        jLabelTitulo.setIcon(new ImageIcon(imagenEscalada));
-    }
+public void icono1() {
+    ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/logo_GymManager.png"));
+
+    int imgW = original.getIconWidth();
+    int imgH = original.getIconHeight();
+
+    // Tamaño fijo del JLabel (mejor que depender del layout dinámico)
+    int labelW = 510;
+    int labelH = 170;
+
+    double scale = Math.min((double) labelW / imgW, (double) labelH / imgH);
+
+    int newW = Math.max(1, (int) (imgW * scale));
+    int newH = Math.max(1, (int) (imgH * scale));
+
+    Image scaled = original.getImage().getScaledInstance(newW, newH, Image.SCALE_SMOOTH);
+
+    jLabelTitulo.setIcon(new ImageIcon(scaled));
+    jLabelTitulo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+}
     
     public void icono2(){
         ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/avatar.png"));
@@ -96,6 +126,12 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonCerrarSesion.setIcon(new ImageIcon(imagenEscalada));
     }
     
+    public void icono9(){
+        ImageIcon original = new ImageIcon(getClass().getResource("/imagenes/cargaDatos.png"));
+        Image imagenEscalada = original.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        jButtonCargarDatos.setIcon(new ImageIcon(imagenEscalada));
+    }
+    
     private void configurarBotones(JButton b){
         b.setHorizontalAlignment(SwingConstants.LEFT);
         b.setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -117,6 +153,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
         jSeparator6 = new javax.swing.JSeparator();
         jSeparator9 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         jPanelLateral = new javax.swing.JPanel();
         jLabelTitulo = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
@@ -129,11 +166,14 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jButtonPlanes = new javax.swing.JButton();
         jSeparator5 = new javax.swing.JSeparator();
         jButtonUsuarios = new javax.swing.JButton();
+        jSeparator = new javax.swing.JSeparator();
+        jButtonCargarDatos = new javax.swing.JButton();
         jSeparator7 = new javax.swing.JSeparator();
         jButtonAyuda = new javax.swing.JButton();
-        jSeparator8 = new javax.swing.JSeparator();
+        jSeparator10 = new javax.swing.JSeparator();
         jButtonCerrarSesion = new javax.swing.JButton();
-        jDesktopPane1 = new javax.swing.JDesktopPane();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -141,8 +181,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jPanelLateral.setPreferredSize(new java.awt.Dimension(220, 415));
         jPanelLateral.setLayout(new javax.swing.BoxLayout(jPanelLateral, javax.swing.BoxLayout.Y_AXIS));
 
-        jLabelTitulo.setText("GYM MANAGER");
-        jLabelTitulo.setMaximumSize(new java.awt.Dimension(220, 80));
+        jLabelTitulo.setMaximumSize(new java.awt.Dimension(510, 170));
         jLabelTitulo.setMinimumSize(new java.awt.Dimension(120, 16));
         jLabelTitulo.setName(""); // NOI18N
         jPanelLateral.add(jLabelTitulo);
@@ -223,6 +262,20 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         });
         jPanelLateral.add(jButtonUsuarios);
 
+        jSeparator.setMaximumSize(new java.awt.Dimension(32767, 20));
+        jPanelLateral.add(jSeparator);
+
+        jButtonCargarDatos.setBackground(new java.awt.Color(153, 153, 153));
+        jButtonCargarDatos.setText("Cargar Datos Prueba");
+        jButtonCargarDatos.setActionCommand("");
+        jButtonCargarDatos.setAlignmentY(0.0F);
+        jButtonCargarDatos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCargarDatosActionPerformed(evt);
+            }
+        });
+        jPanelLateral.add(jButtonCargarDatos);
+
         jSeparator7.setMaximumSize(new java.awt.Dimension(32767, 20));
         jPanelLateral.add(jSeparator7);
 
@@ -237,8 +290,8 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         });
         jPanelLateral.add(jButtonAyuda);
 
-        jSeparator8.setMaximumSize(new java.awt.Dimension(32767, 20));
-        jPanelLateral.add(jSeparator8);
+        jSeparator10.setMaximumSize(new java.awt.Dimension(32767, 20));
+        jPanelLateral.add(jSeparator10);
 
         jButtonCerrarSesion.setBackground(new java.awt.Color(153, 153, 153));
         jButtonCerrarSesion.setText("Cerrar Sesión");
@@ -252,21 +305,6 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         jPanelLateral.add(jButtonCerrarSesion);
 
         getContentPane().add(jPanelLateral, java.awt.BorderLayout.WEST);
-
-        jDesktopPane1.setBackground(new java.awt.Color(204, 204, 204));
-
-        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
-        jDesktopPane1.setLayout(jDesktopPane1Layout);
-        jDesktopPane1Layout.setHorizontalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 294, Short.MAX_VALUE)
-        );
-        jDesktopPane1Layout.setVerticalGroup(
-            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 355, Short.MAX_VALUE)
-        );
-
-        getContentPane().add(jDesktopPane1, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -324,22 +362,7 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
 
     private void jButtonAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAyudaActionPerformed
         // TODO add your handling code here:
-        String mensaje = 
-                "AYUDA DEL SISTEMA DE GESTIÓN DEL GIMNASIO:\n" + 
-                "Menú socios: Permite agregar, buscar, actualizar y eliminar socios.\n" + 
-                "Gestión de asistencias: Registra y administra la entrada diaria de los socios.\n" +
-                "Planes de pago: Puedes crear, modificar y eliminar planes de pago.\n" + 
-                "Cerrar sesión: Vuelve inmediatamente a la pantalla del Login.\n" +
-                "CONSEJOS:\n" +
-                "Asegúrate de rellenar todos los campos obligatorios antes de guardar.\n" +
-                "Si un registro no se puede eliminar, puede tener datos vinculados.\n" +
-                "Usa el botón Buscar para localizar un registro por ID rápidamente.\n" +
-                "INFORMACIÓN DEL SISTEMA:\n" +
-                "Versión 1.0\n" +
-                "Año: 2025\n" +
-                "Para más información, contacta con el administrador del sistema.";
-        
-        JOptionPane.showMessageDialog(this, mensaje, "Ayuda", JOptionPane.INFORMATION_MESSAGE);
+        new Ayuda().mostrarAyuda("login");
     }//GEN-LAST:event_jButtonAyudaActionPerformed
 
     private void jButtonUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUsuariosActionPerformed
@@ -349,6 +372,30 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
         usuario.setLocationRelativeTo(null);
         this.dispose();
     }//GEN-LAST:event_jButtonUsuariosActionPerformed
+
+    private void jButtonCargarDatosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCargarDatosActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Selecciona fichero de datos de prueba");
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setFileFilter(
+            new javax.swing.filechooser.FileNameExtensionFilter(
+                "XML y JSON (*.xml, *.json)", "xml", "json"));
+        chooser.setAcceptAllFileFilterUsed(false);
+
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                String resumen = new proyecto.logica.CargaDatosPrueba()
+                                     .cargar(chooser.getSelectedFile());
+                JOptionPane.showMessageDialog(this,
+                    "Datos cargados correctamente:\n\n" + resumen,
+                    "Carga completada", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                    "Error al cargar los datos:\n" + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButtonCargarDatosActionPerformed
 
     
     public void configurarMenu() {
@@ -415,24 +462,26 @@ public class JFrameMenuPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAsistencias;
     private javax.swing.JButton jButtonAyuda;
+    private javax.swing.JButton jButtonCargarDatos;
     private javax.swing.JButton jButtonCerrarSesion;
     private javax.swing.JButton jButtonPagos;
     private javax.swing.JButton jButtonPlanes;
     private javax.swing.JButton jButtonSocios;
     private javax.swing.JButton jButtonUsuarios;
-    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabelTitulo;
     private javax.swing.JPanel jPanelLateral;
+    private javax.swing.JSeparator jSeparator;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
     private javax.swing.JSeparator jSeparator9;
     // End of variables declaration//GEN-END:variables
 }

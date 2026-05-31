@@ -54,22 +54,20 @@ public class ConexionBBDD {
     private void conectar() {
         String url = "";
         try {
-
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
             } catch (ClassNotFoundException ex) {
-                System.out.println("Error al registrar el driver de MySQL: " + ex);
-            }     
+                javax.swing.JOptionPane.showMessageDialog(null, 
+                    "Driver no encontrado: " + ex.getMessage());
+                return;
+            }
             url = "jdbc:mysql://" + host + ":" + port + "/" + database;
-            // Database connect
-            // Conectamos con la base de datos
-            conexion = DriverManager.getConnection(
-                    url,
-                    user, password);
-            boolean valid = conexion.isValid(50000);
+            conexion = DriverManager.getConnection(url, user, password);
+            boolean valid = conexion.isValid(5000);
             System.out.println(valid ? "TEST OK" : "TEST FAIL");
         } catch (java.sql.SQLException sqle) {
-            System.out.println("Error al conectar con la base de datos de MySQL(" + url + "): " + sqle);
+            javax.swing.JOptionPane.showMessageDialog(null,
+                "Error BD: " + sqle.getMessage());
         }
     }
     public Connection getConnection(){

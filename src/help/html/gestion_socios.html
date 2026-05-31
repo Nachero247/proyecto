@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Gestión de Socios</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  .accion { background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px; padding: 8px 14px; margin: 8px 0; }
+  .campo { font-family: monospace; background: #eee; padding: 1px 5px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Gestión de Socios</h1>
+<p>Esta ventana permite administrar todos los socios del gimnasio. Muestra una tabla con todos los socios registrados y sus datos principales.</p>
+
+<h2>Acciones disponibles</h2>
+<div class="accion">➕ <strong>Nuevo Socio</strong> – Abre el diálogo de Alta de Socio para registrar un nuevo miembro.</div>
+<div class="accion">✏️ <strong>Editar Socio</strong> – Seleccione un socio de la tabla y pulse Editar para modificar sus datos.</div>
+<div class="accion">🗑️ <strong>Eliminar Socio</strong> – Elimina el socio seleccionado (solo Administrador). Esta acción es irreversible.</div>
+<div class="accion">🔍 <strong>Buscar / Filtrar</strong> – Filtre por nombre, DNI o estado para localizar socios rápidamente.</div>
+
+<h2>Campos de la tabla</h2>
+<p>
+  <span class="campo">ID</span> · 
+  <span class="campo">Nombre</span> · 
+  <span class="campo">Apellidos</span> · 
+  <span class="campo">DNI</span> · 
+  <span class="campo">Teléfono</span> · 
+  <span class="campo">Correo</span> · 
+  <span class="campo">Fecha Alta</span> · 
+  <span class="campo">Estado</span>
+</p>
+
+<h2>Estados posibles de un socio</h2>
+<p>Un socio puede estar en uno de estos tres estados: <strong>Alta</strong> (activo), <strong>Baja</strong> (dado de baja) o <strong>Suspendido</strong> (acceso temporalmente bloqueado).</p>
+</body>
+</html>

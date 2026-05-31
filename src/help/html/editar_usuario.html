@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="UTF-8"><title>Editar Usuario</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
+  h1 { color: #2c6e49; border-bottom: 2px solid #2c6e49; padding-bottom: 6px; }
+  .aviso { background: #d4edda; border-left: 3px solid #2c6e49; padding: 8px 12px; margin: 10px 0; border-radius: 3px; }
+</style>
+</head>
+<body>
+<h1>Editar Usuario (JDialog)</h1>
+<p>Permite modificar los datos de una cuenta de usuario existente. Solo el <strong>Administrador</strong> puede usar esta función.</p>
+
+<h2>Funcionamiento</h2>
+<p>Al abrirse, el formulario carga los datos actuales del usuario seleccionado. Puede modificar el nombre de usuario, la contraseña, el rol y el plan asociado.</p>
+
+<h2>Cambio de contraseña</h2>
+<p>Si desea cambiar la contraseña, escriba la nueva en el campo <strong>Contraseña</strong>. Si deja el campo vacío, la contraseña actual no se modificará.</p>
+
+<h2>Cambio de rol</h2>
+<p>El cambio de rol tiene efecto inmediato en el próximo inicio de sesión del usuario. Asegúrese de comunicar al usuario cualquier cambio de rol que afecte a sus permisos.</p>
+
+<div class="aviso">✔ Los cambios se guardan en la base de datos únicamente al pulsar <strong>Guardar</strong>.</div>
+
+<h2>Botones</h2>
+<p><strong>Guardar</strong> – Aplica los cambios.<br>
+<strong>Cancelar</strong> – Descarta los cambios y cierra el diálogo.</p>
+</body>
+</html>
