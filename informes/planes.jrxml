@@ -148,7 +148,7 @@ FROM gym.plan]]>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Socio_ID]]></text>
+				<text><![CDATA[ID Socio]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" positionType="Float" x="90" y="0" width="153" height="20" forecolor="#000000" uuid="a1859714-c312-474a-97b0-6eed538e327f">
@@ -166,7 +166,7 @@ FROM gym.plan]]>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha_Inicio]]></text>
+				<text><![CDATA[Fecha Inicio]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" positionType="Float" x="444" y="0" width="111" height="20" forecolor="#000000" uuid="2e7c86f0-4b24-4d4e-b8c1-3257b3459e80">
@@ -175,7 +175,7 @@ FROM gym.plan]]>
 				<textElement>
 					<font fontName="Arial" size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Fecha_Fin]]></text>
+				<text><![CDATA[Fecha Fin]]></text>
 			</staticText>
 			<staticText>
 				<reportElement style="Column header" positionType="Float" x="243" y="0" width="90" height="20" forecolor="#000000" uuid="f32f7336-8d6b-49d0-a5a0-62e39e342cd7">
